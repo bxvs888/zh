@@ -309,12 +309,12 @@
 
 <p>通过将文本不编译到字节码中，减少内存perm区占用，也能防止JIT失效。</p>
 
-<h3>2.4.5 减少反射调用，以及基本类型装箱。[/b]</h3>
+<h3>2.4.5 减少反射调用，以及基本类型装箱。</h3>
 
-<p>因为模板输出的大量是基本类型和字符串，
-比如当输出基本类型时，需要转成String，如果使用format(Object)接口，就会将基本类型装箱，
-Httl遇到任何类似需要boxed和unboxed的地方，都会重载所有基本类型方法，以减少boxed和unboxed的处理。
-比如：有一次Profiler分析就发现，有一个地方为了能通用处理Object[],int[],long[]等数组类型，
+<p>因为模板输出的大量是基本类型和字符串，比如当输出基本类型时，需要转成String，如果使用format(Object)接口，就会将基本类型装箱，
+Httl遇到任何类似需要boxed和unboxed的地方，都会重载所有基本类型方法，以减少boxed和unboxed的处理。</p>
+
+<p>比如：有一次Profiler分析就发现，有一个地方为了能通用处理Object[],int[],long[]等数组类型，
 因为int[]不继承于Object[]，为了通用处理，改为Array.get(array, index)来获取数组的项，
 导致Profiler时，80%的CPU时间都耗在Array.get()上。</p>
 
