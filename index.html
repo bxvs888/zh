@@ -19,9 +19,9 @@
         <h2>HTTL是一个适用于HTML输出的开源JAVA模板引擎.</h2>
 
         <section id="downloads">
-          <a href="https://github.com/downloads/httl/httl/httl-1.0.0.jar" class="btn">Download bin.jar</a>
-          <a href="https://github.com/downloads/httl/httl/httl-1.0.0-sources.jar" class="btn">Download src.jar</a>
-          <a href="https://github.com/httl/httl" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+          <a href="https://github.com/httl/zh/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/httl/zh/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/httl/zh" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
         </section>
       </div>
     </header>
@@ -34,7 +34,7 @@
 
 <h3>快速</h3>
 
-<p>类似于JSP的原理，将模板编译成Java字节码运行，但比JSP的EL更进一步，使用强类型推导，减少运行期反射和转型，更加快速，请参见下面的性能对比.</p>
+<p>类似于JSP的原理，将模板编译成Java字节码运行，但比JSP的EL更进一步，使用强类型推导，减少运行期反射和转型，更加快速，请参见第2章的性能对比.</p>
 
 <h3>简洁</h3>
 
@@ -42,7 +42,7 @@
 
 <h3>直觉</h3>
 
-<p>语法尽可能符合HTML和JAVA开发者的直觉，指令类似于常用Velocity指令，但改进了Velocity中不符合直觉的地方，请参见下面与Velocity的对比。</p>
+<p>语法尽可能符合HTML和JAVA开发者的直觉，指令类似于常用Velocity指令，但改进了Velocity中不符合直觉的地方，请参见第2章与Velocity的对比。</p>
 
 <h3>友好</h3>
 
@@ -187,7 +187,7 @@
 </tr>
 </table><h2>2.3 性能对比</h2>
 
-性能测试类：<a href="https://github.com/httl/httl/blob/master/src/test/java/httl/test/PerformanceTest.java">PerformanceTest.java</a>
+<p>性能测试类：<a href="https://github.com/httl/httl/blob/master/src/test/java/httl/test/PerformanceTest.java">PerformanceTest.java</a></p>
 
 <table>
 <tr>
@@ -200,7 +200,7 @@
 <td>每秒次数</td>
 </tr>
 <tr>
-<td><a href="https://github.com/httl/httl/blob/master/src/test/resources/performance/books.ftl">freemarker.ftl</a></td>
+<td>[freemarker.ftl](https://github.com/httl/httl/blob/master/src/test/resources/performance/books.ftl)</td>
 <td> 2.3.18</td>
 <td> 79ms</td>
 <td>125ms</td>
@@ -209,7 +209,7 @@
 <td>590/s</td>
 </tr>
 <tr>
-<td><a href="https://github.com/httl/httl/blob/master/src/test/resources/performance/books.vm">velocity.vm</a></td>
+<td>[velocity.vm](https://github.com/httl/httl/blob/master/src/test/resources/performance/books.vm)</td>
 <td> 1.7</td>
 <td> 31ms</td>
 <td>110ms</td>
@@ -218,7 +218,7 @@
 <td>518/s</td>
 </tr>
 <tr>
-<td><a href="https://github.com/httl/httl/blob/master/src/test/resources/performance/books.st">smarty4j.st</a></td>
+<td>[smarty4j.st](https://github.com/httl/httl/blob/master/src/test/resources/performance/books.st)</td>
 <td> 1.0.0-jdk5</td>
 <td> 0ms</td>
 <td>78ms</td>
@@ -227,7 +227,7 @@
 <td>461/s</td>
 </tr>
 <tr>
-<td><a href="https://github.com/httl/httl/blob/master/src/test/resources/performance/books.httl">httl.ht</a></td>
+<td>[httl.ht](https://github.com/httl/httl/blob/master/src/test/resources/performance/books.httl)</td>
 <td> 0.1.0</td>
 <td> 78ms</td>
 <td>547ms</td>
@@ -236,7 +236,7 @@
 <td>4,814/s</td>
 </tr>
 <tr>
-<td><a href="https://github.com/httl/httl/blob/master/src/test/java/httl/test/performance/Books.java">java.class</a></td>
+<td>[java.class](https://github.com/httl/httl/blob/master/src/test/java/httl/test/performance/Books.java)</td>
 <td> 1.6.0_18</td>
 <td> 0ms</td>
 <td>0ms</td>
@@ -378,7 +378,7 @@ ${price}
 
 <p>其中，+=表示追加配置，而不覆盖缺省配置。
 注意，所有配置项都有缺省值，如果使用缺省值，可以不配，
-更多配置参见文档下面的配置参考手册。</p>
+更多配置参见文档第7章。</p>
 
 <h1>4. 下载</h1>
 
@@ -742,58 +742,404 @@ ${colors.next}
 
 <h1>7. 详细配置</h1>
 
-<div class="highlight"><pre><span class="c">#extensions</span>
-<span class="na">engine</span><span class="o">=</span><span class="s">httl.spi.engines.DefaultEngine</span>
-<span class="na">logger</span><span class="o">=</span><span class="s">httl.spi.loggers.Log4jLogger</span>
-<span class="na">loggers</span><span class="o">=</span><span class="s">httl.spi.loggers.Log4jLogger</span>
-<span class="na">cache</span><span class="o">=</span><span class="s">httl.spi.caches.StrongCache</span>
-<span class="na">loader</span><span class="o">=</span><span class="s">httl.spi.loaders.ClasspathLoader</span>
+<p>配置中，+=表示在缺省配置上追加配置，=表示覆盖缺省配置。</p>
+
+<h2>7.1 模板引擎配置</h2>
+
+<div class="highlight"><pre><span class="na">engine</span><span class="o">=</span><span class="s">httl.spi.engines.DefaultEngine</span>
 <span class="na">parser</span><span class="o">=</span><span class="s">httl.spi.parsers.CommentParser</span>
 <span class="na">translator</span><span class="o">=</span><span class="s">httl.spi.translators.DfaTranslator</span>
-<span class="na">compiler</span><span class="o">=</span><span class="s">httl.spi.compilers.JdkCompiler</span>
-<span class="na">formatter</span><span class="o">=</span><span class="s">httl.spi.formatters.MultiFormatter</span>
-<span class="na">formatters</span><span class="o">=</span><span class="s">httl.spi.formatters.DateFormatter</span>
-<span class="na">value.filter</span><span class="o">=</span><span class="s">httl.spi.filters.MultiValueFilter</span>
-<span class="na">value.filters</span><span class="o">=</span><span class="s">httl.spi.filters.EscapeHtmlFilter</span>
-<span class="na">text.filter</span><span class="o">=</span><span class="s">httl.spi.filters.MultiTextFilter</span>
-<span class="na">text.filters</span><span class="o">=</span>
-<span class="na">filters</span><span class="o">=</span>
+</pre></div>
 
-<span class="c">#properties</span>
-<span class="na">import.packages</span><span class="o">=</span><span class="s">java.util</span>
-<span class="na">import.methods</span><span class="o">=</span><span class="s">httl.spi.methods.DefaultMethod</span>
-<span class="na">import.macros</span><span class="o">=</span>
-<span class="na">template.directory</span><span class="o">=</span>
+<p>其中，engine负责组装，parser负责解析语法，translator负责将模板表达式翻译成java表达式。
+除非你想改变语法，或优化解析性能，否则此三项不需要配置。</p>
+
+<p>如果你喜欢HTML标签属性语法，可以配置：</p>
+
+<div class="highlight"><pre><span class="na">parser</span><span class="o">=</span><span class="s">httl.spi.parsers.AttributeParser</span>
+</pre></div>
+
+<p>语法如：</p>
+
+<div class="highlight"><pre><span class="nt">&lt;html</span> <span class="na">var=</span><span class="s">"User user, Book[] books"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;table</span> <span class="na">if=</span><span class="s">"user.role == 'admin'"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;tr</span> <span class="na">foreach=</span><span class="s">"book in books"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;td&gt;</span>${book.title}<span class="nt">&lt;/td&gt;</span>
+      <span class="nt">&lt;/tr&gt;</span>
+    <span class="nt">&lt;/table&gt;</span>
+  <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+
+<p>如果属性和其它框架冲突，可以添加名字空间：</p>
+
+<div class="highlight"><pre><span class="na">attribute.namespace</span><span class="o">=</span><span class="s">httl</span>
+</pre></div>
+
+<p>名称空间写法如：</p>
+
+<div class="highlight"><pre><span class="nt">&lt;tr</span> <span class="na">httl:foreach=</span><span class="s">"book in books"</span> <span class="nt">/&gt;</span>
+</pre></div>
+
+<p>你可以设置foreach状态的变量名，缺省为foreach：(缺省值不用配)</p>
+
+<div class="highlight"><pre><span class="na">foreach.status</span><span class="o">=</span><span class="s">foreach</span>
+</pre></div>
+
+<h2>7.2 模板缓存配置</h2>
+
+<p>缺省为强缓存，即所有模板加载后全部缓存：(缺省值不用配)</p>
+
+<div class="highlight"><pre><span class="na">cache</span><span class="o">=</span><span class="s">httl.spi.caches.StrongCache</span>
+</pre></div>
+
+<p>如果你的模板非常之多，内存不足以缓存所有模板，可以配置为LRU缓存：</p>
+
+<div class="highlight"><pre><span class="na">cache</span><span class="o">=</span><span class="s">httl.spi.caches.LruCache</span>
+<span class="na">cache.capacity</span><span class="o">=</span><span class="s">10000</span>
+</pre></div>
+
+<p>如果不需要缓存，请设为：</p>
+
+<div class="highlight"><pre><span class="na">cache</span><span class="o">=</span><span class="s">null</span>
+</pre></div>
+
+<h2>7.4 模板加载配置</h2>
+
+<p>(1) 可以配置启动时预编译所有模板，会调用loader.list()扫描模板文件。</p>
+
+<p>template.suffix用于loader.list()过滤模板文件。</p>
+
+<p>预编译缺省关闭：(缺省值不用配)</p>
+
+<div class="highlight"><pre><span class="na">precompiled</span><span class="o">=</span><span class="s">false</span>
 <span class="na">template.suffix</span><span class="o">=</span><span class="s">.httl</span>
-<span class="na">attribute.namespace</span><span class="o">=</span>
-<span class="na">cache.capacity</span><span class="o">=</span><span class="s">0</span>
-<span class="na">reloadable</span><span class="o">=</span><span class="s">false</span>
-<span class="na">precompiled</span><span class="o">=</span><span class="s">false</span>
-<span class="na">source.in.class</span><span class="o">=</span><span class="s">false</span>
-<span class="na">text.in.class</span><span class="o">=</span><span class="s">false</span>
-<span class="na">debug</span><span class="o">=</span><span class="s">false</span>
-<span class="na">compile.directory</span><span class="o">=</span>
-<span class="na">java.version</span><span class="o">=</span><span class="s">1.6</span>
-<span class="na">foreach.status</span><span class="o">=</span><span class="s">foreach</span>
-<span class="na">input.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
+</pre></div>
+
+<p>(2) 可以配置是否允许热加载，缺省为false：(缺省值不用配)</p>
+
+<div class="highlight"><pre><span class="na">reloadable</span><span class="o">=</span><span class="s">false</span>
+</pre></div>
+
+<p>开启热加载后，模板引擎在getTemplate()时会检查文件的lastModified时间，如果比上次加载的时间新，就重新加载。</p>
+
+<p>请注意：旧的模板不会被卸载，所有经常改文件会导致内存perm区越来越大，只能在开发阶段使用。</p>
+
+<p>(3) 可以配置模板加载缺省编码，缺省为UTF-8：(缺省值不用配)</p>
+
+<div class="highlight"><pre><span class="na">input.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
+</pre></div>
+
+<h3>7.4.1 从Classpath下加载</h3>
+
+<p>缺省从Classpath下加载，即模板放在任意jar包中：(缺省值不用配)</p>
+
+<div class="highlight"><pre><span class="na">loaders</span><span class="o">=</span><span class="s">httl.spi.loaders.ClasspathLoader</span>
+<span class="na">template.directory</span><span class="o">=</span><span class="s">META-INF/templates</span>
+</pre></div>
+
+<h3>7.4.2 从文件加载：</h3>
+
+<div class="highlight"><pre><span class="na">loaders</span><span class="o">=</span><span class="s">httl.spi.loaders.FileLoader</span>
+<span class="na">template.directory</span><span class="o">=</span><span class="s">/home/admin/templates</span>
+</pre></div>
+
+<h3>7.4.3 从jar包中加载：</h3>
+
+<div class="highlight"><pre><span class="na">loaders</span><span class="o">=</span><span class="s">httl.spi.loaders.JarLoader</span>
+<span class="na">template.directory</span><span class="o">=</span><span class="s">/home/admin/tempaltes.jar</span>
+</pre></div>
+
+<h3>7.4.4 从zip包中加载：</h3>
+
+<div class="highlight"><pre><span class="na">loaders</span><span class="o">=</span><span class="s">httl.spi.loaders.ZipLoader</span>
+<span class="na">template.directory</span><span class="o">=</span><span class="s">/home/admin/tempaltes.zip</span>
+</pre></div>
+
+<h3>7.4.5 从指定url加载：</h3>
+
+<div class="highlight"><pre><span class="na">loaders</span><span class="o">=</span><span class="s">httl.spi.loaders.UrlLoader</span>
+<span class="na">template.directory</span><span class="o">=</span><span class="s">http://myhost/tempaltes</span>
+</pre></div>
+
+<h3>7.4.6 从war包加载：</h3>
+
+<div class="highlight"><pre><span class="na">loaders</span><span class="o">=</span><span class="s">httl.spi.loaders.ServletLoader</span>
+<span class="na">template.directory</span><span class="o">=</span><span class="s">/WEB-INF/templates</span>
+</pre></div>
+
+<p>需在web.xml中配置ServletLoader的listener：</p>
+
+<div class="highlight"><pre><span class="nt">&lt;listener&gt;</span>
+    <span class="nt">&lt;listener-class&gt;</span>httl.spi.loaders.ServletLoader<span class="nt">&lt;/listener-class&gt;</span>
+<span class="nt">&lt;/listener&gt;</span>
+</pre></div>
+
+<h3>7.4.7 从内存字符串加载：</h3>
+
+<div class="highlight"><pre><span class="na">loaders</span><span class="o">=</span><span class="s">httl.spi.loaders.StringLoader</span>
+</pre></div>
+
+<p>然后编码加入模板内容：</p>
+
+<div class="highlight"><pre><span class="n">StringLoader</span><span class="o">.</span><span class="na">addResource</span><span class="o">(</span><span class="s">"foo.httl"</span><span class="o">,</span> <span class="s">"&lt;!--#var(User user)--&gt;${user.name}"</span><span class="o">);</span>
+</pre></div>
+
+<h3>7.4.8 从多个源加载：</h3>
+
+<div class="highlight"><pre><span class="na">loaders</span><span class="o">=</span><span class="s">httl.spi.loaders.ClasspathLoader,httl.spi.loaders.FileLoader</span>
+</pre></div>
+
+<p>或者使用"+="保留缺省的classpath加载的同时，增加新的加载器：</p>
+
+<div class="highlight"><pre><span class="na">loaders+</span><span class="o">=</span><span class="s">httl.spi.loaders.FileLoader</span>
+</pre></div>
+
+<h2>7.5 模板编译器</h2>
+
+<p>用于将模板类编译成字节码，缺省使用jdk自带的编译器：(缺省值不用配)</p>
+
+<div class="highlight"><pre><span class="na">compiler</span><span class="o">=</span><span class="s">httl.spi.compilers.JdkCompiler</span>
+</pre></div>
+
+<p>你也可以换成javassist编译：</p>
+
+<div class="highlight"><pre><span class="na">compiler</span><span class="o">=</span><span class="s">httl.spi.compilers.JavassistCompiler</span>
+</pre></div>
+
+<p>(1) 输出选项：</p>
+
+<p>如果设置output.stream=true，在编译期就会将模板文件转换成byte[]数据，
+在输出时，直接向OutputStream中输出byte[]流，以免运行期每次输出都要转一次。</p>
+
+<p>缺省关闭：(缺省值不用配)</p>
+
+<div class="highlight"><pre><span class="na">output.stream</span><span class="o">=</span><span class="s">false</span>
 <span class="na">output.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
-<span class="na">output.stream</span><span class="o">=</span><span class="s">false</span>
-<span class="na">locale</span><span class="o">=</span><span class="s">en_US</span>
-<span class="na">time.zone</span><span class="o">=</span><span class="s">+0</span>
+</pre></div>
+
+<p>(2) 内存选项：</p>
+
+<p>缺省将模板源码和模板文本都不编译到字节码中：(缺省值不用配)</p>
+
+<div class="highlight"><pre><span class="na">source.in.class</span><span class="o">=</span><span class="s">false</span>
+<span class="na">text.in.class</span><span class="o">=</span><span class="s">false</span>
+</pre></div>
+
+<p>它通过一个Map缓存做中介，把模板源码和模板文本都放到了runtime属性中，以节省内存perm区大小。</p>
+
+<p>编译到字节码中，在读取时可以会稍快，但不建议改变此选项。</p>
+
+<p>(3) 版本选项：</p>
+
+<p>java版本的配置会影响字节码生成的版本。</p>
+
+<div class="highlight"><pre><span class="na">java.version</span><span class="o">=</span><span class="s">1.6</span>
+</pre></div>
+
+<p>(4) 调试选项：</p>
+
+<p>如果你想知道编译后的字节码是什么样的，可以开启debug模式，并设置编译目录，编译器会向指定目录输出.class文件。</p>
+
+<p>调试缺省关闭：(缺省值不用配)</p>
+
+<div class="highlight"><pre><span class="na">debug</span><span class="o">=</span><span class="s">false</span>
+<span class="na">compile.directory</span><span class="o">=</span>
+</pre></div>
+
+<h2>7.6 输出格式化器</h2>
+
+<p>缺省加载了日期格式化器：(缺省值不用配)</p>
+
+<div class="highlight"><pre><span class="na">formatters</span><span class="o">=</span><span class="s">httl.spi.formatters.DateFormatter</span>
 <span class="na">date.format</span><span class="o">=</span><span class="s">yyyy-MM-dd HH:mm:ss</span>
+</pre></div>
+
+<p>你可以使用"+="保留缺省的日期格式化器的同时，增加新的格式化器：</p>
+
+<div class="highlight"><pre><span class="na">formatters+</span><span class="o">=</span><span class="s">httl.spi.formatters.NumberFormatter</span>
 <span class="na">number.format</span><span class="o">=</span><span class="s">###,##0.###</span>
-<span class="na">null.value</span><span class="o">=</span>
+</pre></div>
+
+<p>你也可以设置格式化地区和时区，比如货币格式化时可能会用到：</p>
+
+<div class="highlight"><pre><span class="na">locale</span><span class="o">=</span><span class="s">en_US</span>
+<span class="na">time.zone</span><span class="o">=</span><span class="s">+0</span>
+</pre></div>
+
+<p>你还可以设置null,true,false值的输出，</p>
+
+<p>null值缺省会输出空白，true,false原样输出：(缺省值不用配)</p>
+
+<div class="highlight"><pre><span class="na">null.value</span><span class="o">=</span>
 <span class="na">true.value</span><span class="o">=</span><span class="s">true</span>
 <span class="na">false.value</span><span class="o">=</span><span class="s">false</span>
-<span class="na">sequences</span><span class="o">=</span><span class="s">Mon Tue Wed Thu Fri Sat Sun Mon,\</span>
+</pre></div>
+
+<p>比如可以配为：</p>
+
+<div class="highlight"><pre><span class="na">null.value</span><span class="o">=</span><span class="s">N/A</span>
+<span class="na">true.value</span><span class="o">=</span><span class="s">yes</span>
+<span class="na">false.value</span><span class="o">=</span><span class="s">no</span>
+</pre></div>
+
+<h2>7.7 输出过滤器</h2>
+
+<p>过滤器分为两类，一类是针对模板文本的，一类是针对动态插值的。</p>
+
+<p>模板文本过滤会在编译的时候执行，编译时即把模板文本替换掉，不影响输出时的性能。</p>
+
+<p>动态插值的过滤会在输出的时候执行，需小心过滤引起性能问题。</p>
+
+<p>缺省加载了动态插值HTML过滤，防止HTML注入攻击：(缺省值不用配)</p>
+
+<div class="highlight"><pre><span class="na">value.filters</span><span class="o">=</span><span class="s">httl.spi.filters.EscapeHtmlFilter</span>
+<span class="na">text.filters</span><span class="o">=</span>
+</pre></div>
+
+<p>比如你可以设置在编译时压缩模板文本的空白符：</p>
+
+<div class="highlight"><pre><span class="c"># 将连接的空白符压缩成单个空格</span>
+<span class="na">text.filters</span><span class="o">=</span><span class="s">httl.spi.filters.CompressBlankFilter</span>
+
+<span class="c"># 去掉所有空白符</span>
+<span class="na">text.filters</span><span class="o">=</span><span class="s">httl.spi.filters.ClearBlankFilter</span>
+</pre></div>
+
+<p>你可以用filters同时设置value.filters和text.filters：</p>
+
+<div class="highlight"><pre><span class="na">filters</span><span class="o">=</span><span class="s">httl.spi.filters.CompressBlankFilter</span>
+</pre></div>
+
+<p>等价于：</p>
+
+<div class="highlight"><pre><span class="na">value.filters+</span><span class="o">=</span><span class="s">httl.spi.filters.CompressBlankFilter</span>
+<span class="na">text.filters+</span><span class="o">=</span><span class="s">httl.spi.filters.CompressBlankFilter</span>
+</pre></div>
+
+<h2>7.8 类型导入</h2>
+
+<h3>7.8.1 导入包名</h3>
+
+<div class="highlight"><pre><span class="na">import.packages</span><span class="o">=</span><span class="s">java.util</span>
+</pre></div>
+
+<h3>7.8.2 导入方法</h3>
+
+<p>缺省导入DefaultMethod类中的方法：(缺省值不用配)</p>
+
+<div class="highlight"><pre><span class="na">import.methods</span><span class="o">=</span><span class="s">httl.spi.methods.DefaultMethod</span>
+</pre></div>
+
+<p>你可以使用"+="保留缺省方法的同时，导入新的方法：</p>
+
+<div class="highlight"><pre><span class="na">import.methods+</span><span class="o">=</span><span class="s">com.foo.MyMethod</span>
+</pre></div>
+
+<p>比如DefaultMethod有静态方法：(也可以是非静态方法)</p>
+
+<div class="highlight"><pre><span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">format</span><span class="o">(</span><span class="n">Date</span> <span class="n">self</span><span class="o">,</span> <span class="n">String</span> <span class="n">format</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="o">...;</span>
+<span class="o">}</span>
+<span class="kd">public</span> <span class="kd">static</span> <span class="kt">char</span> <span class="nf">toChar</span><span class="o">(</span><span class="n">String</span> <span class="n">self</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="o">...;</span>
+<span class="o">}</span>
+<span class="kd">public</span> <span class="kd">static</span> <span class="n">Date</span> <span class="nf">now</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="o">...;</span>
+<span class="o">}</span>
+</pre></div>
+
+<p>则可以在模板中调用：</p>
+
+<div class="highlight"><pre>${date.format("yyyy-MM-dd")}
+${str.toChar()}
+${now()}
+</pre></div>
+
+<p>原理：静态方法的第一个参数传入被操作者本身的引用，后面的参数调用时传入。</p>
+
+<p>如果你需要setEngine()注入引擎实例，或setXxx(String)注入配置项，可以导入非静态方法，但静态方法编译后更快。</p>
+
+<p>比如：</p>
+
+<div class="highlight"><pre><span class="c1">// 将注入引擎本身</span>
+<span class="kd">private</span> <span class="n">Engine</span> <span class="n">engine</span><span class="o">;</span>
+<span class="kd">public</span> <span class="nf">setEngine</span><span class="o">(</span><span class="n">Engine</span> <span class="n">engine</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">engine</span> <span class="o">=</span> <span class="n">engine</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="c1">// 将注入httl.properties中input.encoding=UTF-8配置的值</span>
+<span class="kd">private</span> <span class="n">String</span> <span class="n">inputEncoding</span><span class="o">;</span>
+<span class="kd">public</span> <span class="nf">setInputEncoding</span><span class="o">(</span><span class="n">String</span> <span class="n">inputEncoding</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">inputEncoding</span> <span class="o">=</span> <span class="n">inputEncoding</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="c1">// 非静态方法导入</span>
+<span class="kd">public</span> <span class="n">String</span> <span class="nf">include</span><span class="o">(</span><span class="n">String</span> <span class="n">templateName</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">engine</span><span class="o">.</span><span class="na">getTemplate</span><span class="o">(</span><span class="n">templateName</span><span class="o">,</span> <span class="n">inputEncoding</span><span class="o">).</span><span class="na">toString</span><span class="o">();</span>
+<span class="o">}</span>
+</pre></div>
+
+<p>使用方式一样：</p>
+
+<div class="highlight"><pre>${include("foo.httl")}
+</pre></div>
+
+<h3>7.8.3 导入宏</h3>
+
+<div class="highlight"><pre><span class="na">import.macros</span><span class="o">=</span>
+</pre></div>
+
+<h3>7.8.4 导入序列</h3>
+
+<p>用法如：</p>
+
+<div class="highlight"><pre><span class="c">&lt;!--#foreach(weekday in ["Monday" .. "Sunday"])--&gt;</span>
+${weekday}
+<span class="c">&lt;!--#end--&gt;</span>
+</pre></div>
+
+<p>缺省包含星期和月份序列：(缺省值不用配)</p>
+
+<div class="highlight"><pre><span class="na">sequences</span><span class="o">=</span><span class="s">Mon Tue Wed Thu Fri Sat Sun Mon,\</span>
 <span class="s">Monday Tuesday Wednesday Thursday Friday Saturday Sunday Monday,\</span>
 <span class="s">Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec Jan,\</span>
 <span class="s">January February March May June July August September October November December January</span>
 </pre></div>
 
-<h1>7. 设计</h1>
+<p>你可以使用"+="保留缺省序列的同时，增加新的序列：</p>
 
-<h2>7.1 类关系</h2>
+<div class="highlight"><pre><span class="na">sequences+</span><span class="o">=</span><span class="s">金 木 水 火 土 金</span>
+</pre></div>
+
+<h2>7.9 日志输出配置</h2>
+
+<p>缺省使用log4j输出日志：(缺省值不用配)</p>
+
+<div class="highlight"><pre><span class="na">loggers</span><span class="o">=</span><span class="s">httl.spi.loggers.Log4jLogger</span>
+</pre></div>
+
+<p>如果你需要使用其它日志工具输出日志，可配置自己的适配器。</p>
+
+<p>比如使用JDK的日志输出：</p>
+
+<div class="highlight"><pre><span class="na">loggers</span><span class="o">=</span><span class="s">httl.spi.loggers.JdkLogger</span>
+</pre></div>
+
+<p>你也可以同时输出到多个日志工具：</p>
+
+<div class="highlight"><pre><span class="na">loggers</span><span class="o">=</span><span class="s">httl.spi.loggers.Log4jLogger,httl.spi.loggers.JdkLogger</span>
+</pre></div>
+
+<p>或者使用"+="保留缺省的log4j输出的同时，增加新的输出：</p>
+
+<div class="highlight"><pre><span class="na">loggers+</span><span class="o">=</span><span class="s">httl.spi.loggers.JdkLogger</span>
+</pre></div>
+
+<h1>8. 设计</h1>
+
+<h2>8.1 类关系</h2>
 
 <p><img src="http://httl.googlecode.com/svn/trunk/httl-doc/httl-class-diagram.jpg" alt="ClassDiagram"></p>
 
@@ -822,7 +1168,7 @@ ${colors.next}
 <div class="highlight"><pre><span class="kn">import</span> <span class="nn">httl.spi.*</span><span class="o">;</span>
 </pre></div>
 
-<h2>7.2 调用过程</h2>
+<h2>8.2 调用过程</h2>
 
 <p><img src="http://httl.googlecode.com/svn/trunk/httl-doc/httl-sequence-diagram.jpg" alt="Sequence diagram"></p>
 
