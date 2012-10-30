@@ -1,33 +1,44 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
-    <meta charset='utf-8'>
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
-
     <title>&lt;HTTL/&gt; by httl</title>
-  </head>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/main.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
+  </head>
   <body>
 
-    <header>
-      <div class="container">
+      <header>
         <h1>&lt;HTTL/&gt;</h1>
-        <h2>HTTL是一个适用于HTML输出的开源JAVA模板引擎.</h2>
+        <p>HTTL是一个适用于HTML输出的开源JAVA模板引擎.</p>
+      </header>
 
-        <section id="downloads">
-          <a href="https://github.com/downloads/httl/httl/httl-1.0.0.jar" class="btn">Download bin.jar</a>
-          <a href="https://github.com/downloads/httl/httl/httl-1.0.0-sources.jar" class="btn">Download src.jar</a>
-          <a href="https://github.com/httl/httl" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
-        </section>
-      </div>
-    </header>
+      <div id="banner">
+        <span id="logo"></span>
 
-    <div class="container">
-      <section id="main_content">
+        <a href="https://github.com/httl/zh" class="button fork"><strong>View On GitHub</strong></a>
+        <div class="downloads">
+          <span>Downloads:</span>
+          <ul>
+            <li><a href="https://github.com/httl/zh/zipball/master" class="button">ZIP</a></li>
+            <li><a href="https://github.com/httl/zh/tarball/master" class="button">TAR</a></li>
+          </ul>
+        </div>
+      </div><!-- end banner -->
+
+    <div class="wrapper">
+      <nav>
+        <ul></ul>
+      </nav>
+      <section>
         <h1>1. 概述</h1>
 
 <p>HTTL是一个适用于HTML输出的开源JAVA模板引擎，可用于替代JSP页面，它的指令和Velocity相似。 </p>
@@ -191,7 +202,7 @@
 
 <table>
 <tr>
-<td>引擎</td>
+<td>模板引擎</td>
 <td>版本</td>
 <td>初始化</td>
 <td>编译</td>
@@ -271,19 +282,19 @@
 <span class="n">writer</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">user</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
 </pre></div>
 
-<p>当在httl.properties中配置了：</p>
+<p>二进制编译：</p>
 
-<div class="highlight"><pre><span class="na">output.stream</span><span class="o">=</span><span class="s">true</span>
-</pre></div>
-
-<p>HTTL将编译成二进制：</p>
-
-<div class="highlight"><pre><span class="kd">private</span> <span class="kd">static</span> <span class="kt">byte</span><span class="o">[]</span> <span class="kd">final</span> <span class="n">_B1_</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">byte</span><span class="o">[]</span> <span class="o">{</span><span class="mi">60</span><span class="o">,</span> <span class="mi">116</span><span class="o">,</span> <span class="mi">97</span><span class="o">,</span> <span class="mi">98</span><span class="o">,</span> <span class="mi">108</span><span class="o">,</span> <span class="mi">101</span><span class="o">,</span> <span class="mi">62</span><span class="o">,</span> <span class="mi">60</span><span class="o">,</span> <span class="mi">116</span><span class="o">,</span> <span class="mi">114</span><span class="o">,</span> <span class="mi">62</span><span class="o">,</span> <span class="mi">60</span><span class="o">,</span> <span class="mi">116</span><span class="o">,</span> <span class="mi">100</span><span class="o">,</span> <span class="mi">62</span><span class="o">};</span>
-<span class="n">output</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">_B1_</span><span class="o">);</span>
+<div class="highlight"><pre><span class="n">output</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="k">new</span> <span class="kt">byte</span><span class="o">[]</span> <span class="o">{</span><span class="mi">60</span><span class="o">,</span> <span class="mi">116</span><span class="o">,</span> <span class="mi">97</span><span class="o">,</span> <span class="mi">98</span><span class="o">,</span> <span class="mi">108</span><span class="o">,</span> <span class="mi">101</span><span class="o">,</span> <span class="mi">62</span><span class="o">,</span> <span class="mi">60</span><span class="o">,</span> <span class="mi">116</span><span class="o">,</span> <span class="mi">114</span><span class="o">,</span> <span class="mi">62</span><span class="o">,</span> <span class="mi">60</span><span class="o">,</span> <span class="mi">116</span><span class="o">,</span> <span class="mi">100</span><span class="o">,</span> <span class="mi">62</span><span class="o">});</span>
 <span class="n">output</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">user</span><span class="o">.</span><span class="na">getName</span><span class="o">().</span><span class="na">getBytes</span><span class="o">());</span>
 </pre></div>
 
 <p>这样可以大幅度降低IO输出时将文本通过字符集编码成二进制流的速度。</p>
+
+<p>HTTL缺省每模板同时生成两份class，在用户传入OutputStream和Writer时，执行不同的class：</p>
+
+<div class="highlight"><pre><span class="n">template</span><span class="o">.</span><span class="na">render</span><span class="o">(</span><span class="n">paramaters</span><span class="o">,</span> <span class="n">outputStream</span><span class="o">);</span> <span class="c1">// 内部将执行二进制输出版本的Template类</span>
+<span class="n">template</span><span class="o">.</span><span class="na">render</span><span class="o">(</span><span class="n">paramaters</span><span class="o">,</span> <span class="n">writer</span><span class="o">);</span> <span class="c1">// 内部将执行文本输出版本的Template类</span>
+</pre></div>
 
 <h3>2.4.3 对于赋值生成局部变量，不put回参数map</h3>
 
@@ -312,8 +323,15 @@ ${price}
 <p>当模板的内容较大时，会导致生成的字节码也比较大，字节码运行时会放在内存perm区，导致perm区过大。
 模板多时，用户可能需要不断调大perm区：java -XX:PermSize=256MB -XX:MaxPermSize=256MB</p>
 
-<p>另外，SunJDK缺省对大于5K字节码的方法不进行JIT优化，我们常规开启的JVM是mixed模式的，
-即调用量大的，将由JIT编译成本地码运行，其它在JVM内解释执行，解释执行和编译执行的速度相差10倍以上。</p>
+<p>另外，SunJDK缺省对大于8K字节码的方法不进行JIT优化，我们常规开启的JVM是mixed模式的，
+即调用量大的，将由JIT编译成本地码运行，其它在JVM内解释执行，解释执行和编译执行的速度相差10倍以上。
+参见JVM的：<a href="http://hg.openjdk.java.net/jdk6/jdk6/hotspot/file/2ecd0d1194d2/src/share/vm/runtime/globals.hpp">globals.hpp</a></p>
+
+<div class="highlight"><pre><span class="n">product</span><span class="p">(</span><span class="kt">bool</span><span class="p">,</span> <span class="n">DontCompileHugeMethods</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="s">"don't compile methods &gt; HugeMethodLimit"</span><span class="p">)</span>
+<span class="n">develop</span><span class="p">(</span><span class="n">intx</span><span class="p">,</span> <span class="n">HugeMethodLimit</span><span class="p">,</span>  <span class="mi">8000</span><span class="p">,</span>
+        <span class="s">"don't compile methods larger than this if +DontCompileHugeMethods"</span><span class="p">)</span>
+</pre></div>
 
 <p>通过将文本不编译到字节码中，减少内存perm区占用，也能防止JIT失效。</p>
 
@@ -913,11 +931,23 @@ ${colors.next}
 <p>如果设置output.stream=true，在编译期就会将模板文件转换成byte[]数据，
 在输出时，直接向OutputStream中输出byte[]流，以免运行期每次输出都要转一次。</p>
 
-<p>缺省关闭：(缺省值不用配)</p>
+<p>缺省全部开启：(缺省值不用配)</p>
 
-<div class="highlight"><pre><span class="na">output.stream</span><span class="o">=</span><span class="s">false</span>
-<span class="na">output.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
+<div class="highlight"><pre><span class="na">output.stream</span><span class="o">=</span><span class="s">true</span>
+<span class="na">output.writer</span><span class="o">=</span><span class="s">true</span>
 </pre></div>
+
+<p>如果output.stream和output.writer同时开启，每份模板将编译成两份class，并返回自适应Template代理类。
+当用户调用template.render(Map,OutputStream)时，实际执行输出byte[]的Template类，
+当用户调用template.render(Map,Writer)时，实际执行输出String的Template类。</p>
+
+<p>如果output.stream和output.writer同时关闭，只生成writer模板，相当于只开启output.writer。</p>
+
+<p>注意：
+如果只开启output.stream=true，必须用template.render(Map,OutputStream)，否则数据转换会导致性能更低。
+如果只开启output.writer=true，必须用template.render(Map,Writer)，否则数据转换会导致性能更低。</p>
+
+<p>如果你从来不传入OutputStream或Writer，请关闭相应配置开关，减少编译开销。</p>
 
 <p>(2) 内存选项：</p>
 
@@ -1191,8 +1221,12 @@ ${weekday}
 <li><p>然后输出过滤后的内容。 </p></li>
 </ol>
       </section>
+      <footer>
+        <p>Project maintained by <a href="https://github.com/httl">httl</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></small></p>
+      </footer>
     </div>
-
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
     
   </body>
 </html>
