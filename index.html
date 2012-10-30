@@ -342,8 +342,7 @@ ${price}
 <p>因为模板输出的大量是基本类型和字符串，Httl遇到任何类似需要boxed和unboxed的地方，都会重载所有基本类型方法，以减少boxed和unboxed的处理。
 比如：当输出基本类型时，需要转成String，如果使用format(Object)接口，就会将基本类型装箱。</p>
 
-<p>有一次Profiler分析就发现，有一个地方为了能通用处理Object[],int[],long[]等数组类型，
-因为int[]不继承于Object[]，为了通用处理，改为Array.get(array, index)来获取数组的项，
+<p>反射也经常是性能瓶颈所在，比如：因为int[]不继承于Object[]，为了通用处理，改为Array.get(array, index)来获取数组的项，
 导致在Profiler分析时，发现80%的CPU时间都耗在Array.get()上。</p>
 
 <p>等等。</p>
