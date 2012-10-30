@@ -457,6 +457,10 @@ ${price}
 <span class="nt">&lt;project&gt;</span>
 </pre></div>
 
+<h2>4.4 运行环境:</h2>
+
+<p>JDK1.5+</p>
+
 <h1>5. 模板语法</h1>
 
 <p>基于Velocity指令和Html注释:</p>
@@ -843,7 +847,7 @@ ${colors.next}
 
 <p>开启热加载后，模板引擎在getTemplate()时会检查文件的lastModified时间，如果比上次加载的时间新，就重新加载。</p>
 
-<p>请注意：旧的模板不会被卸载，所有经常改文件会导致内存perm区越来越大，只能在开发阶段使用。</p>
+<p>请注意：旧的模板不会被卸载，经常改文件会导致内存perm区越来越大，只能在开发阶段使用。</p>
 
 <p>(3) 可以配置模板加载缺省编码，缺省为UTF-8：(缺省值不用配)</p>
 
@@ -1031,7 +1035,7 @@ ${colors.next}
 
 <p>比如你可以设置在编译时压缩模板文本的空白符：</p>
 
-<div class="highlight"><pre><span class="c"># 将连接的空白符压缩成单个空格</span>
+<div class="highlight"><pre><span class="c"># 将连续的空白符压缩成单个空格</span>
 <span class="na">text.filters</span><span class="o">=</span><span class="s">httl.spi.filters.CompressBlankFilter</span>
 
 <span class="c"># 去掉所有空白符</span>
@@ -1055,6 +1059,8 @@ ${colors.next}
 
 <div class="highlight"><pre><span class="na">import.packages</span><span class="o">=</span><span class="s">java.util</span>
 </pre></div>
+
+<p>这样你就可以在模板内用短类名，而不用带上全包名。</p>
 
 <h3>7.8.2 导入方法</h3>
 
