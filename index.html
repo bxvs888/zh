@@ -19,9 +19,9 @@
         <h2>HTTL是一个适用于HTML输出的开源JAVA模板引擎.</h2>
 
         <section id="downloads">
-          <a href="https://github.com/downloads/httl/httl/httl-1.0.0.jar" class="btn">Download bin.jar</a>
-          <a href="https://github.com/downloads/httl/httl/httl-1.0.0-sources.jar" class="btn">Download src.jar</a>
-          <a href="https://github.com/httl/httl" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+          <a href="https://github.com/httl/zh/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/httl/zh/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/httl/zh" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
         </section>
       </div>
     </header>
@@ -30,7 +30,7 @@
       <section id="main_content">
         <h1>1. 概述</h1>
 
-<p>HTTL是一个适用于HTML输出的开源JAVA模板引擎，可用于替代JSP页面，它的指令类似于Velocity。 </p>
+<p>HTTL是一个适用于HTML输出的开源JAVA模板引擎，可用于替代JSP页面，它的指令和Velocity相似。 </p>
 
 <h3>快速</h3>
 
@@ -285,7 +285,13 @@
 
 <h3>2.4.3 对于赋值生成局部变量，不put回参数map</h3>
 
-<p>比如：set="price = price * discount / 100"编译：</p>
+<p>比如将：</p>
+
+<div class="highlight"><pre><span class="c">&lt;!--#set(price = price * discount / 100)--&gt;</span>
+${price}
+</pre></div>
+
+<p>编译成：</p>
 
 <div class="highlight"><pre><span class="kt">int</span> <span class="n">price</span> <span class="o">=</span> <span class="n">price</span> <span class="o">*</span> <span class="n">discount</span> <span class="o">/</span> <span class="mi">100</span><span class="o">;</span>
 <span class="n">write</span><span class="o">(</span><span class="n">price</span><span class="o">);</span>
@@ -311,12 +317,12 @@
 
 <h3>2.4.5 减少反射调用，以及基本类型装箱。</h3>
 
-<p>因为模板输出的大量是基本类型和字符串，比如当输出基本类型时，需要转成String，如果使用format(Object)接口，就会将基本类型装箱，
-Httl遇到任何类似需要boxed和unboxed的地方，都会重载所有基本类型方法，以减少boxed和unboxed的处理。</p>
+<p>因为模板输出的大量是基本类型和字符串，Httl遇到任何类似需要boxed和unboxed的地方，都会重载所有基本类型方法，以减少boxed和unboxed的处理。
+比如：当输出基本类型时，需要转成String，如果使用format(Object)接口，就会将基本类型装箱。</p>
 
-<p>比如：有一次Profiler分析就发现，有一个地方为了能通用处理Object[],int[],long[]等数组类型，
+<p>有一次Profiler分析就发现，有一个地方为了能通用处理Object[],int[],long[]等数组类型，
 因为int[]不继承于Object[]，为了通用处理，改为Array.get(array, index)来获取数组的项，
-导致Profiler时，80%的CPU时间都耗在Array.get()上。</p>
+导致在Profiler分析时，发现80%的CPU时间都耗在Array.get()上。</p>
 
 <p>等等。</p>
 
