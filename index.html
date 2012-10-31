@@ -811,6 +811,17 @@ ${colors.next}
 <div class="highlight"><pre><span class="na">parser</span><span class="o">=</span><span class="s">httl.spi.parsers.AttributeParser</span>
 </pre></div>
 
+<p>属性语法需要用到jericho包解析HTML标签：</p>
+
+<a href="http://central.maven.org/maven2/net/htmlparser/jericho/jericho-html/3.1/jericho-html-3.1.jar">jericho-html-3.1.jar</a>
+
+<div class="highlight"><pre><dependency>
+	<groupId>net.htmlparser.jericho</groupId>
+	<artifactId>jericho-html</artifactId>
+	<version>3.1</version>
+</dependency>
+</pre></div>
+
 <p>语法如：</p>
 
 <div class="highlight"><pre><span class="nt">&lt;html</span> <span class="na">var=</span><span class="s">"User user, Book[] books"</span><span class="nt">&gt;</span>
@@ -958,6 +969,17 @@ ${colors.next}
 <p>你也可以换成javassist编译：</p>
 
 <div class="highlight"><pre><span class="na">compiler</span><span class="o">=</span><span class="s">httl.spi.compilers.JavassistCompiler</span>
+</pre></div>
+
+<p>当然，也就需要增加javassist的jar包依赖：</p>
+
+<a href="http://central.maven.org/maven2/org/javassist/javassist/3.15.0-GA/javassist-3.15.0-GA.jar">javassist-3.15.0-GA.jar</a>
+
+<div class="highlight"><pre><dependency>
+	<groupId>org.javassist</groupId>
+	<artifactId>javassist</artifactId>
+	<version>3.15.0-GA</version>
+</dependency>
 </pre></div>
 
 <p>(1) 输出选项：</p>
