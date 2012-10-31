@@ -1256,6 +1256,71 @@ ${weekday}
 <li><p>再进行过滤，比如转义动态内容的HTML特殊符，</p></li>
 <li><p>然后输出过滤后的内容。 </p></li>
 </ol>
+
+<h1>9. 发布记录</h1>
+
+<h2>9.1 HTTL 0.1.0 (2011-09-13)</h2>
+
+<div class="highlight"><pre>
+第一个版本，基本功能实现，HTML属性语法解析。
+</pre></div>
+
+<h2>9.2 HTTL 0.2.0 (2011-09-22)</h2>
+
+<div class="highlight"><pre>
+1. 增加注释语法并设为缺省，如：<!--#if(...)--> 
+2. 支持热加载，当文件变更时，自动重新加载，配置：reloadable=true 
+3. 支持启动时预编译，配置：precompiled=true 
+4. 异常信息显示出错位置周边内容，更容易排错 
+5. 支持注释块，不解释块，特殊符转义，如：\#, \$ 
+6. 支持include,read,evaluate函数(可自行扩展)，如：${include("xxx.httl")] 
+7. 支持集合泛型参数，如：#define(List<Book> books) 
+8. 自动空指针检测，比如：${user.role}，当user为null时不会空指针 
+9. 自动条件补全，比如：#if(books)等价于#if(books != null && books.size > 0) 
+10. 支持foreach状态栈，多层foreach时，可通过${foreach.parent.index}获取上层foreach状态 
+11. 允许设置foreach状态变量名 
+12. 支持方括号数组，如：#foreach(c in [a, b, c]) 
+13. 支持双点号序列，如：#foreach(c in a..c)或#foreach(i in 1..2)或#foreach(day in "Monday".."Sunday") 
+14. 支持集合或运算，选择不为空的集合，如：#foreach(book in books1 | books2) 
+15. 支持Date类型比较，如：#if(date1 > date2) 
+16. 支持new操作，如：${new Date()} 
+17. 支持强制转型，如：#set(user = (User) param) 
+18. 增加HttlServlet，支持将请求经过MVC框架处理并填充request属性后forward到HttlServlet进行页面渲染 
+19. 兼容JDK1.5，需配置：compiler=com.googlecode.httl.support.compilers.JavassistCompiler 
+</pre></div>
+
+<h2>9.3 HTTL 1.0.0 (2012-10-30)</h2>
+
+<div class="highlight"><pre>
+修复问题：
+1. 解决foreach和if/else联合使用时状态错乱问题。
+2. 解决getIsXxx属性解析出错问题。
+3. 解决文件加载未使用指定编码问题。
+4. 解决部分文件流打开后未关闭问题。
+5. 解决迭代map出错的问题，以及Map数据的类型推断问题。
+
+新功能：
+6. 支持单独的macro文件定义宏方法，通过import.macros配置加载。
+7. 增加gt,ge,lt,le符号，在属性语法时避免表达式出现HTML标签符。
+
+兼容优化：
+8. 静态方法不走engine.getFunction()查找实例，直接调用类的静态方法。
+9. 将所有配置的获取改为setter注入，比如：setInputEncoding(String)。
+10. 编译Macro时直接注入到模板属性中，并增加template.getMacros()方法。
+11. 渲染过程不改变传入Map的状态，保证模板渲染的无副作用性，以及多次渲染的幂等性。
+12. 优化Profiler性能分析发现的ArrayIterator引起的性能损耗问题。
+13. 将文本内容不编译到字节码中，改为从缓存中获取，防止内存Perm区过大，并提供source.in.class和text.in.class开关项。
+
+不兼容优化：
+14. 将define指令名改成var，以免和velocity的define指令理解混淆，影响所有旧模板，用户可全文替换。
+15. 去掉block指令，用#set(xxx = xxxmacro())代替，影响使用block的模板。
+16. 将com.googlecode.httl改成httl，影响API调用，重新Ctrl+Shift+O导入一下包名即可，类名没变。
+17. 将com.googlecode.httl.support改成httl.spi，影响httl.properties中扩展点的配置，使用缺省配置值的，建议不要配到用户配置中。
+18. 将filters配置项改成了value.filters，与text.filters对应用，影响httl.properties中filter扩展点的配置。
+19. 将functions配置项成了import.methods，与import.packages以及import.macros对应，方便理解。
+20. 加号数字优先，即只要有一方为数字即换数字计算，如："2" + 3，输出：5，而不是：23，如果要字符相拼双方都要为字符："2" + 3.toString
+</pre></div>
+
         </section>
 
         <footer>
