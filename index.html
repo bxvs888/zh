@@ -1018,18 +1018,18 @@ ${colors.next}
 
 <div class="highlight"><pre><span class="na">formatters</span><span class="o">=</span><span class="s">httl.spi.formatters.DateFormatter</span>
 <span class="na">date.format</span><span class="o">=</span><span class="s">yyyy-MM-dd HH:mm:ss</span>
+<span class="na">time.zone</span><span class="o">=</span>
+</pre></div>
+
+<p>你也可以设置时区，设置后，格式化的结果会带上时区的值：(缺省为当前系统时区)</p>
+
+<div class="highlight"><pre><span class="na">time.zone</span><span class="o">=</span><span class="s">+0</span>
 </pre></div>
 
 <p>你可以使用"+="保留缺省的日期格式化器的同时，增加新的格式化器：</p>
 
 <div class="highlight"><pre><span class="na">formatters+</span><span class="o">=</span><span class="s">httl.spi.formatters.NumberFormatter</span>
 <span class="na">number.format</span><span class="o">=</span><span class="s">###,##0.###</span>
-</pre></div>
-
-<p>你也可以设置格式化地区和时区，比如货币格式化时可能会用到：</p>
-
-<div class="highlight"><pre><span class="na">locale</span><span class="o">=</span><span class="s">en_US</span>
-<span class="na">time.zone</span><span class="o">=</span><span class="s">+0</span>
 </pre></div>
 
 <p>你还可以设置null,true,false值的输出，</p>
