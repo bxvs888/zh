@@ -23,9 +23,9 @@
         </header>
 
         <section id="downloads" class="clearfix">
-          <a href="https://github.com/downloads/httl/httl/httl-1.0.0.jar" id="download-zip" class="button"><span>下载 bin.jar</span></a>
-          <a href="https://github.com/downloads/httl/httl/httl-1.0.0-sources.jar" id="download-tar-gz" class="button"><span>下载 src.jar</span></a>
-          <a href="https://github.com/httl/httl" id="view-on-github" class="button"><span>查看源码仓库</span></a>
+          <a href="https://github.com/httl/zh/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/httl/zh/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/httl/zh" id="view-on-github" class="button"><span>View on GitHub</span></a>
         </section>
 
         <hr>
@@ -67,7 +67,7 @@
 <td>十万渲染</td>
 <td>每秒次数</td>
 </tr>
-<tr>
+<tr></tr>
 <tr>
 <td><a href="https://github.com/httl/httl/blob/master/src/test/java/httl/test/performance/JavaCase.java">java</a></td>
 <td><a href="https://github.com/httl/httl/blob/master/src/test/java/httl/test/performance/Books.java">books.java</a></td>
@@ -102,7 +102,7 @@
 <td>141ms/27,571byte</td>
 <td>56,192ms/100,000</td>
 <td>1,779/s</td>
-</tr>
+
 <tr>
 <td><a href="https://github.com/httl/httl/blob/master/src/test/java/httl/test/performance/Smarty4jCase.java">smarty4j</a></td>
 <td><a href="https://github.com/httl/httl/blob/master/src/test/resources/performance/books.st">books.st</a></td>
@@ -121,19 +121,17 @@
 <td>81,428ms/100,000</td>
 <td>1,228/s</td>
 </tr>
-</table>
-
-<p>环境：os: Mac OS X 10.8.2, cpu: 2 x 1.70GHz, mem: 4G, jvm: 1.7.0_09 -&gt; mem: 80M</p>
+</table><p>环境：os: Mac OS X 10.8.2, cpu: 2 x 1.70GHz, mem: 4G, jvm: 1.7.0_09 -&gt; mem: 80M</p>
 
 <h3>HTTL的渲染速度接近于直接用Java硬编码输出，比其它模板引擎高出10倍。</h3>
 
 <p>HTTL用到的JDK的Compiler，编译一个类通常需要几百毫秒，比其它模板的编译要慢，但每个模板只在加载时编译一次。</p>
 
-<p>注：不同环境的运行结果可能存在差异，以上测试数据为仅供参考，你可以在自己的机器上执行测试：</p>
+<p>注：不同环境的运行结果可能存在差异，以上测试数据仅供参考，你可以在自己的机器上执行测试：</p>
 
 <div class="highlight"><pre>git clone https://github.com/httl/httl.git
 <span class="nb">cd </span>httl
-mvn <span class="nb">test</span> -Dtest<span class="o">=</span>httl.test.PerformanceTest -Dcount=10000 -Dsize=100
+mvn <span class="nb">test</span> -Dtest<span class="o">=</span>httl.test.PerformanceTest
 </pre></div>
 
 <h2>2.2 优化策略</h2>
@@ -239,9 +237,7 @@ ${price}
 在HTTL中，$!{aaa}表示不对内容进行过滤，用于原样输出HTML片段。</p></li>
 <li><p>HTTL支持在所有使用变量的地方，进行表达式计算，也就是你不需要像Velocity那样，先#set($j = $i + 1)，再#if($j == $m)，可以直接&lt;!--#if(i + 1 == $m)--&gt;，其它指令也一样。</p></li>
 <li><p>HTTL采用扩展Class原生方法的方式，如：${"a".toChar}，而不像Velocity的Tool工具方法那样：$(StringTool.toChar("a"))，这样的调用方式更直观，更符合代码书写习惯。</p></li>
-</ol>
-
-<h2>2.4 指令对比</h2>
+</ol><h2>2.4 指令对比</h2>
 
 <table>
 <tr>
@@ -364,9 +360,7 @@ ${price}
 <td>不同</td>
 <td>停止模板解析</td>
 </tr>
-</table>
-
-<h1>3. 示例</h1>
+</table><h1>3. 示例</h1>
 
 <h2>3.1 调用示例</h2>
 
@@ -440,7 +434,7 @@ ${price}
 
 <p>性能测试：</p>
 
-<div class="highlight"><pre>mvn <span class="nb">test</span> -Dtest<span class="o">=</span>httl.test.PerformanceTest -Dcount=10000 -Dsize=100
+<div class="highlight"><pre>mvn <span class="nb">test</span> -Dtest<span class="o">=</span>httl.test.PerformanceTest
 </pre></div>
 
 <p>生成Eclipse工程描述文件:</p>
@@ -550,6 +544,30 @@ $!{body}
 
 示例：
 <span class="c">&lt;!--#set(price = book.price * book.discount)--&gt;</span>
+</pre></div>
+
+<p>缺省模板中set的变量，是不会回写到Context的参数Map中的。
+你需要用“:=”进行赋值，才会回写到Context的参数Map中：</p>
+
+<div class="highlight"><pre>格式：
+<span class="c">&lt;!--#set(type name := expression)--&gt;</span>
+
+示例：
+<span class="c">&lt;!--#set(price := book.price * book.discount)--&gt;</span>
+</pre></div>
+
+<p>你可以通过ThreadLocal的Context.getContext().getParameters()拿到回写的变量：</p>
+
+<div class="highlight"><pre><span class="c1">// 你可以把入参设成不可修写的Map，不会影响运行。</span>
+<span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">parameters</span> <span class="o">=</span> <span class="n">Collections</span><span class="o">.</span><span class="na">unmodifiableMap</span><span class="o">(</span><span class="n">parameters</span><span class="o">);</span>
+
+<span class="c1">// 传入的parameters在渲染过程中总是不会被修复，确保渲染过程无副作用，以及多次渲染的幂等性。</span>
+<span class="n">template</span><span class="o">.</span><span class="na">render</span><span class="o">(</span><span class="n">parameters</span><span class="o">,</span> <span class="n">writer</span><span class="o">);</span>
+
+<span class="c1">// 注意：这里获取到的并不是上面render参入的parameters，而是parameters的包装类。</span>
+<span class="c1">// 此parameters是可写的，当模板中set回写变量时，写入该Map中。</span>
+<span class="c1">// 在查询变量时，先在包装类中查找，找不到，再到原生传入的parameters中查找。</span>
+<span class="n">Context</span><span class="o">.</span><span class="na">getContext</span><span class="o">().</span><span class="na">getParameters</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="s">"price"</span><span class="o">);</span>
 </pre></div>
 
 <h2>5.3 条件指令</h2>
@@ -1293,14 +1311,132 @@ ${weekday}
 <li><p>将动态占位符内容，先格式化成字符串， </p></li>
 <li><p>再进行过滤，比如转义动态内容的HTML特殊符，</p></li>
 <li><p>然后输出过滤后的内容。 </p></li>
-</ol><h1>9. 发布记录</h1>
+</ol><h1>9. MVC集成</h1>
 
-<h2>9.1 HTTL 0.1.0 (2011-09-13)</h2>
+<p>Web配置查找顺序：</p>
+
+<p>1.首先查找/WEB-INF/web.xml中的context-param，如：</p>
+
+<div class="highlight"><pre><span class="nt">&lt;context-param&gt;</span>
+    <span class="nt">&lt;param-name&gt;</span>httl.properties<span class="nt">&lt;/param-name&gt;</span>
+    <span class="nt">&lt;param-value&gt;</span>/WEB-INF/httl.properties<span class="nt">&lt;/param-value&gt;</span>
+<span class="nt">&lt;/context-param&gt;</span>
+</pre></div>
+
+<p>(注：如果配置路径以 / 开头则表示在web应用目录下，否则在ClassPath下查找)</p>
+
+<p>2.如果未配置，则查找默认WEB-INF路径：/WEB-INF/httl.properties</p>
+
+<p>3.如果WEB-INF中没有，则查找ClassPath根目录：httl.properties</p>
+
+<p>4.如果ClassPath根目录也没有，则使用标准配置。</p>
+
+<p>其中，httl.properties配置如：</p>
+
+<div class="highlight"><pre><span class="na">loaders</span><span class="o">=</span><span class="s">httl.spi.loaders.ServletLoader</span>
+<span class="na">template.directory</span><span class="o">=</span><span class="s">/WEB-INF/templates</span>
+<span class="na">input.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
+<span class="na">output.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
+</pre></div>
+
+<p>以上配置，对下面的所有MVC集成都有效。</p>
+
+<h2>9.1 Spring MVC 集成</h2>
+
+<p>配置springmvc-servlet.xml:</p>
+
+<div class="highlight"><pre><span class="cp">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span>
+<span class="cp">&lt;!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" </span>
+<span class="cp">    "http://www.springframework.org/dtd/spring-beans-2.0.dtd"&gt;</span>
+<span class="nt">&lt;beans&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"viewResolver"</span> <span class="na">class=</span><span class="s">"httl.web.springmvc.HttlViewResolver"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"suffix"</span> <span class="na">value=</span><span class="s">".httl"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"contentType"</span> <span class="na">value=</span><span class="s">"text/html; charset=UTF-8"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+<span class="nt">&lt;/beans&gt;</span>
+</pre></div>
+
+<h2>9.2 Struts 集成</h2>
+
+<p>配置struts-default.xml:</p>
+
+<div class="highlight"><pre><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>  
+<span class="cp">&lt;!DOCTYPE struts PUBLIC  </span>
+<span class="cp">    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"  </span>
+<span class="cp">    "http://struts.apache.org/dtds/struts-2.0.dtd"&gt;</span>
+<span class="nt">&lt;struts&gt;</span>
+    <span class="nt">&lt;package</span> <span class="na">name=</span><span class="s">"struts-default"</span> <span class="na">abstract=</span><span class="s">"true"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;result-types&gt;</span>
+            <span class="nt">&lt;result-type</span> <span class="na">name=</span><span class="s">"velocity"</span> <span class="na">class=</span><span class="s">"httl.web.struts2.HttlResult"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/result-types&gt;</span>
+    <span class="nt">&lt;/package&gt;</span>
+<span class="nt">&lt;struts&gt;</span>
+</pre></div>
+
+<h2>9.3 Filter 集成</h2>
+
+<p>配置/WEB-INF/web.xml:</p>
+
+<div class="highlight"><pre><span class="nt">&lt;servlet&gt;</span>
+    <span class="nt">&lt;servlet-name&gt;</span>yourservlet<span class="nt">&lt;/servlet-name&gt;</span>
+    <span class="nt">&lt;servlet-class&gt;</span>com.foo.YourServlet<span class="nt">&lt;/servlet-class&gt;</span>
+    <span class="nt">&lt;load-on-startup&gt;</span>1<span class="nt">&lt;/load-on-startup&gt;</span>
+<span class="nt">&lt;/servlet&gt;</span>
+<span class="nt">&lt;servlet-mapping&gt;</span>
+    <span class="nt">&lt;servlet-name&gt;</span>yourservlet<span class="nt">&lt;/servlet-name&gt;</span>
+    <span class="nt">&lt;url-pattern&gt;</span>*.do<span class="nt">&lt;/url-pattern&gt;</span>
+<span class="nt">&lt;/servlet-mapping&gt;</span>
+
+<span class="nt">&lt;filter&gt;</span>
+    <span class="nt">&lt;filter-name&gt;</span>httl<span class="nt">&lt;/filter-name&gt;</span>
+    <span class="nt">&lt;filter-class&gt;</span>httl.web.servlet.HttlFilter<span class="nt">&lt;/filter-class&gt;</span>
+<span class="nt">&lt;/filter&gt;</span>
+<span class="nt">&lt;filter-mapping&gt;</span>
+    <span class="nt">&lt;filter-name&gt;</span>httl<span class="nt">&lt;/filter-name&gt;</span>
+    <span class="nt">&lt;url-pattern&gt;</span>*.do<span class="nt">&lt;/url-pattern&gt;</span>
+<span class="nt">&lt;/filter-mapping&gt;</span>
+</pre></div>
+
+<p>你需要在你的业务Servlet中，处理完业务后，将业务参数都写到request.setAttribute()中。
+HttlFilter会模板目录下读取请求path加.httl后缀的模板，然后以request中的变量进行渲染。</p>
+
+<h2>9.4 Servlet 集成</h2>
+
+<p>配置/WEB-INF/web.xml:</p>
+
+<div class="highlight"><pre><span class="nt">&lt;servlet&gt;</span>
+    <span class="nt">&lt;servlet-name&gt;</span>yourservlet<span class="nt">&lt;/servlet-name&gt;</span>
+    <span class="nt">&lt;servlet-class&gt;</span>com.foo.YourServlet<span class="nt">&lt;/servlet-class&gt;</span>
+    <span class="nt">&lt;load-on-startup&gt;</span>1<span class="nt">&lt;/load-on-startup&gt;</span>
+<span class="nt">&lt;/servlet&gt;</span>
+<span class="nt">&lt;servlet-mapping&gt;</span>
+    <span class="nt">&lt;servlet-name&gt;</span>yourservlet<span class="nt">&lt;/servlet-name&gt;</span>
+    <span class="nt">&lt;url-pattern&gt;</span>*.do<span class="nt">&lt;/url-pattern&gt;</span>
+<span class="nt">&lt;/servlet-mapping&gt;</span>
+
+<span class="nt">&lt;servlet&gt;</span>
+    <span class="nt">&lt;servlet-name&gt;</span>httl<span class="nt">&lt;/servlet-name&gt;</span>
+    <span class="nt">&lt;servlet-class&gt;</span>httl.web.servlet.HttlServlet<span class="nt">&lt;/servlet-class&gt;</span>
+    <span class="nt">&lt;load-on-startup&gt;</span>2<span class="nt">&lt;/load-on-startup&gt;</span>
+<span class="nt">&lt;/servlet&gt;</span>
+<span class="nt">&lt;servlet-mapping&gt;</span>
+    <span class="nt">&lt;servlet-name&gt;</span>httl<span class="nt">&lt;/servlet-name&gt;</span>
+    <span class="nt">&lt;url-pattern&gt;</span>*.httl<span class="nt">&lt;/url-pattern&gt;</span>
+<span class="nt">&lt;/servlet-mapping&gt;</span>
+</pre></div>
+
+<p>你需要在你的业务Servlet中，处理完业务后，将业务参数都写到request.setAttribute()中，
+并将请求forward到指定模板，比如：request.getRequestDispatcher("foo.httl").forward(request, response);
+HttlServlet会模板目录下读取forward过来的path同名的模板，然后以request中的变量进行渲染。</p>
+
+<h1>10. 发布记录</h1>
+
+<h2>10.1 HTTL 0.1.0 (2011-09-13)</h2>
 
 <pre><code>第一个版本，基本功能实现，HTML属性语法解析。
 </code></pre>
 
-<h2>9.2 HTTL 0.2.0 (2011-09-22)</h2>
+<h2>10.2 HTTL 0.2.0 (2011-09-22)</h2>
 
 <pre><code>1. 增加注释语法并设为缺省，如：&lt;!--#if(...)--&gt; 
 2. 支持热加载，当文件变更时，自动重新加载，配置：reloadable=true 
@@ -1323,7 +1459,7 @@ ${weekday}
 19. 兼容JDK1.5，需配置：compiler=com.googlecode.httl.support.compilers.JavassistCompiler 
 </code></pre>
 
-<h2>9.3 HTTL 1.0.0 (2012-10-30)</h2>
+<h2>10.3 HTTL 1.0.0 (2012-10-30)</h2>
 
 <pre><code>修复问题：
 1. 解决foreach和if/else联合使用时状态错乱问题。
@@ -1360,26 +1496,6 @@ ${weekday}
           This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
         </footer>
 
-<div style="position: absolute; right: 160px; top: 0px;">中文 | <a href="../en">English</a></div>
-<div id="outlineIndex" style="position: absolute; left: 100px; top: 300px; display: none;"></div>
-<div id="outlineClose" style="position: absolute; left: 190px; top: 300px; display: none; color: #FF3333; cursor: pointer;" onclick="document.getElementById('outlineIndex').style.display = 'none';document.getElementById('outlineClose').style.display = 'none'">[X]</div>
-<script type="text/javascript">
-<!--
-if (window.screen.width > 800) {
-var index = "";
-var outlines = document.getElementsByTagName("h1");
-for (var i = 0; i < outlines.length; i ++) {
-	var outline = outlines[i];
-	var name = outline.innerHTML;
-    outline.outerHTML = "<a name=\"" + name + "\"></a>" + outline.outerHTML;
-    index += "<a href=\"#" + name + "\">" + name + "</a><br/>"
-}
-document.getElementById("outlineIndex").innerHTML = index;
-document.getElementById('outlineIndex').style.display = '';
-document.getElementById('outlineClose').style.display = '';
-}
--->
-</script>
         
       </div>
     </div>
