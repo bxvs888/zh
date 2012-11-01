@@ -23,9 +23,9 @@
         </header>
 
         <section id="downloads" class="clearfix">
-          <a href="https://github.com/downloads/httl/httl/httl-1.0.0.jar" id="download-zip" class="button"><span>下载 bin.jar</span></a>
-          <a href="https://github.com/downloads/httl/httl/httl-1.0.0-sources.jar" id="download-tar-gz" class="button"><span>下载 src.jar</span></a>
-          <a href="https://github.com/httl/httl" id="view-on-github" class="button"><span>查看源码仓库</span></a>
+          <a href="https://github.com/httl/zh/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/httl/zh/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/httl/zh" id="view-on-github" class="button"><span>View on GitHub</span></a>
         </section>
 
         <hr>
@@ -412,89 +412,59 @@ ${price}
 注意，所有配置项都有缺省值，如果使用缺省值，可以不配，
 更多配置参见文档第7章。</p>
 
-<h1>4. 下载</h1>
+<h1>4. 设计</h1>
 
-<h2>4.1 发布包:</h2>
+<h2>4.1 类关系</h2>
 
-<p><a href="https://github.com/httl/httl/downloads">https://github.com/httl/httl/downloads</a></p>
+<p><img src="../diagram/httl-class-diagram.png" alt="类图"><a href="../diagram/httl-class-diagram.png">大图</a></p>
 
-<h2>4.2 源代码:</h2>
+<p>分包原则：按复用的粒度分包，如果某些类总是一起被复用，则放在一个包下面。 </p>
 
-<p><a href="https://github.com/httl/httl">https://github.com/httl/httl</a></p>
+<p>HTTL有两种用户： </p>
 
-<p>下载源码：</p>
+<ol>
+<li><p>一种是模板引擎的使用者， </p></li>
+<li><p>一种是模板引擎的扩展者。 </p></li>
+</ol><p>每种用户所需用到的类，就是同一复用粒度的。 </p>
 
-<div class="highlight"><pre>git clone https://github.com/httl/httl.git
+<p>所以在整体上划分为三层： </p>
+
+<ol>
+<li><p>API (Application Programming Interface) 直接使用者需要导入的接口。</p></li>
+<li><p>SPI (Service Provider Interface)  扩展者需要导入的接口。 </p></li>
+<li><p>Impl (Built-in Implementation) 内置扩展实现。 </p></li>
+</ol><p>使用者API导入： </p>
+
+<div class="highlight"><pre><span class="kn">import</span> <span class="nn">httl.*</span><span class="o">;</span>  
 </pre></div>
 
-<p>编译源码：</p>
+<p>扩展者SPI导入： </p>
 
-<div class="highlight"><pre>mvn install -Dmaven.test.skip
+<div class="highlight"><pre><span class="kn">import</span> <span class="nn">httl.spi.*</span><span class="o">;</span>
 </pre></div>
 
-<p>性能测试：</p>
+<h2>4.2 调用过程</h2>
 
-<div class="highlight"><pre>mvn <span class="nb">test</span> -Dtest<span class="o">=</span>httl.test.PerformanceTest
-</pre></div>
+<p><img src="../diagram/httl-sequence-diagram.png" alt="时序图"><a href="../diagram/httl-class-diagram.png">大图</a></p>
 
-<p>生成Eclipse工程描述文件:</p>
+<p>执行过程说明：(与上图中的序号对应) </p>
 
-<div class="highlight"><pre>mvn eclipse:eclipse -DdownloadSources
-</pre></div>
-
-<p>导入Eclipse工程：</p>
-
-<p>Eclipse -&gt; File -&gt; Import -&gt; Existing Projects into Workspace -&gt; Browse -&gt; Finished</p>
-
-<p>将.httl文件以html编辑器格式打开：</p>
-
-<p>Eclipse -&gt; Window -&gt; Preferences -&gt; General -&gt; Content Types -&gt; Text -&gt; HTML -&gt; Add -&gt; .httl</p>
-
-<h2>4.3 Maven依赖:</h2>
-
-<div class="highlight"><pre><span class="nt">&lt;project&gt;</span>
-    <span class="nt">&lt;dependencies&gt;</span>
-        <span class="nt">&lt;dependency&gt;</span>
-            <span class="nt">&lt;groupId&gt;</span>httl<span class="nt">&lt;/groupId&gt;</span>
-            <span class="nt">&lt;artifactId&gt;</span>httl<span class="nt">&lt;/artifactId&gt;</span>
-            <span class="nt">&lt;version&gt;</span>1.0.0<span class="nt">&lt;/version&gt;</span>
-            <span class="nt">&lt;/dependency&gt;</span>
-    <span class="nt">&lt;/dependencies&gt;</span>
-    <span class="nt">&lt;repositories&gt;</span>
-        <span class="nt">&lt;repository&gt;</span>
-            <span class="nt">&lt;id&gt;</span>httl-repository<span class="nt">&lt;/id&gt;</span>
-            <span class="nt">&lt;name&gt;</span>Httl Repository<span class="nt">&lt;/name&gt;</span>
-            <span class="nt">&lt;url&gt;</span>http://httl.github.com/maven/<span class="nt">&lt;/url&gt;</span>
-        <span class="nt">&lt;/repository&gt;</span>
-    <span class="nt">&lt;/repositories&gt;</span>
-<span class="nt">&lt;project&gt;</span>
-</pre></div>
-
-<h2>4.4 运行环境</h2>
-
-<p><a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">JDK1.5+</a></p>
-
-<p>缺省配置下，HTTL不需要依赖任何三方类库即可运行。</p>
-
-<h2>4.5 开源许可</h2>
-
-<p><a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License 2.0</a></p>
-
-<pre><code>版权所有 2011-2012 HTTL开发团队
-
-根据2.0版本Apache许可证(以下简称"许可证")授权；
-根据本许可证，用户可以不使用此文件。
-用户可从下列网址获得许可证副本：
-
-     http://www.apache.org/licenses/LICENSE-2.0
-
-除非因适用法律要求或书面同意，
-根据本许可证分发的软件是基于"按原样"基础提供的，
-无任何明示的或暗示的保证或条件。
-详见根据本许可证许可下特定语言的管辖权限和限制。
-</code></pre>
-
-<h1>5. 模板语法</h1>
+<ol>
+<li><p>当从引擎中获取模板时， </p></li>
+<li><p>首先会在缓存查找是否已缓存，如果有缓存就直接返回， </p></li>
+<li><p>如果没有，则加载模板， </p></li>
+<li><p>接着进行模板语法解析， </p></li>
+<li><p>在解析到表达式时，将其转译为Java表达式， </p></li>
+<li><p>并对静态文本进行编译前过滤，比如删除空白等， </p></li>
+<li><p>对解析后的Java代码进行编译，得到Template的具体模板实现类， </p></li>
+<li><p>实例化模板实现类， </p></li>
+<li><p>将模板实例写入缓存，并返回给用户， </p></li>
+<li><p>当用户调用模板的渲染方法时， </p></li>
+<li><p>将静态模板文本直接输出， </p></li>
+<li><p>将动态占位符内容，先格式化成字符串， </p></li>
+<li><p>再进行过滤，比如转义动态内容的HTML特殊符，</p></li>
+<li><p>然后输出过滤后的内容。 </p></li>
+</ol><h1>5. 模板</h1>
 
 <p>基于Velocity指令和Html注释:</p>
 
@@ -699,7 +669,7 @@ $!{xxx(books)}
 \${xxx}
 </pre></div>
 
-<h1>6. 表达式语法</h1>
+<h1>6. 表达式</h1>
 
 <p>基于Java表达式和扩展方法。</p>
 
@@ -826,7 +796,7 @@ ${colors.next}
 <span class="n">uuid</span><span class="o">()</span>
 </pre></div>
 
-<h1>7. 详细配置</h1>
+<h1>7. 配置</h1>
 
 <p>配置中，+=表示在缺省配置上追加配置，=表示覆盖缺省配置。</p>
 
@@ -1259,59 +1229,7 @@ ${weekday}
 <div class="highlight"><pre><span class="na">loggers+</span><span class="o">=</span><span class="s">httl.spi.loggers.JdkLogger</span>
 </pre></div>
 
-<h1>8. 架构设计</h1>
-
-<h2>8.1 类关系</h2>
-
-<p><img src="../diagram/httl-class-diagram.png" alt="类图"><a href="../diagram/httl-class-diagram.png">大图</a></p>
-
-<p>分包原则：按复用的粒度分包，如果某些类总是一起被复用，则放在一个包下面。 </p>
-
-<p>HTTL有两种用户： </p>
-
-<ol>
-<li><p>一种是模板引擎的使用者， </p></li>
-<li><p>一种是模板引擎的扩展者。 </p></li>
-</ol><p>每种用户所需用到的类，就是同一复用粒度的。 </p>
-
-<p>所以在整体上划分为三层： </p>
-
-<ol>
-<li><p>API (Application Programming Interface) 直接使用者需要导入的接口。</p></li>
-<li><p>SPI (Service Provider Interface)  扩展者需要导入的接口。 </p></li>
-<li><p>Impl (Built-in Implementation) 内置扩展实现。 </p></li>
-</ol><p>使用者API导入： </p>
-
-<div class="highlight"><pre><span class="kn">import</span> <span class="nn">httl.*</span><span class="o">;</span>  
-</pre></div>
-
-<p>扩展者SPI导入： </p>
-
-<div class="highlight"><pre><span class="kn">import</span> <span class="nn">httl.spi.*</span><span class="o">;</span>
-</pre></div>
-
-<h2>8.2 调用过程</h2>
-
-<p><img src="../diagram/httl-sequence-diagram.png" alt="时序图"><a href="../diagram/httl-class-diagram.png">大图</a></p>
-
-<p>执行过程说明：(与上图中的序号对应) </p>
-
-<ol>
-<li><p>当从引擎中获取模板时， </p></li>
-<li><p>首先会在缓存查找是否已缓存，如果有缓存就直接返回， </p></li>
-<li><p>如果没有，则加载模板， </p></li>
-<li><p>接着进行模板语法解析， </p></li>
-<li><p>在解析到表达式时，将其转译为Java表达式， </p></li>
-<li><p>并对静态文本进行编译前过滤，比如删除空白等， </p></li>
-<li><p>对解析后的Java代码进行编译，得到Template的具体模板实现类， </p></li>
-<li><p>实例化模板实现类， </p></li>
-<li><p>将模板实例写入缓存，并返回给用户， </p></li>
-<li><p>当用户调用模板的渲染方法时， </p></li>
-<li><p>将静态模板文本直接输出， </p></li>
-<li><p>将动态占位符内容，先格式化成字符串， </p></li>
-<li><p>再进行过滤，比如转义动态内容的HTML特殊符，</p></li>
-<li><p>然后输出过滤后的内容。 </p></li>
-</ol><h1>9. MVC集成</h1>
+<h1>8. 集成</h1>
 
 <p>Web配置查找顺序：</p>
 
@@ -1341,7 +1259,7 @@ ${weekday}
 
 <p>以上配置，对下面的所有MVC集成都有效。</p>
 
-<h2>9.1 Spring MVC 集成</h2>
+<h2>8.1 Spring MVC 集成</h2>
 
 <p>配置springmvc-servlet.xml:</p>
 
@@ -1356,7 +1274,7 @@ ${weekday}
 <span class="nt">&lt;/beans&gt;</span>
 </pre></div>
 
-<h2>9.2 Struts 集成</h2>
+<h2>8.2 Struts 集成</h2>
 
 <p>配置struts-default.xml:</p>
 
@@ -1373,7 +1291,7 @@ ${weekday}
 <span class="nt">&lt;struts&gt;</span>
 </pre></div>
 
-<h2>9.3 Filter 集成</h2>
+<h2>8.3 Filter 集成</h2>
 
 <p>配置/WEB-INF/web.xml:</p>
 
@@ -1400,7 +1318,7 @@ ${weekday}
 <p>你需要在你的业务Servlet中，处理完业务后，将业务参数都写到request.setAttribute()中。
 HttlFilter会模板目录下读取请求path加.httl后缀的模板，然后以request中的变量进行渲染。</p>
 
-<h2>9.4 Servlet 集成</h2>
+<h2>8.4 Servlet 集成</h2>
 
 <p>配置/WEB-INF/web.xml:</p>
 
@@ -1429,7 +1347,89 @@ HttlFilter会模板目录下读取请求path加.httl后缀的模板，然后以r
 并将请求forward到指定模板，比如：request.getRequestDispatcher("foo.httl").forward(request, response);
 HttlServlet会模板目录下读取forward过来的path同名的模板，然后以request中的变量进行渲染。</p>
 
-<h1>10. 发布记录</h1>
+<h1>9. 下载</h1>
+
+<h2>9.1 发布包:</h2>
+
+<p><a href="https://github.com/httl/httl/downloads">https://github.com/httl/httl/downloads</a></p>
+
+<h2>9.2 源代码:</h2>
+
+<p><a href="https://github.com/httl/httl">https://github.com/httl/httl</a></p>
+
+<p>下载源码：</p>
+
+<div class="highlight"><pre>git clone https://github.com/httl/httl.git
+</pre></div>
+
+<p>编译源码：</p>
+
+<div class="highlight"><pre>mvn install -Dmaven.test.skip
+</pre></div>
+
+<p>性能测试：</p>
+
+<div class="highlight"><pre>mvn <span class="nb">test</span> -Dtest<span class="o">=</span>httl.test.PerformanceTest
+</pre></div>
+
+<p>生成Eclipse工程描述文件:</p>
+
+<div class="highlight"><pre>mvn eclipse:eclipse -DdownloadSources
+</pre></div>
+
+<p>导入Eclipse工程：</p>
+
+<p>Eclipse -&gt; File -&gt; Import -&gt; Existing Projects into Workspace -&gt; Browse -&gt; Finished</p>
+
+<p>将.httl文件以html编辑器格式打开：</p>
+
+<p>Eclipse -&gt; Window -&gt; Preferences -&gt; General -&gt; Content Types -&gt; Text -&gt; HTML -&gt; Add -&gt; .httl</p>
+
+<h2>9.3 Maven依赖:</h2>
+
+<div class="highlight"><pre><span class="nt">&lt;project&gt;</span>
+    <span class="nt">&lt;dependencies&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>httl<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>httl<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>1.0.0<span class="nt">&lt;/version&gt;</span>
+            <span class="nt">&lt;/dependency&gt;</span>
+    <span class="nt">&lt;/dependencies&gt;</span>
+    <span class="nt">&lt;repositories&gt;</span>
+        <span class="nt">&lt;repository&gt;</span>
+            <span class="nt">&lt;id&gt;</span>httl-repository<span class="nt">&lt;/id&gt;</span>
+            <span class="nt">&lt;name&gt;</span>Httl Repository<span class="nt">&lt;/name&gt;</span>
+            <span class="nt">&lt;url&gt;</span>http://httl.github.com/maven/<span class="nt">&lt;/url&gt;</span>
+        <span class="nt">&lt;/repository&gt;</span>
+    <span class="nt">&lt;/repositories&gt;</span>
+<span class="nt">&lt;project&gt;</span>
+</pre></div>
+
+<h2>9.4 运行环境</h2>
+
+<p><a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">JDK1.5+</a></p>
+
+<p>缺省配置下，HTTL不需要依赖任何三方类库即可运行。</p>
+
+<h2>9.5 开源许可</h2>
+
+<p><a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License 2.0</a></p>
+
+<pre><code>版权所有 2011-2012 HTTL开发团队
+
+根据2.0版本Apache许可证(以下简称"许可证")授权；
+根据本许可证，用户可以不使用此文件。
+用户可从下列网址获得许可证副本：
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+除非因适用法律要求或书面同意，
+根据本许可证分发的软件是基于"按原样"基础提供的，
+无任何明示的或暗示的保证或条件。
+详见根据本许可证许可下特定语言的管辖权限和限制。
+</code></pre>
+
+<h1>10. 变更</h1>
 
 <h2>10.1 HTTL 0.1.0 (2011-09-13)</h2>
 
@@ -1496,32 +1496,6 @@ HttlServlet会模板目录下读取forward过来的path同名的模板，然后�
           This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
         </footer>
 
-<div style="position: absolute; right: 160px; top: 0px;">中文 | <a href="../en">English</a></div>
-<div id="outlineIndex" style="position: absolute; left: 100px; top: 300px; display: none; width: 120px; background-color: white;"></div>
-<div id="outlineClose" style="position: absolute; left: 200px; top: 300px; display: none; color: #FF3333; cursor: pointer;" onclick="document.getElementById('outlineIndex').style.display = 'none';document.getElementById('outlineClose').style.display = 'none'">[X]</div>
-<script type="text/javascript">
-<!--
-if (window.screen.width > 1000) {
-var index = "";
-var outlines = document.getElementsByTagName("h1");
-for (var i = 0; i < outlines.length; i ++) {
-	var outline = outlines[i];
-	var name = outline.innerHTML;
-    outline.outerHTML = "<a name=\"" + name + "\"></a>" + outline.outerHTML;
-    index += "<a href=\"#" + name + "\">" + name + "</a><br/>"
-}
-document.getElementById("outlineIndex").innerHTML = index;
-document.getElementById('outlineIndex').style.display = '';
-document.getElementById('outlineClose').style.display = '';
-var left = ((window.screen.width - 700) / 2) - 200;
-if (left < 0) {
-	left = 0;
-}
-document.getElementById('outlineIndex').style.left = left + "px";
-document.getElementById('outlineClose').style.left = (left + 100) + "px";
-}
--->
-</script>
         
       </div>
     </div>
