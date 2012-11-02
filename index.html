@@ -23,9 +23,9 @@
         </header>
 
         <section id="downloads" class="clearfix">
-          <a href="https://github.com/downloads/httl/httl/httl-1.0.0.jar" id="download-zip" class="button"><span>下载 bin.jar</span></a>
-          <a href="https://github.com/downloads/httl/httl/httl-1.0.0-sources.jar" id="download-tar-gz" class="button"><span>下载 src.jar</span></a>
-          <a href="https://github.com/httl/httl" id="view-on-github" class="button"><span>查看源码仓库</span></a>
+          <a href="https://github.com/httl/zh/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/httl/zh/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/httl/zh" id="view-on-github" class="button"><span>View on GitHub</span></a>
         </section>
 
         <hr>
@@ -1231,7 +1231,9 @@ ${weekday}
 
 <h1>8. 集成</h1>
 
-<p><img src="http://httl.github.com/images/httl-mvc.png" alt="MVC"><a href="http://httl.github.com/images/mvc.png">查看大图</a></p>
+<p>HTTL在MVC中的定位：</p>
+
+<p><img src="http://httl.github.com/images/httl-mvc.png" alt="MVC"><a href="http://httl.github.com/images/httl-mvc.png">查看大图</a></p>
 
 <p>Web配置查找顺序：</p>
 
@@ -1277,6 +1279,43 @@ ${weekday}
 </pre></div>
 
 <h2>8.2 Struts 集成</h2>
+
+<p>配置struts-default.xml:</p>
+
+<div class="highlight"><pre><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>  
+<span class="cp">&lt;!DOCTYPE struts PUBLIC  </span>
+<span class="cp">    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"  </span>
+<span class="cp">    "http://struts.apache.org/dtds/struts-2.0.dtd"&gt;</span>
+<span class="nt">&lt;struts&gt;</span>
+    <span class="nt">&lt;package</span> <span class="na">name=</span><span class="s">"struts-default"</span> <span class="na">abstract=</span><span class="s">"true"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;result-types&gt;</span>
+            <span class="nt">&lt;result-type</span> <span class="na">name=</span><span class="s">"velocity"</span> <span class="na">class=</span><span class="s">"httl.web.struts2.HttlResult"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/result-types&gt;</span>
+    <span class="nt">&lt;/package&gt;</span>
+<span class="nt">&lt;struts&gt;</span>
+</pre></div>
+
+<h2>8.3 Webx 集成</h2>
+
+<p>配置webx.xml:</p>
+
+<div class="highlight"><pre><span class="cp">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span>
+<span class="c">&lt;!-- Webx Root Context Configuration.  --&gt;</span>
+<span class="nt">&lt;beans:beans</span> <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+    <span class="na">xmlns:beans=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
+    <span class="na">xmlns:p=</span><span class="s">"http://www.springframework.org/schema/p"</span>
+    <span class="na">xmlns:services=</span><span class="s">"http://www.alibaba.com/schema/services"</span>
+    <span class="na">xmlns:engines=</span><span class="s">"http://www.alibaba.com/schema/services/template/engines"</span>
+    <span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd</span>
+<span class="s">            http://www.alibaba.com/schema/services http://localhost:8080/schema/services.xsd</span>
+<span class="s">            http://www.alibaba.com/schema/services/template/engines http://localhost:8080/schema/services/template/engines.xsd"</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;services:template&gt;</span>
+        <span class="nt">&lt;engines:httl-engine</span> <span class="na">path=</span><span class="s">"/templates"</span> <span class="na">templateEncoding=</span><span class="s">"UTF-8"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/services:template&gt;</span>
+
+<span class="nt">&lt;/beans:beans&gt;</span>
+</pre></div>
 
 <p>配置struts-default.xml:</p>
 
@@ -1491,6 +1530,18 @@ HttlServlet会模板目录下读取forward过来的path同名的模板，然后�
 19. 将functions配置项成了import.methods，与import.packages以及import.macros对应，方便理解。
 20. 加号数字优先，即只要有一方为数字即换数字计算，如："2" + 3，输出：5，而不是：23，如果要字符相拼双方都要为字符："2" + 3.toString
 </code></pre>
+
+<h2>9.4 HTTL 1.0.1 (2012-11-02)</h2>
+
+<pre><code>1. 增加springmvc的ViewResolver集成。
+2. 增加struts的Result集成。
+3. 增加webx的TemplateEngine集成。
+4. 增加slf4j日志输出，并设为缺省。
+5. 增加jcl日志输出。
+6. 增加set(a := b)，用于将参数写回Context的参数Map中。
+7. 允许include传参，如：$!{include("aaa.httl", ["user": user, "age": 28])}
+8. 优化unescapeString和unescapeHtml的性能。
+</code></pre>
         </section>
 
         <footer>
@@ -1498,32 +1549,6 @@ HttlServlet会模板目录下读取forward过来的path同名的模板，然后�
           This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
         </footer>
 
-<div style="position: absolute; right: 160px; top: 0px;">中文 | <a href="../en">English</a></div>
-<div id="outlineIndex" style="position: absolute; left: 100px; top: 300px; display: none; width: 120px; background-color: white;"></div>
-<div id="outlineClose" style="position: absolute; left: 200px; top: 300px; display: none; color: #FF3333; cursor: pointer;" onclick="document.getElementById('outlineIndex').style.display = 'none';document.getElementById('outlineClose').style.display = 'none'">[X]</div>
-<script type="text/javascript">
-<!--
-if (window.screen.width > 1000) {
-var index = "";
-var outlines = document.getElementsByTagName("h1");
-for (var i = 0; i < outlines.length; i ++) {
-	var outline = outlines[i];
-	var name = outline.innerHTML;
-    outline.outerHTML = "<a name=\"" + name + "\"></a>" + outline.outerHTML;
-    index += "<a href=\"#" + name + "\">" + name + "</a><br/>"
-}
-document.getElementById("outlineIndex").innerHTML = index;
-document.getElementById('outlineIndex').style.display = '';
-document.getElementById('outlineClose').style.display = '';
-var left = ((window.screen.width - 700) / 2) - 200;
-if (left < 0) {
-	left = 0;
-}
-document.getElementById('outlineIndex').style.left = left + "px";
-document.getElementById('outlineClose').style.left = (left + 100) + "px";
-}
--->
-</script>
         
       </div>
     </div>
