@@ -131,7 +131,7 @@
 
 <div class="highlight"><pre>git clone https://github.com/httl/httl.git
 <span class="nb">cd </span>httl
-mvn <span class="nb">test</span> -Dtest<span class="o">=</span>httl.test.PerformanceTest
+mvn <span class="nb">test</span> -Dtest<span class="o">=</span>httl.test.PerformanceTest -Dstream<span class="o">=</span>false -Dsize<span class="o">=</span>200 -Dcount<span class="o">=</span>10000
 </pre></div>
 
 <h2>2.2 优化策略</h2>
@@ -420,55 +420,130 @@ ${price}
 
 <p><a href="http://httl.github.com/images/httl-class-diagram.png">查看大图</a></p>
 
-<p>分包原则：按复用的粒度分包，如果某些类总是一起被复用，则放在一个包下面。 </p>
+<p>1. 核心领域模型划分原则：按实体域，服务域，会话域划分。 </p>
 
-<p>HTTL有两种用户： </p>
+<ul>
+<li><p>不管你做一个什么产品，都一定有一个被操作的主体，比如：服务框架管理的Service，任务框架管理的Task，Spring管理的Bean等，这就是实体域。</p></li>
+<li><p>即然有被操作者，就一定有操作者，它管理被操作者的生命周期，发起动作，比如：服务框架的ServiceInvoker,，任务框架的TaskScheduler，Spring的BeanFactory等，这就是服务域。</p></li>
+<li><p>服务域发起动作，在执行过程中，会有一些临时状态需要存储交换，比如：Invacation，Execution，Request等，这就是会话域。</p></li>
+</ul>
 
-<ol>
-<li><p>一种是模板引擎的使用者， </p></li>
-<li><p>一种是模板引擎的扩展者。 </p></li>
-</ol><p>每种用户所需用到的类，就是同一复用粒度的。 </p>
+<p><img src="http://httl.github.com/images/ses-domain.png" alt="领域模型划分"></p>
 
-<p>所以在整体上划分为三层： </p>
+<p>相应在HTTL中：</p>
 
-<ol>
-<li><p>API (Application Programming Interface) 直接使用者需要导入的接口。</p></li>
-<li><p>SPI (Service Provider Interface)  扩展者需要导入的接口。 </p></li>
-<li><p>BUILT-IN (Built-in Implementation) 内置扩展实现。 </p></li>
-</ol><p>使用者API导入： </p>
+<ul>
+<li><p>Engine 为服务域，它是API的入口，并负责实体域Template的生命周期管理，它是Singleton实例的，加载后不可变，所以是线程安全的，它的初始化过程较重，请复用单例。</p></li>
+<li><p>Template 为实体域，代表着被操作者，它是被动域，它是Prototype实例的，即每个模板产生一个实例，加载后不可变，所以是线程安全的，模板变化后，将产生不同的实例，而不改变原实例。 </p></li>
+<li><p>Context 为会话域，执有操作过程的可变状态，它是ThreadLocal实例的，即不和其它线程竞争使用，所以也是线程安全的，请不要跨线程传递，它的初始化轻量，每次执行新建实例，执行完即销毁。</p></li>
+</ul>
 
-<div class="highlight"><pre><span class="kn">import</span> <span class="nn">httl.*</span><span class="o">;</span>  
-</pre></div>
+<p>这样划分的好处是，职责清晰，可变状态集中，每个域都是无锁线程安全的，保证在大并发下，不会降低系统的活性。</p>
 
-<p>扩展者SPI导入： </p>
+<p>2. 分包原则：按复用度，抽象度，稳定度分包。</p>
 
-<div class="highlight"><pre><span class="kn">import</span> <span class="nn">httl.spi.*</span><span class="o">;</span>
-</pre></div>
+<ul>
+<li><p>复用度：每种用户所需用到的类，就是同一复用粒度的，比如：使用者和扩展者，这样可以减少代码干扰，以及最大化复用。</p></li>
+<li><p>抽象度：包中抽象类个数占比，比如包中有10个类，其中3个为抽象类(包括接口)，则抽象度为3/10，保持被依赖者总是比依赖者的抽象度高，形成金子塔关系，这样可以保持每层都有足够的扩展性。 </p></li>
+<li><p>稳定度：被依赖包和依赖包的占比，如果一个包依赖很多包，那别的包变化都会引起它变化，所以它就不稳定，反之即稳定，保持包的稳定度和抽象度成正比，即把抽象类(包括接口)放到稳定的包中，这样可以防止不稳定性传染。</p></li>
+</ul>
+
+<p>稳定度与抽象度关系如下图：</p>
+
+<p><img src="http://httl.github.com/images/abstract-stable.png" alt="稳定度与抽象度关系"></p>
+
+<p>也就是分包应该如下：</p>
+
+<p><img src="http://httl.github.com/images/abstract-stable-package.png" alt="稳定度与抽象度包结构"></p>
+
+<p>其中上面那个包不依赖其它包。所以它很稳定，应尽量把抽象类或接口放在这一层，</p>
+
+<p>而下面那个包依赖了三个包，三个包变化会引起它跟随变化，所以它是不稳定，应尽量把具体实现类放在这一层。</p>
+
+<p>因稳定度与抽象度成正比，所以不稳定度与抽象度成反比，计算方式如下：</p>
+
+<p>(1) I = Ce / (Ca + Ce)</p>
+
+<ul>
+<li>I: Instability (不稳定度)</li>
+<li>Ca: Afferent Coupling (传入依赖，也就是被其它包依赖的个数)</li>
+<li>Ce: Efferent Coupling (输出依赖，也就是依赖其它包的个数)</li>
+</ul>
+
+<p>(2) A = Na / Nc</p>
+<ul>
+<li>A: Abstractness (抽象度)</li>
+<li>Na: Number of abstract classes (抽象类的个数)</li>
+<li>Nc: Number of classes (类的个数，包括抽象类)</li>
+</ul>
+ 
+<p>(3) D = abs(1 - I - A) * sin(45)</p>
+<ul>
+<li>D: Distance (偏差)</li>
+<li>I: Instability (不稳定度)</li>
+<li>A: Abstractness (抽象度)</li>
+</ul>
+ 
+<p>应该保持偏差越小越好，即下图所示交点都落在绿色反比线左右：</p>
+
+<p><img src="http://httl.github.com/images/iad-metrics.gif" alt="不稳定度与抽象度比"></p>
+
+<p>基于上面的原则，HTTL的包结构整体上划分为三层：</p>
+
+<ul>
+<li><p>API (Application Programming Interface) 模板引擎的使用者依赖的接口类，也是核心领域模型，其中Engine类相当于微内核，只管理非功能性的扩展点的加载，不硬编码模板加载解析渲染的任何部分。</p></li>
+<li><p>SPI (Service Provider Interface)  模板引擎的扩展者依赖的接口类，它依赖于API的领域模型，它是模板引擎功能正交分解的抽象层，以保证用户可以最小粒度替换需要改写的地方，方便二次开发。 </p></li>
+<li><p>BUILT-IN (Built-in Implementation) 内置扩展实现，它是SPI标准实现，也是可被用户替换的类，它包含引擎所有做的事，包括扩展点之间的组装过程(可替换DefaultEngine)，以确保没有功能换不掉，即平等对待扩展者。 </p></li>
+</ul>
+
+<p>采用子包依赖父包风格，所以将API放在根目录，SPI接口独立子包，各种实现放在SPI的子包中。</p>
+
+<ul>
+<li><p>使用者API导入：import httl.*</p></li>
+<li><p>扩展者SPI导入：import httl.spi.*</p></li>
+</ul>
+
+<p>下图是HTTL所有包的不稳定度与抽象度的比值距阵：</p>
+
+<p><img src="http://httl.github.com/images/httl-metrics.png" alt="HTTL不稳定度与抽象度比"></p>
+
+<p>HTTL所有核心包都是靠近反比线的，即上图用绿色标识的，表示分包是合理的。</p>
 
 <h2>4.2 调用过程</h2>
 
 <p><img src="http://httl.github.com/images/httl-sequence-diagram.png" alt="时序图"></p>
 
-<p><a href="http://httl.github.com/images/httl-class-diagram.png">查看大图</a></p>
+<p><a href="http://httl.github.com/images/httl-sequence-diagram.png">查看大图</a></p>
 
 <p>执行过程说明：(与上图中的序号对应) </p>
 
-<ol>
-<li><p>当从引擎中获取模板时， </p></li>
-<li><p>首先会在缓存查找是否已缓存，如果有缓存就直接返回， </p></li>
-<li><p>如果没有，则加载模板， </p></li>
-<li><p>接着进行模板语法解析， </p></li>
-<li><p>在解析到表达式时，将其转译为Java表达式， </p></li>
-<li><p>并对静态文本进行编译前过滤，比如删除空白等， </p></li>
-<li><p>对解析后的Java代码进行编译，得到Template的具体模板实现类， </p></li>
-<li><p>实例化模板实现类， </p></li>
-<li><p>将模板实例写入缓存，并返回给用户， </p></li>
-<li><p>当用户调用模板的渲染方法时， </p></li>
-<li><p>将静态模板文本直接输出， </p></li>
-<li><p>将动态占位符内容，先格式化成字符串， </p></li>
-<li><p>再进行过滤，比如转义动态内容的HTML特殊符，</p></li>
-<li><p>然后输出过滤后的内容。 </p></li>
-</ol><h1>5.模板</h1>
+<p>1. 当从引擎中获取模板时， </p>
+
+<p>1.1 首先会在缓存查找是否已缓存，如果有缓存就直接返回， </p>
+
+<p>1.2 如果没有，则加载模板， </p>
+
+<p>1.3 接着进行模板语法解析， </p>
+
+<p>1.3.1 在解析到表达式时，将其转译为Java表达式， </p>
+
+<p>1.3.2 并对静态文本进行编译前过滤，比如删除空白等， </p>
+
+<p>1.3.3 对解析后的Java代码进行编译，得到Template的具体模板实现类， </p>
+
+<p>1.3.4 实例化模板实现类， </p>
+
+<p>1.4 将模板实例写入缓存，并返回给用户， </p>
+
+<p>2. 当用户调用模板的渲染方法时， </p>
+
+<p>2.1 将动态占位符内容，先格式化成字符串， </p>
+
+<p>2.2 再进行过滤，比如转义动态内容的HTML特殊符，</p>
+
+<p>2.3 然后输出过滤后的内容，如果是静态文本直接输出。 </p>
+
+<h1>5.模板</h1>
 
 <p>基于Velocity指令和Html注释:</p>
 
@@ -1557,7 +1632,7 @@ HttlServlet会模板目录下读取forward过来的path同名的模板，然后�
 
 <p>性能测试：</p>
 
-<div class="highlight"><pre>mvn <span class="nb">test</span> -Dtest<span class="o">=</span>httl.test.PerformanceTest
+<div class="highlight"><pre>mvn <span class="nb">test</span> -Dtest<span class="o">=</span>httl.test.PerformanceTest -Dstream<span class="o">=</span>false -Dsize<span class="o">=</span>200 -Dcount<span class="o">=</span>10000
 </pre></div>
 
 <p>生成Eclipse工程描述文件:</p>
