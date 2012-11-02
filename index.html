@@ -862,7 +862,7 @@ ${colors.next}
 
 <p>缺省为强缓存，即所有模板加载后全部缓存：(缺省值不用配)</p>
 
-<div class="highlight"><pre><span class="na">cache</span><span class="o">=</span><span class="s">httl.spi.caches.StrongCache</span>
+<div class="highlight"><pre><span class="na">cache</span><span class="o">=</span><span class="s">java.util.concurrent.ConcurrentHashMap</span>
 </pre></div>
 
 <p>如果你的模板非常之多，内存不足以缓存所有模板，可以配置为LRU缓存：</p>
