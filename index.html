@@ -23,9 +23,9 @@
         </header>
 
         <section id="downloads" class="clearfix">
-          <a href="https://github.com/downloads/httl/httl/httl-1.0.0.jar" id="download-zip" class="button"><span>下载 bin.jar</span></a>
-          <a href="https://github.com/downloads/httl/httl/httl-1.0.0-sources.jar" id="download-tar-gz" class="button"><span>下载 src.jar</span></a>
-          <a href="https://github.com/httl/httl" id="view-on-github" class="button"><span>查看源码仓库</span></a>
+          <a href="https://github.com/httl/zh/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/httl/zh/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/httl/zh" id="view-on-github" class="button"><span>View on GitHub</span></a>
         </section>
 
         <hr>
@@ -1241,9 +1241,23 @@ ${weekday}
 
 <p><a href="http://httl.github.com/images/httl-mvc.png">查看大图</a></p>
 
-<p>Web配置查找顺序：</p>
+<ol>
+<li>Web应用需要配置ServletLoader加载模板：(所有Web集成通用)</li>
+</ol><p>web.xml:</p>
 
-<p>1.首先查找/WEB-INF/web.xml中的context-param，如：</p>
+<div class="highlight"><pre><span class="nt">&lt;listener&gt;</span>
+    <span class="nt">&lt;listener-class&gt;</span>httl.spi.loaders.ServletLoader<span class="nt">&lt;/listener-class&gt;</span>
+<span class="nt">&lt;/listener&gt;</span>
+</pre></div>
+
+<p>httl.properties：</p>
+
+<div class="highlight"><pre><span class="na">loaders</span><span class="o">=</span><span class="s">httl.spi.loaders.ServletLoader</span>
+</pre></div>
+
+<ol>
+<li>Web应用查找httl.properties配置的顺序：(所有Web集成通用)</li>
+</ol><p>(1) 首先查找/WEB-INF/web.xml中的context-param，如：</p>
 
 <div class="highlight"><pre><span class="nt">&lt;context-param&gt;</span>
     <span class="nt">&lt;param-name&gt;</span>httl.properties<span class="nt">&lt;/param-name&gt;</span>
@@ -1253,25 +1267,45 @@ ${weekday}
 
 <p>(注：如果配置路径以 / 开头则表示在web应用目录下，否则在ClassPath下查找)</p>
 
-<p>2.如果未配置，则查找默认WEB-INF路径：/WEB-INF/httl.properties</p>
+<p>(2) 如果未配置，则查找默认WEB-INF路径：/WEB-INF/httl.properties</p>
 
-<p>3.如果WEB-INF中没有，则查找ClassPath根目录：httl.properties</p>
+<p>(3) 如果WEB-INF中没有，则查找ClassPath根目录：httl.properties</p>
 
-<p>4.如果ClassPath根目录也没有，则使用标准配置。</p>
-
-<p>其中，httl.properties配置如：</p>
-
-<div class="highlight"><pre><span class="na">loaders</span><span class="o">=</span><span class="s">httl.spi.loaders.ServletLoader</span>
-<span class="na">template.directory</span><span class="o">=</span><span class="s">/WEB-INF/templates</span>
-<span class="na">input.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
-<span class="na">output.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
-</pre></div>
-
-<p>以上配置，对下面的所有MVC集成都有效。</p>
+<p>(4) 如果ClassPath根目录也没有，则使用标准配置。</p>
 
 <h2>8.1 Spring MVC 集成</h2>
 
-<p>配置springmvc-servlet.xml:</p>
+<p>配置/WEB-INF/web.xml:</p>
+
+<div class="highlight"><pre><span class="cp">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span>
+<span class="nt">&lt;web-app</span> <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+        <span class="na">xmlns=</span><span class="s">"http://java.sun.com/xml/ns/javaee"</span> <span class="na">xmlns:web=</span><span class="s">"http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"</span>
+        <span class="na">xsi:schemaLocation=</span><span class="s">"http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"</span>
+        <span class="na">version=</span><span class="s">"2.5"</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;listener&gt;</span>
+        <span class="nt">&lt;listener-class&gt;</span>httl.spi.loaders.ServletLoader<span class="nt">&lt;/listener-class&gt;</span>
+    <span class="nt">&lt;/listener&gt;</span>
+
+    <span class="nt">&lt;listener&gt;</span>
+        <span class="nt">&lt;listener-class&gt;</span>org.springframework.web.context.ContextLoaderListener<span class="nt">&lt;/listener-class&gt;</span>
+    <span class="nt">&lt;/listener&gt;</span>
+
+    <span class="nt">&lt;servlet&gt;</span>
+        <span class="nt">&lt;servlet-name&gt;</span>springmvc<span class="nt">&lt;/servlet-name&gt;</span>
+        <span class="nt">&lt;servlet-class&gt;</span>org.springframework.web.servlet.DispatcherServlet<span class="nt">&lt;/servlet-class&gt;</span>
+        <span class="nt">&lt;load-on-startup&gt;</span>1<span class="nt">&lt;/load-on-startup&gt;</span>
+    <span class="nt">&lt;/servlet&gt;</span>
+
+    <span class="nt">&lt;servlet-mapping&gt;</span>
+        <span class="nt">&lt;servlet-name&gt;</span>springmvc<span class="nt">&lt;/servlet-name&gt;</span>
+        <span class="nt">&lt;url-pattern&gt;</span>/*<span class="nt">&lt;/url-pattern&gt;</span>
+    <span class="nt">&lt;/servlet-mapping&gt;</span>
+
+<span class="nt">&lt;/web-app&gt;</span>
+</pre></div>
+
+<p>配置/WEB-INF/springmvc-servlet.xml:</p>
 
 <div class="highlight"><pre><span class="cp">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span>
 <span class="cp">&lt;!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" </span>
@@ -1284,26 +1318,96 @@ ${weekday}
 <span class="nt">&lt;/beans&gt;</span>
 </pre></div>
 
+<p>配置/WEB-INF/httl.properties：</p>
+
+<div class="highlight"><pre><span class="na">loaders</span><span class="o">=</span><span class="s">httl.spi.loaders.ServletLoader</span>
+<span class="na">template.directory</span><span class="o">=</span><span class="s">/WEB-INF/templates</span>
+<span class="na">input.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
+<span class="na">output.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
+</pre></div>
+
 <h2>8.2 Struts 集成</h2>
 
-<p>配置struts-default.xml:</p>
+<p>配置/WEB-INF/web.xml:</p>
+
+<div class="highlight"><pre><span class="cp">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span>
+<span class="nt">&lt;web-app</span> <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+        <span class="na">xmlns=</span><span class="s">"http://java.sun.com/xml/ns/javaee"</span> <span class="na">xmlns:web=</span><span class="s">"http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"</span>
+        <span class="na">xsi:schemaLocation=</span><span class="s">"http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"</span>
+        <span class="na">version=</span><span class="s">"2.5"</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;listener&gt;</span>
+        <span class="nt">&lt;listener-class&gt;</span>httl.spi.loaders.ServletLoader<span class="nt">&lt;/listener-class&gt;</span>
+    <span class="nt">&lt;/listener&gt;</span>
+
+    <span class="nt">&lt;filter&gt;</span>
+        <span class="nt">&lt;filter-name&gt;</span>struts<span class="nt">&lt;/filter-name&gt;</span>
+        <span class="nt">&lt;filter-class&gt;</span>org.apache.struts2.dispatcher.FilterDispatcher<span class="nt">&lt;/filter-class&gt;</span>
+    <span class="nt">&lt;/filter&gt;</span>
+
+    <span class="nt">&lt;filter-mapping&gt;</span>
+        <span class="nt">&lt;filter-name&gt;</span>struts<span class="nt">&lt;/filter-name&gt;</span>
+        <span class="nt">&lt;url-pattern&gt;</span>/*<span class="nt">&lt;/url-pattern&gt;</span>
+    <span class="nt">&lt;/filter-mapping&gt;</span>
+
+<span class="nt">&lt;/web-app&gt;</span>
+</pre></div>
+
+<p>配置classpath:struts.xml:</p>
 
 <div class="highlight"><pre><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>  
 <span class="cp">&lt;!DOCTYPE struts PUBLIC  </span>
 <span class="cp">    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"  </span>
 <span class="cp">    "http://struts.apache.org/dtds/struts-2.0.dtd"&gt;</span>
 <span class="nt">&lt;struts&gt;</span>
-    <span class="nt">&lt;package</span> <span class="na">name=</span><span class="s">"struts-default"</span> <span class="na">abstract=</span><span class="s">"true"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;result-types&gt;</span>
-            <span class="nt">&lt;result-type</span> <span class="na">name=</span><span class="s">"velocity"</span> <span class="na">class=</span><span class="s">"httl.web.struts2.HttlResult"</span><span class="nt">/&gt;</span>
-        <span class="nt">&lt;/result-types&gt;</span>
+    <span class="nt">&lt;package</span> <span class="na">name=</span><span class="s">"hello"</span> <span class="na">extends=</span><span class="s">"httl-default"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;action</span> <span class="na">name=</span><span class="s">"helloWorld"</span> <span class="na">class=</span><span class="s">"com.hello.HelloWorld"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;result</span> <span class="na">type=</span><span class="s">"httl"</span><span class="nt">&gt;</span>/hello_world.httl<span class="nt">&lt;/result&gt;</span>
+        <span class="nt">&lt;/action&gt;</span>
     <span class="nt">&lt;/package&gt;</span>
-<span class="nt">&lt;struts&gt;</span>
+<span class="nt">&lt;/struts&gt;</span>
+</pre></div>
+
+<p>配置/WEB-INF/httl.properties：</p>
+
+<div class="highlight"><pre><span class="na">loaders</span><span class="o">=</span><span class="s">httl.spi.loaders.ServletLoader</span>
+<span class="na">template.directory</span><span class="o">=</span><span class="s">/WEB-INF/templates</span>
+<span class="na">input.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
+<span class="na">output.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
 </pre></div>
 
 <h2>8.3 Webx 集成</h2>
 
-<p>配置webx.xml:</p>
+<p>配置/WEB-INF/web.xml:</p>
+
+<div class="highlight"><pre><span class="cp">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span>
+<span class="nt">&lt;web-app</span> <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+        <span class="na">xmlns=</span><span class="s">"http://java.sun.com/xml/ns/javaee"</span> <span class="na">xmlns:web=</span><span class="s">"http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"</span>
+        <span class="na">xsi:schemaLocation=</span><span class="s">"http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"</span>
+        <span class="na">version=</span><span class="s">"2.5"</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;listener&gt;</span>
+        <span class="nt">&lt;listener-class&gt;</span>httl.spi.loaders.ServletLoader<span class="nt">&lt;/listener-class&gt;</span>
+    <span class="nt">&lt;/listener&gt;</span>
+
+    <span class="nt">&lt;filter&gt;</span>
+        <span class="nt">&lt;filter-name&gt;</span>webx<span class="nt">&lt;/filter-name&gt;</span>
+        <span class="nt">&lt;filter-class&gt;</span>com.alibaba.citrus.webx.servlet.WebxFrameworkFilter<span class="nt">&lt;/filter-class&gt;</span>
+        <span class="nt">&lt;init-param&gt;</span>
+            <span class="nt">&lt;param-name&gt;</span>excludes<span class="nt">&lt;/param-name&gt;</span>
+            <span class="nt">&lt;param-value&gt;</span>*.css, *.js, *.jpg, *.gif, *.png<span class="nt">&lt;/param-value&gt;</span>
+        <span class="nt">&lt;/init-param&gt;</span>
+    <span class="nt">&lt;/filter&gt;</span>
+
+    <span class="nt">&lt;filter-mapping&gt;</span>
+        <span class="nt">&lt;filter-name&gt;</span>webx<span class="nt">&lt;/filter-name&gt;</span>
+        <span class="nt">&lt;url-pattern&gt;</span>/*<span class="nt">&lt;/url-pattern&gt;</span>
+    <span class="nt">&lt;/filter-mapping&gt;</span>
+
+<span class="nt">&lt;/web-app&gt;</span>
+</pre></div>
+
+<p>配置/WEB-INF/webx.xml:</p>
 
 <div class="highlight"><pre><span class="cp">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span>
 <span class="c">&lt;!-- Webx Root Context Configuration.  --&gt;</span>
@@ -1317,82 +1421,119 @@ ${weekday}
 <span class="s">            http://www.alibaba.com/schema/services/template/engines http://localhost:8080/schema/services/template/engines.xsd"</span><span class="nt">&gt;</span>
 
     <span class="nt">&lt;services:template&gt;</span>
-        <span class="nt">&lt;engines:httl-engine</span> <span class="na">path=</span><span class="s">"/templates"</span> <span class="na">templateEncoding=</span><span class="s">"UTF-8"</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;engines:httl-engine</span> <span class="nt">/&gt;</span>
     <span class="nt">&lt;/services:template&gt;</span>
 
 <span class="nt">&lt;/beans:beans&gt;</span>
 </pre></div>
 
-<p>配置struts-default.xml:</p>
+<p>配置/WEB-INF/httl.properties：</p>
 
-<div class="highlight"><pre><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>  
-<span class="cp">&lt;!DOCTYPE struts PUBLIC  </span>
-<span class="cp">    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"  </span>
-<span class="cp">    "http://struts.apache.org/dtds/struts-2.0.dtd"&gt;</span>
-<span class="nt">&lt;struts&gt;</span>
-    <span class="nt">&lt;package</span> <span class="na">name=</span><span class="s">"struts-default"</span> <span class="na">abstract=</span><span class="s">"true"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;result-types&gt;</span>
-            <span class="nt">&lt;result-type</span> <span class="na">name=</span><span class="s">"velocity"</span> <span class="na">class=</span><span class="s">"httl.web.struts2.HttlResult"</span><span class="nt">/&gt;</span>
-        <span class="nt">&lt;/result-types&gt;</span>
-    <span class="nt">&lt;/package&gt;</span>
-<span class="nt">&lt;struts&gt;</span>
+<div class="highlight"><pre><span class="na">loaders</span><span class="o">=</span><span class="s">httl.spi.loaders.ServletLoader</span>
+<span class="na">template.directory</span><span class="o">=</span><span class="s">/WEB-INF/templates</span>
+<span class="na">input.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
+<span class="na">output.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
 </pre></div>
 
-<h2>8.3 Filter 集成</h2>
-
-<p>配置/WEB-INF/web.xml:</p>
-
-<div class="highlight"><pre><span class="nt">&lt;servlet&gt;</span>
-    <span class="nt">&lt;servlet-name&gt;</span>yourservlet<span class="nt">&lt;/servlet-name&gt;</span>
-    <span class="nt">&lt;servlet-class&gt;</span>com.foo.YourServlet<span class="nt">&lt;/servlet-class&gt;</span>
-    <span class="nt">&lt;load-on-startup&gt;</span>1<span class="nt">&lt;/load-on-startup&gt;</span>
-<span class="nt">&lt;/servlet&gt;</span>
-<span class="nt">&lt;servlet-mapping&gt;</span>
-    <span class="nt">&lt;servlet-name&gt;</span>yourservlet<span class="nt">&lt;/servlet-name&gt;</span>
-    <span class="nt">&lt;url-pattern&gt;</span>*.do<span class="nt">&lt;/url-pattern&gt;</span>
-<span class="nt">&lt;/servlet-mapping&gt;</span>
-
-<span class="nt">&lt;filter&gt;</span>
-    <span class="nt">&lt;filter-name&gt;</span>httl<span class="nt">&lt;/filter-name&gt;</span>
-    <span class="nt">&lt;filter-class&gt;</span>httl.web.servlet.HttlFilter<span class="nt">&lt;/filter-class&gt;</span>
-<span class="nt">&lt;/filter&gt;</span>
-<span class="nt">&lt;filter-mapping&gt;</span>
-    <span class="nt">&lt;filter-name&gt;</span>httl<span class="nt">&lt;/filter-name&gt;</span>
-    <span class="nt">&lt;url-pattern&gt;</span>*.do<span class="nt">&lt;/url-pattern&gt;</span>
-<span class="nt">&lt;/filter-mapping&gt;</span>
-</pre></div>
+<h2>8.4 Filter 集成</h2>
 
 <p>你需要在你的业务Servlet中，处理完业务后，将业务参数都写到request.setAttribute()中。
 HttlFilter会模板目录下读取请求path加.httl后缀的模板，然后以request中的变量进行渲染。</p>
 
-<h2>8.4 Servlet 集成</h2>
-
 <p>配置/WEB-INF/web.xml:</p>
 
-<div class="highlight"><pre><span class="nt">&lt;servlet&gt;</span>
-    <span class="nt">&lt;servlet-name&gt;</span>yourservlet<span class="nt">&lt;/servlet-name&gt;</span>
-    <span class="nt">&lt;servlet-class&gt;</span>com.foo.YourServlet<span class="nt">&lt;/servlet-class&gt;</span>
-    <span class="nt">&lt;load-on-startup&gt;</span>1<span class="nt">&lt;/load-on-startup&gt;</span>
-<span class="nt">&lt;/servlet&gt;</span>
-<span class="nt">&lt;servlet-mapping&gt;</span>
-    <span class="nt">&lt;servlet-name&gt;</span>yourservlet<span class="nt">&lt;/servlet-name&gt;</span>
-    <span class="nt">&lt;url-pattern&gt;</span>*.do<span class="nt">&lt;/url-pattern&gt;</span>
-<span class="nt">&lt;/servlet-mapping&gt;</span>
+<div class="highlight"><pre><span class="cp">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span>
+<span class="nt">&lt;web-app</span> <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+        <span class="na">xmlns=</span><span class="s">"http://java.sun.com/xml/ns/javaee"</span> <span class="na">xmlns:web=</span><span class="s">"http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"</span>
+        <span class="na">xsi:schemaLocation=</span><span class="s">"http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"</span>
+        <span class="na">version=</span><span class="s">"2.5"</span><span class="nt">&gt;</span>
 
-<span class="nt">&lt;servlet&gt;</span>
-    <span class="nt">&lt;servlet-name&gt;</span>httl<span class="nt">&lt;/servlet-name&gt;</span>
-    <span class="nt">&lt;servlet-class&gt;</span>httl.web.servlet.HttlServlet<span class="nt">&lt;/servlet-class&gt;</span>
-    <span class="nt">&lt;load-on-startup&gt;</span>2<span class="nt">&lt;/load-on-startup&gt;</span>
-<span class="nt">&lt;/servlet&gt;</span>
-<span class="nt">&lt;servlet-mapping&gt;</span>
-    <span class="nt">&lt;servlet-name&gt;</span>httl<span class="nt">&lt;/servlet-name&gt;</span>
-    <span class="nt">&lt;url-pattern&gt;</span>*.httl<span class="nt">&lt;/url-pattern&gt;</span>
-<span class="nt">&lt;/servlet-mapping&gt;</span>
+    <span class="nt">&lt;listener&gt;</span>
+        <span class="nt">&lt;listener-class&gt;</span>httl.spi.loaders.ServletLoader<span class="nt">&lt;/listener-class&gt;</span>
+    <span class="nt">&lt;/listener&gt;</span>
+
+    <span class="nt">&lt;servlet&gt;</span>
+        <span class="nt">&lt;servlet-name&gt;</span>yourservlet<span class="nt">&lt;/servlet-name&gt;</span>
+        <span class="nt">&lt;servlet-class&gt;</span>com.foo.YourServlet<span class="nt">&lt;/servlet-class&gt;</span>
+        <span class="nt">&lt;load-on-startup&gt;</span>1<span class="nt">&lt;/load-on-startup&gt;</span>
+    <span class="nt">&lt;/servlet&gt;</span>
+
+    <span class="nt">&lt;servlet-mapping&gt;</span>
+        <span class="nt">&lt;servlet-name&gt;</span>yourservlet<span class="nt">&lt;/servlet-name&gt;</span>
+        <span class="nt">&lt;url-pattern&gt;</span>*.do<span class="nt">&lt;/url-pattern&gt;</span>
+    <span class="nt">&lt;/servlet-mapping&gt;</span>
+
+    <span class="nt">&lt;filter&gt;</span>
+        <span class="nt">&lt;filter-name&gt;</span>httl<span class="nt">&lt;/filter-name&gt;</span>
+        <span class="nt">&lt;filter-class&gt;</span>httl.web.servlet.HttlFilter<span class="nt">&lt;/filter-class&gt;</span>
+    <span class="nt">&lt;/filter&gt;</span>
+
+    <span class="nt">&lt;filter-mapping&gt;</span>
+        <span class="nt">&lt;filter-name&gt;</span>httl<span class="nt">&lt;/filter-name&gt;</span>
+        <span class="nt">&lt;url-pattern&gt;</span>*.do<span class="nt">&lt;/url-pattern&gt;</span>
+    <span class="nt">&lt;/filter-mapping&gt;</span>
+
+<span class="nt">&lt;/web-app&gt;</span>
 </pre></div>
+
+<p>配置/WEB-INF/httl.properties：</p>
+
+<div class="highlight"><pre><span class="na">loaders</span><span class="o">=</span><span class="s">httl.spi.loaders.ServletLoader</span>
+<span class="na">template.directory</span><span class="o">=</span><span class="s">/WEB-INF/templates</span>
+<span class="na">input.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
+<span class="na">output.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
+</pre></div>
+
+<h2>8.5 Servlet 集成</h2>
 
 <p>你需要在你的业务Servlet中，处理完业务后，将业务参数都写到request.setAttribute()中，
 并将请求forward到指定模板，比如：request.getRequestDispatcher("foo.httl").forward(request, response);
 HttlServlet会模板目录下读取forward过来的path同名的模板，然后以request中的变量进行渲染。</p>
+
+<p>配置/WEB-INF/web.xml:</p>
+
+<div class="highlight"><pre><span class="cp">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span>
+<span class="nt">&lt;web-app</span> <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+        <span class="na">xmlns=</span><span class="s">"http://java.sun.com/xml/ns/javaee"</span> <span class="na">xmlns:web=</span><span class="s">"http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"</span>
+        <span class="na">xsi:schemaLocation=</span><span class="s">"http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"</span>
+        <span class="na">version=</span><span class="s">"2.5"</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;listener&gt;</span>
+        <span class="nt">&lt;listener-class&gt;</span>httl.spi.loaders.ServletLoader<span class="nt">&lt;/listener-class&gt;</span>
+    <span class="nt">&lt;/listener&gt;</span>
+
+    <span class="nt">&lt;servlet&gt;</span>
+        <span class="nt">&lt;servlet-name&gt;</span>yourservlet<span class="nt">&lt;/servlet-name&gt;</span>
+        <span class="nt">&lt;servlet-class&gt;</span>com.foo.YourServlet<span class="nt">&lt;/servlet-class&gt;</span>
+        <span class="nt">&lt;load-on-startup&gt;</span>1<span class="nt">&lt;/load-on-startup&gt;</span>
+    <span class="nt">&lt;/servlet&gt;</span>
+
+    <span class="nt">&lt;servlet-mapping&gt;</span>
+        <span class="nt">&lt;servlet-name&gt;</span>yourservlet<span class="nt">&lt;/servlet-name&gt;</span>
+        <span class="nt">&lt;url-pattern&gt;</span>*.do<span class="nt">&lt;/url-pattern&gt;</span>
+    <span class="nt">&lt;/servlet-mapping&gt;</span>
+
+    <span class="nt">&lt;servlet&gt;</span>
+        <span class="nt">&lt;servlet-name&gt;</span>httl<span class="nt">&lt;/servlet-name&gt;</span>
+        <span class="nt">&lt;servlet-class&gt;</span>httl.web.servlet.HttlServlet<span class="nt">&lt;/servlet-class&gt;</span>
+        <span class="nt">&lt;load-on-startup&gt;</span>2<span class="nt">&lt;/load-on-startup&gt;</span>
+    <span class="nt">&lt;/servlet&gt;</span>
+
+    <span class="nt">&lt;servlet-mapping&gt;</span>
+        <span class="nt">&lt;servlet-name&gt;</span>httl<span class="nt">&lt;/servlet-name&gt;</span>
+        <span class="nt">&lt;url-pattern&gt;</span>*.httl<span class="nt">&lt;/url-pattern&gt;</span>
+    <span class="nt">&lt;/servlet-mapping&gt;</span>
+
+<span class="nt">&lt;/web-app&gt;</span>
+</pre></div>
+
+<p>配置/WEB-INF/httl.properties：</p>
+
+<div class="highlight"><pre><span class="na">loaders</span><span class="o">=</span><span class="s">httl.spi.loaders.ServletLoader</span>
+<span class="na">template.directory</span><span class="o">=</span><span class="s">/WEB-INF/templates</span>
+<span class="na">input.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
+<span class="na">output.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
+</pre></div>
 
 <h1>9. 下载</h1>
 
@@ -1540,7 +1681,7 @@ HttlServlet会模板目录下读取forward过来的path同名的模板，然后�
 <h2>9.4 HTTL 1.0.1 (2012-11-02)</h2>
 
 <pre><code>1. 增加springmvc的ViewResolver集成。
-2. 增加struts的Result集成。
+2. 增加struts的Result和TemplateEngine集成。
 3. 增加webx的TemplateEngine集成。
 4. 增加slf4j日志输出，并设为缺省。
 5. 增加jcl日志输出。
@@ -1555,32 +1696,6 @@ HttlServlet会模板目录下读取forward过来的path同名的模板，然后�
           This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
         </footer>
 
-<div style="position: absolute; right: 160px; top: 0px;">中文 | <a href="../en">English</a></div>
-<div id="outlineIndex" style="position: absolute; left: 100px; top: 300px; display: none; width: 120px; padding: 10px; border: 1px dashed black; background-color: white;"></div>
-<div id="outlineClose" style="position: absolute; left: 220px; top: 300px; display: none; color: #FF3333; cursor: pointer;" onclick="document.getElementById('outlineIndex').style.display = 'none';document.getElementById('outlineClose').style.display = 'none'">[X]</div>
-<script type="text/javascript">
-<!--
-if (window.screen.width > 1000) {
-var index = "";
-var outlines = document.getElementsByTagName("h1");
-for (var i = 0; i < outlines.length; i ++) {
-	var outline = outlines[i];
-	var name = outline.innerHTML;
-    outline.outerHTML = "<a name=\"" + name + "\"></a>" + outline.outerHTML;
-    index += "<a href=\"#" + name + "\">" + name + "</a><br/>"
-}
-document.getElementById("outlineIndex").innerHTML = index;
-document.getElementById('outlineIndex').style.display = '';
-document.getElementById('outlineClose').style.display = '';
-var left = ((window.screen.width - 700) / 2) - 200;
-if (left < 0) {
-	left = 0;
-}
-document.getElementById('outlineIndex').style.left = left + "px";
-document.getElementById('outlineClose').style.left = (left + 120) + "px";
-}
--->
-</script>
         
       </div>
     </div>
