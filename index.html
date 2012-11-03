@@ -417,7 +417,7 @@ ${price}
 
 <ol>
 <li><p>HTTL指令必需加注释外壳，只支持&lt;!--#if(x)--&gt;，不支持#if(x)，确保不干扰HTML本身的有效源码。 </p></li>
-<li><p>HTTL指令中的变量不加$符，只支持&lt;!--#foreach(book in books)--&gt;，不支持&lt;!--#foreach($book in $books)--&gt;，因为指令中没有加引号的字符串就是变量，和常规语言的语法一样，加$有点废话。 </p></li>
+<li><p>HTTL指令中的变量不加$符，只支持&lt;!--#foreach(book in books)--&gt;，不支持&lt;!--#foreach($book in $books)--&gt;，因为指令中没有加引号的字符串就是变量，和常规语言的语法一样，加$有点废话，而且容易忘写。 </p></li>
 <li><p>HTTL占位符必需加大括号，只支持${aaa}，不支持$aaa，因为$在JavaScript中也是合法变量名符号，而${}不是，减少混淆，也防止多人开发时，有人加大括号，有人不加，干脆没得选，都加，保持一致。 </p></li>
 <li><p>HTTL占位符当变量为null时输出空白串，而不像Velocity那样原样输出指令原文，即${aaa}，等价于Velocity的$!{aaa}，以免开发人员忘写感叹号，泄漏表达式源码，如需原样输出，可使用转义\${aaa}，
 在HTTL中，$!{aaa}表示不对内容进行过滤，用于原样输出HTML片段。</p></li>
