@@ -1160,13 +1160,19 @@ ${colors.next}
 
 <p>动态插值的过滤会在输出的时候执行，需小心过滤引起性能问题。</p>
 
-<p>缺省加载了动态插值HTML过滤，防止HTML注入攻击，并在编译时将连续的空白符压缩成单个空格：(缺省值不用配)</p>
+<p>缺省加载了动态插值HTML过滤，防止HTML注入XSS攻击：(缺省值不用配)</p>
+
+<div class="highlight"><pre><span class="na">value.filters</span><span class="o">=</span><span class="s">httl.spi.filters.EscapeHtmlFilter</span>
+<span class="na">text.filters</span><span class="o">=</span>
+</pre></div>
+
+<p>你可以配置在编译时将静态文本中的连续空白符压缩成单个空格：(编译时执行，不影响渲染速度)</p>
 
 <div class="highlight"><pre><span class="na">value.filters</span><span class="o">=</span><span class="s">httl.spi.filters.EscapeHtmlFilter</span>
 <span class="na">text.filters</span><span class="o">=</span><span class="s">httl.spi.filters.CompressBlankFilter</span>
 </pre></div>
 
-<p>你可以用filters同时设置value.filters和text.filters：</p>
+<p>你也可以用filters同时设置value.filters和text.filters：</p>
 
 <div class="highlight"><pre><span class="na">filters</span><span class="o">=</span><span class="s">httl.spi.filters.CompressBlankFilter</span>
 </pre></div>
