@@ -856,7 +856,9 @@ sort(list)
 
 cycle(item, item)
 <span class="c">&lt;!--#set(colors = cycle("red", "blue", "green"))--&gt;</span>
+<span class="c">&lt;!--#foreach(item in list)--&gt;</span>
 ${colors.next}
+<span class="c">&lt;!--#end--&gt;</span>
 </pre></div>
 
 <h3>6.2.5 文件函数</h3>
