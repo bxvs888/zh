@@ -192,7 +192,7 @@
 mvn <span class="nb">test</span> -Dtest<span class="o">=</span>httl.test.PerformanceTest -Dstream<span class="o">=</span><span class="nb">false</span> -Dsize<span class="o">=</span>200 -Dcount<span class="o">=</span>10000
 </pre></div>
 
-<p>另外，HTTL缺省开启了EscapeHtmlFilter，而其它模板引擎没有，为了公平，性能测试时配置关闭了Filter:</p>
+<p>另外，HTTL缺省开启了EscapeXmlFilter，而其它模板引擎没有，为了公平，性能测试时配置关闭了Filter:</p>
 
 <div class="highlight"><pre><span class="na">value.filters</span><span class="o">=</span><span class="s">null</span>
 </pre></div>
@@ -816,7 +816,7 @@ $!{xxx(books)}
 
 <h3>6.2.2 转义函数</h3>
 
-<div class="highlight"><pre><span class="n">str</span><span class="o">.</span><span class="na">escapeHtml</span>
+<div class="highlight"><pre><span class="n">str</span><span class="o">.</span><span class="na">escapeXml</span>
 <span class="n">str</span><span class="o">.</span><span class="na">escapeUrl</span>
 <span class="n">str</span><span class="o">.</span><span class="na">escapeString</span>
 </pre></div>
@@ -1177,7 +1177,7 @@ ${colors.next}
 
 <p>缺省加载了动态插值HTML过滤，防止HTML注入XSS攻击：(缺省值不用配)</p>
 
-<div class="highlight"><pre><span class="na">value.filters</span><span class="o">=</span><span class="s">httl.spi.filters.EscapeHtmlFilter</span>
+<div class="highlight"><pre><span class="na">value.filters</span><span class="o">=</span><span class="s">httl.spi.filters.EscapeXmlFilter</span>
 <span class="na">text.filters</span><span class="o">=</span>
 </pre></div>
 
