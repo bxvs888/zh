@@ -1862,8 +1862,10 @@ HttlServlet会模板目录下读取forward过来的path同名的模板，然后�
 5. 修复ClassUtils.forName()不支持多维数组问题。
 6. 修复压测下DateFormat查找稍慢的问题，为缺省格式的DateFormat增加独立的ThreadLocal，减少按格式查询Map缓存。
 7. 修复AbstractTemplate的serialize没有使用配置的字符编码问题。
-8. 配置文件增加支持a=$b引用其它配置项。
-9. 增加ClearBlankLineFilter用于清除静态文本中的空白行。
+8. 修复a(b())一元函数解析错误的问题。
+9. 配置文件增加支持a=$b引用其它配置项。
+10. 增加ClearBlankLineFilter用于清除静态文本中的空白行。
+11. 增加${render($template)}动态模板求值。
 </code></pre>
         </section>
 
