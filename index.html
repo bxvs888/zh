@@ -355,7 +355,7 @@ ${price}
 <p>基于上面的原则，HTTL的包结构整体上划分为三层：</p>
 
 <ul>
-<li>API (Application Programming Interface) 模板引擎的使用者依赖的接口类，也是核心领域模型，其中Engine类相当于微内核，只管理非功能性的扩展点的加载，不硬编码模板加载解析渲染的任何部分。</li>
+<li>API (Application Programming Interface) 模板引擎的使用者依赖的接口类，也是核心领域模型所在，保持最少概念，并隐藏实现细节，其中Engine类相当于微内核，只管理非功能性的扩展点的加载，不硬编码模板加载解析渲染的任何部分。</li>
 <li>SPI (Service Provider Interface)  模板引擎的扩展者依赖的接口类，它依赖于API的领域模型，它是模板引擎功能正交分解的抽象层，以保证用户可以最小粒度替换需要改写的地方，方便二次开发。 </li>
 <li>BUILT-IN (Built-in Implementation) 内置扩展实现，它是SPI标准实现，也是可被用户替换的类，它包含引擎所有做的事，包括扩展点之间的组装过程(可替换DefaultEngine)，以确保没有功能换不掉，即平等对待扩展者。 </li>
 </ul><p>采用子包依赖父包风格，所以将API放在根目录，SPI接口独立子包，各种实现放在SPI的下一级子包中。</p>
