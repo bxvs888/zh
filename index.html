@@ -1329,7 +1329,7 @@ ${weekday}
 
 <p><img src="http://httl.github.com/images/httl-mvc.png" alt="MVC"></p>
 
-<p>(a) Web应用需要配置ServletLoader加载Web应用目录下的模板：(所有Web集成通用)</p>
+<h3>1. Web应用需要配置ServletLoader加载Web目录下的模板：</h3>
 
 <p>(注：如果你将模板放在ClassPath下，则不需要此配置)</p>
 
@@ -1345,9 +1345,9 @@ ${weekday}
 <div class="highlight"><pre><span class="na">loaders</span><span class="o">=</span><span class="s">httl.spi.loaders.ServletLoader</span>
 </pre></div>
 
-<p>(b) Web应用查找httl.properties配置的顺序：(所有Web集成通用)</p>
+<h3>2. Web应用查找httl.properties配置的顺序：</h3>
 
-<p>(1) 首先查找/WEB-INF/web.xml中的context-param，如：</p>
+<p>(1) 首先查找/WEB-INF/web.xml中的context-param：(前提是配了ServletLoader)</p>
 
 <div class="highlight"><pre><span class="nt">&lt;context-param&gt;</span>
     <span class="nt">&lt;param-name&gt;</span>httl.properties<span class="nt">&lt;/param-name&gt;</span>
