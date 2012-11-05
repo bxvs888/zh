@@ -1343,6 +1343,8 @@ ${weekday}
 <div class="highlight"><pre><span class="na">loaders</span><span class="o">=</span><span class="s">httl.spi.loaders.ServletLoader</span>
 </pre></div>
 
+<p>如果你将模板放在classpath下，上面的配置就不需要，只有你将模板放在webapp目录时才需要配置。</p>
+
 <ol>
 <li>Web应用查找httl.properties配置的顺序：(所有Web集成通用)</li>
 </ol><p>(1) 首先查找/WEB-INF/web.xml中的context-param，如：</p>
