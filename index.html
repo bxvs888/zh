@@ -65,7 +65,7 @@
 <span class="n">parameters</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"books"</span><span class="o">,</span> <span class="n">books</span><span class="o">);</span>
 
 <span class="n">Engine</span> <span class="n">engine</span> <span class="o">=</span> <span class="n">Engine</span><span class="o">.</span><span class="na">getEngine</span><span class="o">();</span>
-<span class="n">Template</span> <span class="n">template</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="na">getTemplate</span><span class="o">(</span><span class="s">"books.httl"</span><span class="o">);</span>
+<span class="n">Template</span> <span class="n">template</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="na">getTemplate</span><span class="o">(</span><span class="s">"/books.httl"</span><span class="o">);</span>
 <span class="n">template</span><span class="o">.</span><span class="na">render</span><span class="o">(</span><span class="n">parameters</span><span class="o">,</span> <span class="n">response</span><span class="o">.</span><span class="na">getWriter</span><span class="o">());</span>
 </pre></div>
 
