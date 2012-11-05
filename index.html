@@ -171,32 +171,25 @@
 <td>65,855ms</td>
 <td>1,518/s</td>
 </tr>
-<tr>
-<td><a href="https://github.com/httl/httl/blob/master/src/test/java/httl/test/performance/BeetlCase.java">beetl</a></td>
-<td><a href="https://github.com/httl/httl/blob/master/src/test/resources/performance/books.btl">books.btl</a></td>
-<td>24ms</td>
-<td>11ms</td>
-<td>159ms</td>
-<td>26,820byte</td>
-<td>81,428ms</td>
-<td>1,228/s</td>
-</tr>
 </table><p>环境：os: Mac OS X 10.8.2, cpu: 2 x 1.70GHz, mem: 4G, jvm: 1.7.0_09 -&gt; mem: 80M</p>
 
 <h3>HTTL的渲染速度接近于直接用Java硬编码输出，比其它模板引擎高出10倍。</h3>
 
 <p>HTTL用到的JDK的Compiler，编译一个类通常需要几百毫秒，比其它模板的编译要慢，但每个模板只在加载时编译一次。</p>
 
+<p>以上测试，不包含HTTL在编译期将静态文本转成byte[]，以减少运行时输出重复转码的优化。
+全部采用忽略输出的方式进行测试，测的是模板引擎纯渲染时间，否则HTTL将更快。</p>
+
+<p>另外，HTTL缺省开启了EscapeXmlFilter，而其它模板引擎没有，为了公平，性能测试时配置关闭了Filter:</p>
+
+<div class="highlight"><pre><span class="na">value.filters</span><span class="o">=</span><span class="s">null</span>
+</pre></div>
+
 <p>注：不同环境的运行结果可能存在差异，以上测试数据仅供参考，你可以在自己的机器上执行测试：</p>
 
 <div class="highlight"><pre>git clone https://github.com/httl/httl.git
 <span class="nb">cd </span>httl
 mvn <span class="nb">test</span> -Dtest<span class="o">=</span>httl.test.PerformanceTest -Dstream<span class="o">=</span><span class="nb">false</span> -Dsize<span class="o">=</span>200 -Dcount<span class="o">=</span>10000
-</pre></div>
-
-<p>另外，HTTL缺省开启了EscapeXmlFilter，而其它模板引擎没有，为了公平，性能测试时配置关闭了Filter:</p>
-
-<div class="highlight"><pre><span class="na">value.filters</span><span class="o">=</span><span class="s">null</span>
 </pre></div>
 
 <h2>3.2 优化策略</h2>
