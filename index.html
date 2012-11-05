@@ -66,7 +66,7 @@
 
 <span class="n">Engine</span> <span class="n">engine</span> <span class="o">=</span> <span class="n">Engine</span><span class="o">.</span><span class="na">getEngine</span><span class="o">();</span>
 <span class="n">Template</span> <span class="n">template</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="na">getTemplate</span><span class="o">(</span><span class="s">"/books.httl"</span><span class="o">);</span>
-<span class="n">template</span><span class="o">.</span><span class="na">render</span><span class="o">(</span><span class="n">parameters</span><span class="o">,</span> <span class="n">response</span><span class="o">.</span><span class="na">getWriter</span><span class="o">());</span>
+<span class="n">template</span><span class="o">.</span><span class="na">render</span><span class="o">(</span><span class="n">parameters</span><span class="o">,</span> <span class="n">response</span><span class="o">.</span><span class="na">getOutputStream</span><span class="o">());</span>
 </pre></div>
 
 <p>注：缺省配置下，HTTL不依赖任何三方库，只需JDK1.5+即可。</p>
