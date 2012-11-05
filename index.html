@@ -549,7 +549,7 @@ ${price}
 
 <h3>5.1.1 过滤输出</h3>
 
-<p>输出表达式的计算结果，并进行过滤，比如：过滤变量中的HTML标签，防止HTML注入攻击。</p>
+<p>输出表达式的计算结果，并进行过滤，比如：过滤变量中的HTML标签。</p>
 
 <div class="highlight"><pre>格式：
 ${expression}
@@ -557,6 +557,8 @@ ${expression}
 示例：
 ${user.name}
 </pre></div>
+
+<p>注：HTTL缺省开启了EscapeXmlFilter，以防止HTML注入XSS攻击，如果你需要更强的过滤，请自行实现Filter，并配置到value.filters。</p>
 
 <h3>5.1.2 不过滤输出</h3>
 
