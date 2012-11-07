@@ -879,7 +879,7 @@ ${colors.next}
 
 <h1>7.配置</h1>
 
-<p>配置中，+=表示在缺省配置上追加配置，=表示覆盖缺省配置。</p>
+<p>配置中，+=表示在缺省配置上追加配置，=表示覆盖缺省配置，多个值用逗号分隔。</p>
 
 <h2>7.1 模板引擎配置</h2>
 
@@ -1051,7 +1051,7 @@ ${colors.next}
 <div class="highlight"><pre><span class="na">loaders</span><span class="o">=</span><span class="s">httl.spi.loaders.ClasspathLoader,httl.spi.loaders.FileLoader</span>
 </pre></div>
 
-<p>或者使用"+="保留缺省的classpath加载的同时，增加新的加载器：</p>
+<p>或者使用"+="保留缺省的classpath加载的同时，增加新的加载器，多个值用逗号分隔：</p>
 
 <div class="highlight"><pre><span class="na">loaders+</span><span class="o">=</span><span class="s">httl.spi.loaders.FileLoader</span>
 </pre></div>
@@ -1145,7 +1145,7 @@ ${colors.next}
 <div class="highlight"><pre><span class="na">time.zone</span><span class="o">=</span><span class="s">+8</span>
 </pre></div>
 
-<p>你可以使用"+="保留缺省的日期格式化器的同时，增加新的格式化器：</p>
+<p>你可以使用"+="保留缺省的日期格式化器的同时，增加新的格式化器，多个用逗号分隔：</p>
 
 <div class="highlight"><pre><span class="na">formatters+</span><span class="o">=</span><span class="s">httl.spi.formatters.NumberFormatter</span>
 <span class="na">number.format</span><span class="o">=</span><span class="s">###,##0.###</span>
@@ -1173,7 +1173,7 @@ ${colors.next}
 
 <p>模板文本过滤会在编译的时候执行，编译时即把模板文本替换掉，不影响输出时的性能。</p>
 
-<p>动态插值的过滤会在输出的时候执行，需小心过滤引起性能问题。</p>
+<p>动态插值的过滤会在输出的时候执行，需小心过滤引起性能问题，多个用逗号分隔。</p>
 
 <p>缺省加载了动态插值HTML过滤，防止HTML注入XSS攻击：(缺省值不用配)</p>
 
@@ -1206,10 +1206,17 @@ ${colors.next}
 
 <h3>7.8.1 导入包名</h3>
 
+<p>缺省导入了java.util包：(缺省值不用配)</p>
+
 <div class="highlight"><pre><span class="na">import.packages</span><span class="o">=</span><span class="s">java.util</span>
 </pre></div>
 
 <p>这样你就可以在模板内用短类名，而不用带上全包名。</p>
+
+<p>你可以使用"+="保留缺省导入包的同时，导入新的包，多个包用逗号分隔：</p>
+
+<div class="highlight"><pre><span class="na">import.packages+</span><span class="o">=</span><span class="s">com.foo</span>
+</pre></div>
 
 <h3>7.8.2 导入方法</h3>
 
@@ -1218,7 +1225,7 @@ ${colors.next}
 <div class="highlight"><pre><span class="na">import.methods</span><span class="o">=</span><span class="s">httl.spi.methods.DefaultMethod</span>
 </pre></div>
 
-<p>你可以使用"+="保留缺省方法的同时，导入新的方法：</p>
+<p>你可以使用"+="保留缺省方法的同时，导入新的方法，多个类用逗号分隔：</p>
 
 <div class="highlight"><pre><span class="na">import.methods+</span><span class="o">=</span><span class="s">com.foo.MyMethod</span>
 </pre></div>
@@ -1274,7 +1281,9 @@ ${now()}
 
 <h3>7.8.3 导入宏</h3>
 
-<div class="highlight"><pre><span class="na">import.macros</span><span class="o">=</span>
+<p>导指定模板中的所有宏，多个模板用逗号分隔，这些宏可在其它任意模板中使用，如：</p>
+
+<div class="highlight"><pre><span class="na">import.macros</span><span class="o">=</span><span class="s">common_macros.httl</span>
 </pre></div>
 
 <h3>7.8.4 导入序列</h3>
@@ -1294,7 +1303,7 @@ ${weekday}
 <span class="s">January February March May June July August September October November December January</span>
 </pre></div>
 
-<p>你可以使用"+="保留缺省序列的同时，增加新的序列：</p>
+<p>你可以使用"+="保留缺省序列的同时，增加新的序列，序列中的值用空格分隔，多个序列用逗号分隔：</p>
 
 <div class="highlight"><pre><span class="na">sequences+</span><span class="o">=</span><span class="s">金 木 水 火 土 金</span>
 </pre></div>
@@ -1318,7 +1327,7 @@ ${weekday}
 <div class="highlight"><pre><span class="na">loggers</span><span class="o">=</span><span class="s">httl.spi.loggers.Log4jLogger,httl.spi.loggers.JdkLogger</span>
 </pre></div>
 
-<p>或者使用"+="保留缺省的log4j输出的同时，增加新的输出：</p>
+<p>或者使用"+="保留缺省的log4j输出的同时，增加新的输出，多个用逗号分隔：</p>
 
 <div class="highlight"><pre><span class="na">loggers+</span><span class="o">=</span><span class="s">httl.spi.loggers.JdkLogger</span>
 </pre></div>
