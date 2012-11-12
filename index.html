@@ -173,7 +173,7 @@
 </tr>
 </table><p>环境：os: Mac OS X 10.8.2, cpu: 2 x 1.70GHz, mem: 4G, jvm: 1.7.0_09 -&gt; mem: 80M</p>
 
-<h3>HTTL的渲染速度接近于直接用Java硬编码输出，比其它模板引擎高出10倍。</h3>
+<h3>HTTL的渲染速度接近于直接用Java硬编码输出，比其它模板引擎高近10倍。</h3>
 
 <p>HTTL用到的JDK的Compiler，编译一个类通常需要几百毫秒，比其它模板的编译要慢，但每个模板只在加载时编译一次。</p>
 
@@ -190,7 +190,7 @@
 
 <div class="highlight"><pre>git clone https://github.com/httl/httl.git
 <span class="nb">cd </span>httl
-mvn <span class="nb">test</span> -Dtest<span class="o">=</span>httl.test.PerformanceTest -Dstream<span class="o">=</span><span class="nb">false</span> -Dsize<span class="o">=</span>200 -Dcount<span class="o">=</span>10000
+mvn <span class="nb">test</span> -Dtest<span class="o">=</span>httl.test.PerformanceTest -Dcount<span class="o">=</span>10000
 </pre></div>
 
 <h2>3.2 优化策略</h2>
@@ -1117,7 +1117,7 @@ ${colors.next}
 
 <p>(3) 版本选项：</p>
 
-<p>java版本的配置会影响字节码生成的版本。</p>
+<p>java版本的配置会影响字节码生成的版本。(缺省为当前JDK版本)</p>
 
 <div class="highlight"><pre><span class="na">java.version</span><span class="o">=</span><span class="s">1.6</span>
 </pre></div>
