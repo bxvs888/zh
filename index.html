@@ -23,9 +23,9 @@
         </header>
 
         <section id="downloads" class="clearfix">
-          <a href="https://github.com/downloads/httl/httl/httl-1.0.2.jar" id="download-zip" class="button"><span>下载 1.0.2.jar</span></a>
-          <a href="https://github.com/downloads/httl/httl/httl-1.0.2-sources.jar" id="download-tar-gz" class="button"><span>下载 1.0.2-src.jar</span></a>
-          <a href="https://github.com/httl/httl" id="view-on-github" class="button"><span>查看源码仓库</span></a>
+          <a href="https://github.com/httl/zh/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/httl/zh/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/httl/zh" id="view-on-github" class="button"><span>View on GitHub</span></a>
         </section>
 
         <hr>
@@ -594,6 +594,14 @@ $!{body}
 
 示例：
 <span class="c">&lt;!--#set(price = book.price * book.discount)--&gt;</span>
+<span class="c">&lt;!--#set(int price = book.price * book.discount)--&gt;</span>
+</pre></div>
+
+<p>类型的声明，同时可以用作强制转型，比如：</p>
+
+<div class="highlight"><pre><span class="c">&lt;!--#foreach(bookentry in bookmap)--&gt;</span>
+    <span class="c">&lt;!--#set(Book book = bookentry.value)--&gt;</span>
+<span class="c">&lt;!--#end--&gt;</span>
 </pre></div>
 
 <p>缺省模板中set的变量，是不会回写到Context的参数Map中的。
@@ -672,7 +680,7 @@ $!{body}
 <p>迭代表达式产生的集合，以集合中的每项值，重复输出指令所包含的块。</p>
 
 <div class="highlight"><pre>格式：
-<span class="c">&lt;!--#foreach(name in expression)--&gt;</span>
+<span class="c">&lt;!--#foreach(type name in expression)--&gt;</span>
 
 示例：
 <span class="c">&lt;!--#foreach(book in books)--&gt;</span>
@@ -681,6 +689,13 @@ $!{body}
     ${foreach.size}
     ${foreach.first}
     ${foreach.last}
+<span class="c">&lt;!--#end--&gt;</span>
+</pre></div>
+
+<p>类型的声明，同时可以用作强制转型，比如：</p>
+
+<div class="highlight"><pre><span class="c">&lt;!--#foreach(Book book in booklist)--&gt;</span>
+    ${book.title}
 <span class="c">&lt;!--#end--&gt;</span>
 </pre></div>
 
@@ -756,27 +771,57 @@ $!{xxx(books)}
 <p>支持Java所有表达式，以下只列出与Java不同的点：</p>
 
 <ul>
-<li>所有null值的操作均返回null。</li>
-<li>所有实现Comparable的对象都支持比较运算符。</li>
-<li>所有对象都支持逻辑与或，分别返回空值或非空值。</li>
+<li>所有null值的操作均返回null，比如：${foo.bar.blabla}，如果foo为null，后面所有的操作最终为null，而不会空指针。</li>
+<li>双等号"=="会被解析成equals()方法比较，而不是比内存地址。</li>
+<li>加号"+"数字优先，${1 + "2"}输出3，而不是12，字符串拼接尽量用${s1}${s2}，而不是${s1 + s2}</li>
+<li>Bean属性会解析成getter方法调用，${user.name}等价于${user.getName()}</li>
+<li>所有实现Comparable的对象都支持比较运算符，比如：#if(date1 &lt; date2)，可以比较日期的先后。</li>
+<li>所有对象都支持逻辑与或，分别返回空值或非空值，比如：${list1 || list2}，如果list1不为空则返回list1，否则返回list2。</li>
+<li>List和Map可以方括号取值，比如：list[0]等价于list.get(0)，map["abc"]等价于map.get("abc")</li>
+</ul><p>属性查找顺序，以${obj.foo}为例：</p>
+
+<ul>
+<li>首先查找有没有导入obj类型的foo()静态方法</li>
+<li>再查找obj.getFoo()函数</li>
+<li>再查找obj.isFoo()函数</li>
+<li>再查找obj.foo()函数</li>
+<li>再查找obj.foo属性</li>
 </ul><h2>6.1 操作符表达式</h2>
 
 <h3>6.1.1 集合操作符</h3>
 
-<div class="highlight"><pre><span class="nl">Sequence:</span> <span class="mi">1</span><span class="o">..</span><span class="mi">3</span>
-<span class="nl">List:</span> <span class="o">[</span><span class="mi">123</span><span class="o">,</span> <span class="s">"abc"</span><span class="o">]</span>
-<span class="nl">Map:</span> <span class="o">[</span><span class="s">"xxx"</span><span class="o">:</span> <span class="mi">123</span><span class="o">,</span> <span class="s">"yyy"</span><span class="o">:</span> <span class="s">"abc"</span><span class="o">]</span>
+<div class="highlight"><pre>${list[0]} 等价于：${list.get(0)}
+
+${map.abc} 等价于：${map.get("abc")}
+
+${map["a.b.c"]} 等价于：${map.get("a.b.c")}
+
+序列生成: 1..3
+比如：
+<span class="c">&lt;!--#foreach(i in 1..10)--&gt;</span>
+${i}
+<span class="c">&lt;!--#end--&gt;</span>
+
+List生成: [123, "abc", var]
+比如：
+<span class="c">&lt;!--#foreach(color in ["red", "yellow", "blue"])--&gt;</span>
+${color}
+<span class="c">&lt;!--#end--&gt;</span>
+
+Map生成: ["xxx": 123, "yyy": "abc", "zzz": var]
+比如：
+<span class="c">&lt;!--#foreach(entry in ["red": "#FF0000", "yellow": "#00FF00"])--&gt;</span>
+${entry.key} = ${entry.value}
+<span class="c">&lt;!--#end--&gt;</span>
+
+集合相加：list1 + list2
+比如：
+<span class="c">&lt;!--#foreach(item in list1 + list2)--&gt;</span>
+${item}
+<span class="c">&lt;!--#end--&gt;</span>
 </pre></div>
 
-<h3>6.1.2 日期操作符</h3>
-
-<div class="highlight"><pre><span class="n">date1</span> <span class="o">&gt;</span> <span class="n">date2</span>
-<span class="n">date1</span> <span class="o">&gt;=</span> <span class="n">date2</span>
-<span class="n">date1</span> <span class="o">&lt;</span> <span class="n">date2</span>
-<span class="n">date1</span> <span class="o">&lt;=</span> <span class="n">date2</span>
-</pre></div>
-
-<h3>6.1.3 逻辑操作符</h3>
+<h3>6.1.2 逻辑操作符</h3>
 
 <div class="highlight"><pre><span class="c">&lt;!--#if(object)--&gt;</span>
 等价于：
@@ -793,6 +838,14 @@ $!{xxx(books)}
 <span class="c">&lt;!--#foreach(item in list1 || list2)--&gt;</span>
 等价于：
 <span class="c">&lt;!--#foreach(item in list1 != null &amp;&amp; list1.size() &gt; 0 ? list1 : list2)--&gt;</span>
+</pre></div>
+
+<h3>6.1.3 日期操作符</h3>
+
+<div class="highlight"><pre><span class="n">date1</span> <span class="o">&gt;</span> <span class="n">date2</span>
+<span class="n">date1</span> <span class="o">&gt;=</span> <span class="n">date2</span>
+<span class="n">date1</span> <span class="o">&lt;</span> <span class="n">date2</span>
+<span class="n">date1</span> <span class="o">&lt;=</span> <span class="n">date2</span>
 </pre></div>
 
 <h2>6.2 函数表达式</h2>
@@ -830,9 +883,18 @@ $!{xxx(books)}
 
 <h3>6.2.4 集合函数</h3>
 
-<div class="highlight"><pre>array[index]
+<div class="highlight"><pre># 数组和List一样可以用size方法获取大小
+array.size
+list.size
+map.size
+
+# List和数组一样可以用方括号下标获取值
+array[index]
 list[index]
 
+# Map和Bean一样可以用属性获取键值
+bean.property
+bean["property"]
 map.key
 map["key"]
 
@@ -871,7 +933,37 @@ ${colors.next}
 <span class="n">read</span><span class="o">(</span><span class="n">locale</span><span class="o">(</span><span class="s">"i18n-text.txt"</span><span class="o">))</span>
 </pre></div>
 
-<h3>6.2.6 系统函数</h3>
+<h3>6.2.6 国际化函数</h3>
+
+<div class="highlight"><pre><span class="n">$</span><span class="o">{</span><span class="s">"key"</span><span class="o">.</span><span class="na">i18n</span><span class="o">}</span> <span class="err">或</span> <span class="n">$</span><span class="o">{</span><span class="n">i18n</span><span class="o">(</span><span class="s">"key"</span><span class="o">)}</span>
+<span class="err">依次查找下面文件中的</span><span class="n">key</span><span class="err">配置：</span>
+<span class="n">basename_zh_CN</span><span class="o">.</span><span class="na">properties</span>
+<span class="n">basename_zh</span><span class="o">.</span><span class="na">properties</span>
+<span class="n">basename</span><span class="o">.</span><span class="na">properties</span>
+
+<span class="n">$</span><span class="o">!{</span><span class="n">include</span><span class="o">(</span><span class="s">"template.httl"</span><span class="o">.</span><span class="na">locale</span><span class="o">)}</span> <span class="err">或</span> <span class="n">$</span><span class="o">!{</span><span class="n">include</span><span class="o">(</span><span class="n">locale</span><span class="o">(</span><span class="s">"template.httl"</span><span class="o">))}</span>
+<span class="err">依次查找以下文件是否存在：</span>
+<span class="n">template_zh_CN</span><span class="o">.</span><span class="na">httl</span>
+<span class="n">template_zh</span><span class="o">.</span><span class="na">httl</span>
+<span class="n">template</span><span class="o">.</span><span class="na">httl</span>
+</pre></div>
+
+<p>httl.properties相关配置：</p>
+
+<pre><code># 国际化信息配置文件前缀，将在ClassPath下查找messages_zh_CN.properties
+i18n.basename=messages
+
+# 国际化信息格式，支持message和string，分别对应MessagFormat.format()和String.format()
+i18n.format=message
+
+# 优先从Web请求中获取locale信息，其次再从引擎配置中获取缺省locale信息
+resolvers=httl.web.WebResolver,httl.spi.resolvers.EngineResolver
+
+# 缺省区域信息
+locale=zh_CN
+</code></pre>
+
+<h3>6.2.7 系统函数</h3>
 
 <div class="highlight"><pre><span class="n">now</span><span class="o">()</span>
 <span class="n">random</span><span class="o">()</span>
@@ -940,30 +1032,26 @@ ${colors.next}
 
 <p>缺省为强缓存，即所有模板和表达式加载后全部缓存：(缺省值不用配)</p>
 
-<div class="highlight"><pre><span class="na">template.cache</span><span class="o">=</span><span class="s">java.util.concurrent.ConcurrentHashMap</span>
-<span class="na">expression.cache</span><span class="o">=</span><span class="s">java.util.concurrent.ConcurrentHashMap</span>
+<div class="highlight"><pre><span class="na">cache</span><span class="o">=</span><span class="s">httl.spi.caches.AdaptiveCache</span>
+<span class="na">cache.capacity</span><span class="o">=</span><span class="s">0</span>
 </pre></div>
 
-<p>如果你的模板非常之多，内存不足以缓存所有模板，可以配置为LRU缓存：</p>
+<p>当配置的capacity大于0，AdaptiveCache将适配到LRU(最近最少使用)实现，否则将适配到全缓存实现。</p>
 
-<div class="highlight"><pre><span class="na">template.cache</span><span class="o">=</span><span class="s">httl.spi.caches.LruCache</span>
-<span class="na">cache.capacity</span><span class="o">=</span><span class="s">10000</span>
-</pre></div>
+<p>如果你的模板非常之多，内存不足以缓存所有模板，可以配置为缓存容量：（将自动启用LRU丢弃策略）</p>
 
-<p>你可以用cache同时设置模板和表达式两者的缓存：</p>
-
-<div class="highlight"><pre><span class="na">cache</span><span class="o">=</span><span class="s">httl.spi.caches.LruCache</span>
-</pre></div>
-
-<p>等价于：</p>
-
-<div class="highlight"><pre><span class="na">template.cache</span><span class="o">=</span><span class="s">httl.spi.caches.LruCache</span>
-<span class="na">expression.cache</span><span class="o">=</span><span class="s">httl.spi.caches.LruCache</span>
+<div class="highlight"><pre><span class="na">cache.capacity</span><span class="o">=</span><span class="s">10000</span>
 </pre></div>
 
 <p>如果不需要缓存，请设为：</p>
 
 <div class="highlight"><pre><span class="na">cache</span><span class="o">=</span><span class="s">null</span>
+</pre></div>
+
+<p>你也可以分开设置模板和表达式两者的缓存：</p>
+
+<div class="highlight"><pre><span class="na">template.cache</span><span class="o">=</span><span class="s">httl.spi.caches.LruCache</span>
+<span class="na">expression.cache</span><span class="o">=</span><span class="s">httl.spi.caches.LruCache</span>
 </pre></div>
 
 <h2>7.4 模板加载配置</h2>
@@ -1059,7 +1147,14 @@ ${colors.next}
 
 <h2>7.5 模板编译器</h2>
 
-<p>用于将模板类编译成字节码，缺省使用jdk自带的编译器：(缺省值不用配)</p>
+<p>用于将模板类编译成字节码，缺省使用根据JDK版本自适应编译器：(缺省值不用配)</p>
+
+<div class="highlight"><pre><span class="na">compiler</span><span class="o">=</span><span class="s">httl.spi.compilers.AdaptiveCompiler</span>
+</pre></div>
+
+<p>当前运行环境为JDK1.6以前版本时，AdaptiveCompiler将适配到JavassistCompiler，否则将适配到JdkCompiler。</p>
+
+<p>你可以强制指定使用jdk自带的编译器：</p>
 
 <div class="highlight"><pre><span class="na">compiler</span><span class="o">=</span><span class="s">httl.spi.compilers.JdkCompiler</span>
 </pre></div>
@@ -1124,12 +1219,11 @@ ${colors.next}
 
 <p>(4) 调试选项：</p>
 
-<p>如果你想知道编译后的字节码是什么样的，可以开启debug模式，并设置编译目录，编译器会向指定目录输出.class文件。</p>
+<p>如果你想知道编译后的字节码是什么样的，可以设置编译目录，目录必须预先创建，编译器会向该目录输出.class文件。</p>
 
-<p>调试缺省关闭：(缺省值不用配)</p>
+<p>编译目录缺省关闭：(缺省值不用配)</p>
 
-<div class="highlight"><pre><span class="na">debug</span><span class="o">=</span><span class="s">false</span>
-<span class="na">compile.directory</span><span class="o">=</span>
+<div class="highlight"><pre><span class="na">compile.directory</span><span class="o">=</span>
 </pre></div>
 
 <h2>7.6 输出格式化器</h2>
@@ -1332,6 +1426,22 @@ ${weekday}
 
 <div class="highlight"><pre><span class="na">loggers+</span><span class="o">=</span><span class="s">httl.spi.loggers.JdkLogger</span>
 </pre></div>
+
+<p>注：当日志级别为DEBUG时，HTTL将向日志中输出编译的模板源码，方便排错。</p>
+
+<h2>7.10 运行时属性</h2>
+
+<p>缺省只从引擎配置中获取属性：(缺省值不用配)</p>
+
+<pre><code>resolvers=httl.spi.resolvers.EngineResolver
+</code></pre>
+
+<p>如果你是Web应用，可以配置优先从Web请求中获取运行时属性，其次再从引擎配置中获取缺省属性：</p>
+
+<pre><code>resolvers=httl.web.WebResolver,httl.spi.resolvers.EngineResolver
+</code></pre>
+
+<p>比如：用户的locale区域国际化信息，换上面的配置先从请求中获取，这样就可以根据用户区域设置显示不同语言。</p>
 
 <h1>8.集成</h1>
 
@@ -1748,7 +1858,7 @@ HttlServlet会模板目录下读取forward过来的path同名的模板，然后�
         <span class="nt">&lt;dependency&gt;</span>
             <span class="nt">&lt;groupId&gt;</span>httl<span class="nt">&lt;/groupId&gt;</span>
             <span class="nt">&lt;artifactId&gt;</span>httl<span class="nt">&lt;/artifactId&gt;</span>
-            <span class="nt">&lt;version&gt;</span>1.0.0<span class="nt">&lt;/version&gt;</span>
+            <span class="nt">&lt;version&gt;</span>1.0.3<span class="nt">&lt;/version&gt;</span>
             <span class="nt">&lt;/dependency&gt;</span>
     <span class="nt">&lt;/dependencies&gt;</span>
     <span class="nt">&lt;repositories&gt;</span>
@@ -1873,6 +1983,24 @@ HttlServlet会模板目录下读取forward过来的path同名的模板，然后�
 11. 增加${render($template)}动态模板求值。
 12. 修复Loader加载时目录拼接错误。
 </code></pre>
+
+<h2>11.6 HTTL 1.0.3 (2012-11-13)</h2>
+
+<pre><code>1. java.version配置项缺省改为自动获取当前JDK的版本。
+2. 修复precompiled注入顺序问题。
+3. 修复跨配置文件的$配置项引用问题。
+4. 增加ByteCache，减少生成字节码逻辑。
+5. 检查锁逃逸，ByteOutput换成UnsafeByteOutput，StringBuffer换成StringBuilder等。
+6. 在$!{foo}进行不过滤输出时，如果变量本身就是byte[]或String类型，直接向stream或writer输出，减少转码。
+7. 增强集合运算后泛型推导，比如：#foreach(book in booklist1 + booklist2)。
+8. 改用google的ConcurrentLinkedHashMap做LRU缓存实现。
+9. 支持集合相加，比如：array1 + array2, list1 + list2, map1 + map2。
+10. 缺省导入java.lang.Math中的静态方法。
+11. 增加hasResource()判断资源是否存在。
+12. 增加Resolver扩展接口，用于获取运行时属性，比如请求的国际化区域信息和请求的编码。
+13. 增加"foo".i18n()方法查找ResourceBunlde国际化信息，如：message_zh_CN.properties。
+14. 增加"foo.httl".locale()方法查找国际化文件名，如：foo_zh_CN.httl。
+</code></pre>
         </section>
 
         <footer>
@@ -1880,30 +2008,6 @@ HttlServlet会模板目录下读取forward过来的path同名的模板，然后�
           This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
         </footer>
 
-<div style="position: absolute; right: 160px; top: 0px;">中文 | <a href="../en">English</a></div>
-<div id="outlineIndex" style="position: absolute; left: 100px; top: 280px; display: none; width: 100px; padding: 10px; border: 1px dashed black; background-color: white;"></div>
-<div id="outlineClose" style="position: absolute; left: 200px; top: 280px; display: none; color: #FF3333; cursor: pointer;" onclick="document.getElementById('outlineIndex').style.display = 'none';document.getElementById('outlineClose').style.display = 'none'">[X]</div>
-<script type="text/javascript">
-<!--
-var index = "";
-var outlines = document.getElementsByTagName("h1");
-for (var i = 0; i < outlines.length; i ++) {
-	var outline = outlines[i];
-	var name = outline.innerHTML;
-    outline.outerHTML = "<a name=\"" + name + "\"></a>" + outline.outerHTML;
-    index += "<a href=\"#" + name + "\">" + name + "</a><br/>"
-}
-document.getElementById("outlineIndex").innerHTML = index;
-document.getElementById('outlineIndex').style.display = '';
-document.getElementById('outlineClose').style.display = '';
-var left = ((window.screen.width - 600) / 2) - 200;
-if (left < 0) {
-	left = 0;
-}
-document.getElementById('outlineIndex').style.left = left + "px";
-document.getElementById('outlineClose').style.left = (left + 100) + "px";
--->
-</script>
         
       </div>
     </div>
