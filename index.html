@@ -96,7 +96,7 @@
 <p>httl.properties:</p>
 
 <div class="highlight"><pre><span class="na">import.packages+</span><span class="o">=</span><span class="s">com.xxx</span>
-<span class="na">template.directory</span><span class="o">=</span><span class="s">META-INF/templates</span>
+<span class="na">template.directory</span><span class="o">=</span><span class="s">/META-INF/templates</span>
 <span class="na">input.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
 <span class="na">output.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
 </pre></div>
@@ -1002,11 +1002,6 @@ locale=zh_CN
 <span class="nt">&lt;/html&gt;</span>
 </pre></div>
 
-<p>如果属性和其它框架冲突，可以添加名字空间：</p>
-
-<div class="highlight"><pre><span class="na">attribute.namespace</span><span class="o">=</span><span class="s">httl</span>
-</pre></div>
-
 <p>属性语法需要用到jericho包解析HTML标签：</p>
 
 <p><a href="http://central.maven.org/maven2/net/htmlparser/jericho/jericho-html/3.1/jericho-html-3.1.jar">jericho-html-3.1.jar</a></p>
@@ -1016,6 +1011,11 @@ locale=zh_CN
     <span class="nt">&lt;artifactId&gt;</span>jericho-html<span class="nt">&lt;/artifactId&gt;</span>
     <span class="nt">&lt;version&gt;</span>3.1<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
+</pre></div>
+
+<p>如果属性和其它框架冲突，可以添加名字空间：</p>
+
+<div class="highlight"><pre><span class="na">attribute.namespace</span><span class="o">=</span><span class="s">httl</span>
 </pre></div>
 
 <p>名称空间写法如：</p>
