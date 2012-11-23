@@ -41,7 +41,7 @@
 
 <h3>简洁</h3>
 
-<p>保持最简洁指令集，只保留基本的占位/注释/转义，和八个必需的控制指令，其它都降级为表达式方法实现，比如指令：#include("a.httl")，改为普通函数：${include("a.httl")}。</p>
+<p>保持最简洁指令集，只保留基本的占位/注释/转义，和必需的变量/条件/循环/宏等控制指令，其它都降级为表达式方法实现，比如指令：#include("a.httl")，改为普通函数：${include("a.httl")}。</p>
 
 <h3>直觉</h3>
 
@@ -663,6 +663,8 @@ $!{body}
 <div class="highlight"><pre><span class="c">&lt;!--#set(Book book = bookentry.value)--&gt;</span>
 </pre></div>
 
+<p>如果bookentry.value的类型丢失，上面的写法可以恢复book的类型。</p>
+
 <p>缺省模板中set的变量，是不会回写到Context的参数Map中的。
 你需要用“:=”进行赋值，才会回写到Context的参数Map中：</p>
 
@@ -675,14 +677,14 @@ $!{body}
 
 <p>你可以通过ThreadLocal的Context.getContext().getParameters()拿到回写的变量：</p>
 
-<div class="highlight"><pre><span class="c1">// 你可以把入参设成不可修写的Map，不会影响运行。</span>
+<div class="highlight"><pre><span class="c1">// 你可以把入参设成不可修改的Map，不会影响运行。</span>
 <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">parameters</span> <span class="o">=</span> <span class="n">Collections</span><span class="o">.</span><span class="na">unmodifiableMap</span><span class="o">(</span><span class="n">parameters</span><span class="o">);</span>
 
-<span class="c1">// 传入的parameters在渲染过程中总是不会被修复，确保渲染过程无副作用，以及多次渲染的幂等性。</span>
+<span class="c1">// 传入的parameters在渲染过程中总是不会被修改，确保渲染过程无副作用，以及多次渲染的幂等性。</span>
 <span class="n">template</span><span class="o">.</span><span class="na">render</span><span class="o">(</span><span class="n">parameters</span><span class="o">,</span> <span class="n">writer</span><span class="o">);</span>
 
 <span class="c1">// 注意：这里获取到的并不是上面render参入的parameters，而是parameters的包装类。</span>
-<span class="c1">// 此parameters是可写的，当模板中set回写变量时，写入该Map中。</span>
+<span class="c1">// 此包装类是可写的，并且写入不会影响原生传入的parameters，当模板中set回写变量时，写入该Map中。</span>
 <span class="c1">// 在查询变量时，先在包装类中查找，找不到，再到原生传入的parameters中查找。</span>
 <span class="n">Context</span><span class="o">.</span><span class="na">getContext</span><span class="o">().</span><span class="na">getParameters</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="s">"price"</span><span class="o">);</span>
 </pre></div>
@@ -757,6 +759,8 @@ $!{body}
     ${book.title}
 <span class="c">&lt;!--#end--&gt;</span>
 </pre></div>
+
+<p>如果booklist的泛型丢失，上面的写法可以恢复book的类型。</p>
 
 <h3>5.4.3 中断迭代</h3>
 
