@@ -672,9 +672,7 @@ $!{body}
 
 <p>类型的声明，同时可以用作强制转型，比如：</p>
 
-<div class="highlight"><pre><span class="c">&lt;!--#foreach(bookentry in bookmap)--&gt;</span>
-    <span class="c">&lt;!--#set(Book book = bookentry.value)--&gt;</span>
-<span class="c">&lt;!--#end--&gt;</span>
+<div class="highlight"><pre><span class="c">&lt;!--#set(Book book = bookentry.value)--&gt;</span>
 </pre></div>
 
 <p>缺省模板中set的变量，是不会回写到Context的参数Map中的。
