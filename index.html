@@ -328,19 +328,16 @@ ${price}
 
 <ul>
 <li>Engine 为服务域
-
 <ul>
 <li>它是API的入口，并负责实体域Template的生命周期管理，它是Singleton单一实例的，加载后不可变，所以是线程安全的，它的初始化过程较重，请复用单例。</li>
 </ul>
 </li>
 <li>Template 为实体域
-
 <ul>
 <li>代表着被操作者，它是Prototype原型实例的，即每个模板产生一个实例，加载后不可变，同样也是线程安全的，模板变化后，将产生不同的实例，而不改变原实例。</li>
 </ul>
 </li>
 <li>Context 为会话域
-
 <ul>
 <li>持有操作过程中的所有可变状态，它是ThreadLocal线程内实例的，即不和其它线程竞争使用，所以也是线程安全的，请不要跨线程传递，它的初始化过程很轻量，每次模板执行前都新建实例，执行完即销毁。</li>
 </ul>
@@ -351,19 +348,16 @@ ${price}
 
 <ul>
 <li>复用度：
-
 <ul>
 <li>每种用户所需用到的类，就是同一复用粒度的，比如：使用者和扩展者，这样可以减少代码干扰，以及最大化复用。</li>
 </ul>
 </li>
 <li>稳定度：
-
 <ul>
 <li>被依赖包和依赖包的占比，如果一个包依赖很多包，那别的包变化都会引起它跟随变化，所以它就不稳定，反之即稳定，保持包的稳定度和抽象度成正比，即把抽象类(包括接口)放到稳定的包中，这样可以防止不稳定性传染。</li>
 </ul>
 </li>
 <li>抽象度：
-
 <ul>
 <li>包中抽象类个数占比，比如包中有10个类，其中3个为抽象类(包括接口)，则抽象度为3/10，保持被依赖者总是比依赖者的抽象度高，形成金子塔关系，这样可以保持每层都有足够的扩展性。 </li>
 </ul>
@@ -384,7 +378,6 @@ ${price}
 
 <ul>
 <li>(1) I = Ce / (Ca + Ce)
-
 <ul>
 <li>I: Instability (不稳定度)</li>
 <li>Ca: Afferent Coupling (传入依赖，也就是被其它包依赖的个数)</li>
@@ -392,7 +385,6 @@ ${price}
 </ul>
 </li>
 <li>(2) A = Na / Nc
-
 <ul>
 <li>A: Abstractness (抽象度)</li>
 <li>Na: Number of abstract classes (抽象类的个数)</li>
@@ -400,7 +392,6 @@ ${price}
 </ul>
 </li>
 <li>(3) D = abs(1 - I - A) * sin(45)
-
 <ul>
 <li>D: Distance (偏差)</li>
 <li>I: Instability (不稳定度)</li>
@@ -415,18 +406,15 @@ ${price}
 
 <ul>
 <li>API (Application Programming Interface)
-
 <ul><li>模板引擎的使用者依赖的接口类，也是核心领域模型所在，保持最少概念，并隐藏实现细节，其中Engine类相当于微内核，只管理非功能性的扩展点的加载，不硬编码模板加载解析渲染的任何部分。</li></ul>
 </li>
-</ul> SPI (Service Provider Interface)
-
+<li>SPI (Service Provider Interface)
 <ul><li>模板引擎的扩展者依赖的接口类，它依赖于API的领域模型，它是模板引擎功能正交分解的抽象层，以保证用户可以最小粒度替换需要改写的地方，方便二次开发。 </li></ul> 
-
- BUILT-IN (Built-in Implementation)
-
+</li>
+<li>BUILT-IN (Built-in Implementation)
 <ul><li>内置扩展实现，它是SPI标准实现，也是可被用户替换的类，它包含引擎所有做的事，包括扩展点之间的组装过程(可替换DefaultEngine)，以确保没有功能换不掉，即平等对待扩展者。 </li></ul> 
-
-
+</li>
+</ul>
 
 <p>采用子包依赖父包风格，所以将API放在根目录，SPI接口独立子包，各种实现放在SPI的下一级子包中。</p>
 
