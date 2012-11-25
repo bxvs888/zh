@@ -2091,7 +2091,7 @@ HttlServlet会模板目录下读取forward过来的path同名的模板，然后�
 <pre><code>1. 修复生成模板类源码数组类型名称问题。
 2. 单引号为字符串，反单引号为char。
 3. 生成的模板类代码只打印在日志，不放到异常信息中。
-4. 国际化信息找不到时，显示Key。
+4. 自动删除指令行空白，并可通过remove.directive.blank配置。
 5. 多Resolver和多Loader反序查找，便于+=配置，用户配置优先。
 6. set支持用分号分隔多个赋值。
 7. foreach状态的stcak集合改成parent链。
@@ -2106,9 +2106,10 @@ HttlServlet会模板目录下读取forward过来的path同名的模板，然后�
 16. 打印配置和模板加载目录INFO日志，方便排错。
 17. 解决Engine的properties后于init()方法赋值问题。
 18. 修复set重复定义变量类型，导致JdkCompiler编译失败的问题。
-19. 自动删除指令行空白，并可通过remove.directive.blank配置。
+19. 国际化信息找不到时，显示Key。
 20. 改为从模板相同的Loader加载国际化信息。
 21. 改为使用EncodingProperties加载国际化信息，用户可以直接用UTF-8文件保存国际化信息，而不需要ascii2native。
+22. 所有Web集成不再需要在web.xml和httl.properties中配置ServletLoader，缺省自动配置。
 </code></pre>
 
 <h1>12. 支持</h1>
