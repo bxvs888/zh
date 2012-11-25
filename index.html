@@ -23,9 +23,9 @@
         </header>
 
         <section id="downloads" class="clearfix">
-          <a href="https://github.com/downloads/httl/httl/httl-1.0.4.jar" id="download-zip" class="button"><span>下载 1.0.4.jar</span></a>
-          <a href="https://github.com/downloads/httl/httl/httl-1.0.4-sources.jar" id="download-tar-gz" class="button"><span>下载 1.0.4-src.jar</span></a>
-          <a href="https://github.com/httl/httl" id="view-on-github" class="button"><span>查看源码仓库</span></a>
+          <a href="https://github.com/httl/zh/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/httl/zh/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/httl/zh" id="view-on-github" class="button"><span>View on GitHub</span></a>
         </section>
 
         <hr>
@@ -430,19 +430,23 @@ ${price}
 <ul>
 <li>API (Application Programming Interface)
 
-<ul><li>模板引擎的使用者依赖的接口类，也是核心领域模型所在，保持最少概念，并隐藏实现细节，其中Engine类相当于微内核，只管理非功能性的扩展点的加载，不硬编码模板加载解析渲染的任何部分。</li></ul>
+<ul>
+<li>模板引擎的使用者依赖的接口类，也是核心领域模型所在，保持最少概念，并隐藏实现细节，其中Engine类相当于微内核，只管理非功能性的扩展点的加载，不硬编码模板加载解析渲染的任何部分。</li>
+</ul>
 </li>
-</ul> SPI (Service Provider Interface)
+<li>SPI (Service Provider Interface)
 
-<ul><li>模板引擎的扩展者依赖的接口类，它依赖于API的领域模型，它是模板引擎功能正交分解的抽象层，以保证用户可以最小粒度替换需要改写的地方，方便二次开发。 </li></ul> 
+<ul>
+<li>模板引擎的扩展者依赖的接口类，它依赖于API的领域模型，它是模板引擎功能正交分解的抽象层，以保证用户可以最小粒度替换需要改写的地方，方便二次开发。</li>
+</ul>
+</li>
+<li>BUILT-IN (Built-in Implementation)
 
- BUILT-IN (Built-in Implementation)
-
-<ul><li>内置扩展实现，它是SPI标准实现，也是可被用户替换的类，它包含引擎所有做的事，包括扩展点之间的组装过程(可替换DefaultEngine)，以确保没有功能换不掉，即平等对待扩展者。 </li></ul> 
-
-
-
-<p>采用子包依赖父包风格，所以将API放在根目录，SPI接口独立子包，各种实现放在SPI的下一级子包中。</p>
+<ul>
+<li>内置扩展实现，它是SPI标准实现，也是可被用户替换的类，它包含引擎所有做的事，包括扩展点之间的组装过程(可替换DefaultEngine)，以确保没有功能换不掉，即平等对待扩展者。</li>
+</ul>
+</li>
+</ul><p>采用子包依赖父包风格，所以将API放在根目录，SPI接口独立子包，各种实现放在SPI的下一级子包中。</p>
 
 <ul>
 <li>使用者API导入：import httl.*;<br>
@@ -1671,8 +1675,7 @@ ${weekday}
 
 <p>配置/WEB-INF/httl.properties：</p>
 
-<div class="highlight"><pre><span class="na">loaders</span><span class="o">=</span><span class="s">httl.spi.loaders.ServletLoader</span>
-<span class="na">template.directory</span><span class="o">=</span><span class="s">/WEB-INF/templates</span>
+<div class="highlight"><pre><span class="na">template.directory</span><span class="o">=</span><span class="s">/WEB-INF/templates</span>
 <span class="na">input.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
 <span class="na">output.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
 </pre></div>
@@ -1730,8 +1733,7 @@ ${weekday}
 
 <p>配置/WEB-INF/httl.properties：</p>
 
-<div class="highlight"><pre><span class="na">loaders</span><span class="o">=</span><span class="s">httl.spi.loaders.ServletLoader</span>
-<span class="na">template.directory</span><span class="o">=</span><span class="s">/WEB-INF/templates</span>
+<div class="highlight"><pre><span class="na">template.directory</span><span class="o">=</span><span class="s">/WEB-INF/templates</span>
 <span class="na">input.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
 <span class="na">output.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
 </pre></div>
@@ -1748,10 +1750,6 @@ HttlFilter会模板目录下读取请求path加.httl后缀的模板，然后以r
         <span class="na">xmlns=</span><span class="s">"http://java.sun.com/xml/ns/javaee"</span> <span class="na">xmlns:web=</span><span class="s">"http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"</span>
         <span class="na">xsi:schemaLocation=</span><span class="s">"http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"</span>
         <span class="na">version=</span><span class="s">"2.5"</span><span class="nt">&gt;</span>
-
-    <span class="nt">&lt;listener&gt;</span>
-        <span class="nt">&lt;listener-class&gt;</span>httl.spi.loaders.ServletLoader<span class="nt">&lt;/listener-class&gt;</span>
-    <span class="nt">&lt;/listener&gt;</span>
 
     <span class="nt">&lt;servlet&gt;</span>
         <span class="nt">&lt;servlet-name&gt;</span>yourservlet<span class="nt">&lt;/servlet-name&gt;</span>
@@ -1779,8 +1777,7 @@ HttlFilter会模板目录下读取请求path加.httl后缀的模板，然后以r
 
 <p>配置/WEB-INF/httl.properties：</p>
 
-<div class="highlight"><pre><span class="na">loaders</span><span class="o">=</span><span class="s">httl.spi.loaders.ServletLoader</span>
-<span class="na">template.directory</span><span class="o">=</span><span class="s">/WEB-INF/templates</span>
+<div class="highlight"><pre><span class="na">template.directory</span><span class="o">=</span><span class="s">/WEB-INF/templates</span>
 <span class="na">input.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
 <span class="na">output.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
 </pre></div>
@@ -1798,10 +1795,6 @@ HttlServlet会模板目录下读取forward过来的path同名的模板，然后�
         <span class="na">xmlns=</span><span class="s">"http://java.sun.com/xml/ns/javaee"</span> <span class="na">xmlns:web=</span><span class="s">"http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"</span>
         <span class="na">xsi:schemaLocation=</span><span class="s">"http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"</span>
         <span class="na">version=</span><span class="s">"2.5"</span><span class="nt">&gt;</span>
-
-    <span class="nt">&lt;listener&gt;</span>
-        <span class="nt">&lt;listener-class&gt;</span>httl.spi.loaders.ServletLoader<span class="nt">&lt;/listener-class&gt;</span>
-    <span class="nt">&lt;/listener&gt;</span>
 
     <span class="nt">&lt;servlet&gt;</span>
         <span class="nt">&lt;servlet-name&gt;</span>yourservlet<span class="nt">&lt;/servlet-name&gt;</span>
@@ -1830,8 +1823,7 @@ HttlServlet会模板目录下读取forward过来的path同名的模板，然后�
 
 <p>配置/WEB-INF/httl.properties：</p>
 
-<div class="highlight"><pre><span class="na">loaders</span><span class="o">=</span><span class="s">httl.spi.loaders.ServletLoader</span>
-<span class="na">template.directory</span><span class="o">=</span><span class="s">/WEB-INF/templates</span>
+<div class="highlight"><pre><span class="na">template.directory</span><span class="o">=</span><span class="s">/WEB-INF/templates</span>
 <span class="na">input.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
 <span class="na">output.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
 </pre></div>
@@ -2123,7 +2115,7 @@ HttlServlet会模板目录下读取forward过来的path同名的模板，然后�
 21. 改为使用EncodingProperties加载国际化信息，用户可以直接用UTF-8文件保存国际化信息，而不需要ascii2native。
 </code></pre>
 
-<h1>12.支持</h1>
+<h1>12. 支持</h1>
 
 <p>如果使用过程中遇到问题，请在下面地址提交问题：</p>
 
@@ -2139,49 +2131,6 @@ HttlServlet会模板目录下读取forward过来的path同名的模板，然后�
           This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
         </footer>
 
-<div style="position: absolute; right: 160px; top: 0px;">中文 | <a href="../en">English</a></div>
-<div id="outlineIndex" style="position: absolute; left: 100px; top: 280px; display: none; width: 100px; padding: 10px; border: 1px dashed black; background-color: white;"></div>
-<div id="outlineClose" style="position: absolute; left: 200px; top: 280px; display: none; color: #FF3333; cursor: pointer;" onclick="document.getElementById('outlineIndex').style.display = 'none';document.getElementById('outlineClose').style.display = 'none'">[X]</div>
-<script type="text/javascript">
-<!--
-var outlineIndex = document.getElementById("outlineIndex");
-var outlineClose = document.getElementById("outlineClose");
-
-var index = "";
-var outlines = document.getElementsByTagName("h1");
-for (var i = 0; i < outlines.length; i ++) {
-	var outline = outlines[i];
-	var name = outline.innerHTML;
-    outline.outerHTML = "<a name=\"" + name + "\"></a>" + outline.outerHTML;
-    index += "<a href=\"#" + name + "\">" + name + "</a><br/>"
-}
-
-outlineIndex.innerHTML = index;
-outlineIndex.style.display = '';
-outlineClose.style.display = '';
-
-var left = ((window.screen.width - 600) / 2) - 200;
-if (left < 0) {
-	left = 0;
-}
-
-outlineIndex.style.left = left + "px";
-outlineClose.style.left = (left + 100) + "px";
-
-window.addEventListener("scroll", function(e) {
-	var orignTop = 280;
-	var scrollTop = document.body.scrollTop;
-	if (scrollTop > orignTop) {
-		document.getElementById("outlineIndex").style.top = scrollTop + "px";
-		document.getElementById("outlineClose").style.top = scrollTop + "px";
-	} else {
-		document.getElementById("outlineIndex").style.top = orignTop + "px";
-		document.getElementById("outlineClose").style.top = orignTop + "px";
-	}
-
-}, false);
--->
-</script>
         
       </div>
     </div>
