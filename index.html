@@ -23,9 +23,9 @@
         </header>
 
         <section id="downloads" class="clearfix">
-          <a href="https://github.com/downloads/httl/httl/httl-1.0.3.jar" id="download-zip" class="button"><span>下载 1.0.3.jar</span></a>
-          <a href="https://github.com/downloads/httl/httl/httl-1.0.3-sources.jar" id="download-tar-gz" class="button"><span>下载 1.0.3-src.jar</span></a>
-          <a href="https://github.com/httl/httl" id="view-on-github" class="button"><span>查看源码仓库</span></a>
+          <a href="https://github.com/httl/zh/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/httl/zh/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/httl/zh" id="view-on-github" class="button"><span>View on GitHub</span></a>
         </section>
 
         <hr>
@@ -75,7 +75,7 @@
 
 <p>books.httl:</p>
 
-<div class="highlight"><pre><span class="c">&lt;!--#var(User user, List&lt;Book&gt; books)--&gt;</span>
+<div class="highlight"><pre><span class="c">&lt;!--#var(User user, Book[] books)--&gt;</span>
 <span class="nt">&lt;html&gt;</span>
   <span class="nt">&lt;body&gt;</span>
     <span class="c">&lt;!--#if(user.role == "admin")--&gt;</span>
@@ -87,6 +87,19 @@
       <span class="c">&lt;!--#end--&gt;</span>
     <span class="nt">&lt;/table&gt;</span>
     <span class="c">&lt;!--#end--&gt;</span>
+  <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+
+<p>或者：(需配置parser=httl.spi.parsers.AttributeParser)</p>
+
+<div class="highlight"><pre><span class="nt">&lt;html</span> <span class="na">var=</span><span class="s">"User user, Book[] books"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;table</span> <span class="na">if=</span><span class="s">"user.role == 'admin'"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;tr</span> <span class="na">foreach=</span><span class="s">"book in books"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;td&gt;</span>${book.title}<span class="nt">&lt;/td&gt;</span>
+      <span class="nt">&lt;/tr&gt;</span>
+    <span class="nt">&lt;/table&gt;</span>
   <span class="nt">&lt;/body&gt;</span>
 <span class="nt">&lt;/html&gt;</span>
 </pre></div>
@@ -311,7 +324,7 @@ ${price}
 
 <h2>4.1 类关系</h2>
 
-<p><img src="http://httl.github.com/images/httl-class-diagram-preview.png" alt="类图"></p>
+<p><img src="http://httl.github.com/images/httl-class-diagram.png" alt="类图"></p>
 
 <p><a href="http://httl.github.com/images/httl-class-diagram.png">查看大图</a></p>
 
@@ -329,16 +342,19 @@ ${price}
 
 <ul>
 <li>Engine 为服务域
+
 <ul>
 <li>它是API的入口，并负责实体域Template的生命周期管理，它是Singleton单一实例的，加载后不可变，所以是线程安全的，它的初始化过程较重，请复用单例。</li>
 </ul>
 </li>
 <li>Template 为实体域
+
 <ul>
 <li>代表着被操作者，它是Prototype原型实例的，即每个模板产生一个实例，加载后不可变，同样也是线程安全的，模板变化后，将产生不同的实例，而不改变原实例。</li>
 </ul>
 </li>
 <li>Context 为会话域
+
 <ul>
 <li>持有操作过程中的所有可变状态，它是ThreadLocal线程内实例的，即不和其它线程竞争使用，所以也是线程安全的，请不要跨线程传递，它的初始化过程很轻量，每次模板执行前都新建实例，执行完即销毁。</li>
 </ul>
@@ -349,16 +365,19 @@ ${price}
 
 <ul>
 <li>复用度：
+
 <ul>
 <li>每种用户所需用到的类，就是同一复用粒度的，比如：使用者和扩展者，这样可以减少代码干扰，以及最大化复用。</li>
 </ul>
 </li>
 <li>稳定度：
+
 <ul>
 <li>被依赖包和依赖包的占比，如果一个包依赖很多包，那别的包变化都会引起它跟随变化，所以它就不稳定，反之即稳定，保持包的稳定度和抽象度成正比，即把抽象类(包括接口)放到稳定的包中，这样可以防止不稳定性传染。</li>
 </ul>
 </li>
 <li>抽象度：
+
 <ul>
 <li>包中抽象类个数占比，比如包中有10个类，其中3个为抽象类(包括接口)，则抽象度为3/10，保持被依赖者总是比依赖者的抽象度高，形成金子塔关系，这样可以保持每层都有足够的扩展性。 </li>
 </ul>
@@ -379,6 +398,7 @@ ${price}
 
 <ul>
 <li>(1) I = Ce / (Ca + Ce)
+
 <ul>
 <li>I: Instability (不稳定度)</li>
 <li>Ca: Afferent Coupling (传入依赖，也就是被其它包依赖的个数)</li>
@@ -386,6 +406,7 @@ ${price}
 </ul>
 </li>
 <li>(2) A = Na / Nc
+
 <ul>
 <li>A: Abstractness (抽象度)</li>
 <li>Na: Number of abstract classes (抽象类的个数)</li>
@@ -393,6 +414,7 @@ ${price}
 </ul>
 </li>
 <li>(3) D = abs(1 - I - A) * sin(45)
+
 <ul>
 <li>D: Distance (偏差)</li>
 <li>I: Instability (不稳定度)</li>
@@ -407,15 +429,18 @@ ${price}
 
 <ul>
 <li>API (Application Programming Interface)
+
 <ul><li>模板引擎的使用者依赖的接口类，也是核心领域模型所在，保持最少概念，并隐藏实现细节，其中Engine类相当于微内核，只管理非功能性的扩展点的加载，不硬编码模板加载解析渲染的任何部分。</li></ul>
 </li>
-<li>SPI (Service Provider Interface)
+</ul> SPI (Service Provider Interface)
+
 <ul><li>模板引擎的扩展者依赖的接口类，它依赖于API的领域模型，它是模板引擎功能正交分解的抽象层，以保证用户可以最小粒度替换需要改写的地方，方便二次开发。 </li></ul> 
-</li>
-<li>BUILT-IN (Built-in Implementation)
+
+ BUILT-IN (Built-in Implementation)
+
 <ul><li>内置扩展实现，它是SPI标准实现，也是可被用户替换的类，它包含引擎所有做的事，包括扩展点之间的组装过程(可替换DefaultEngine)，以确保没有功能换不掉，即平等对待扩展者。 </li></ul> 
-</li>
-</ul>
+
+
 
 <p>采用子包依赖父包风格，所以将API放在根目录，SPI接口独立子包，各种实现放在SPI的下一级子包中。</p>
 
@@ -433,7 +458,7 @@ ${price}
 
 <h2>4.2 调用过程</h2>
 
-<p><img src="http://httl.github.com/images/httl-sequence-diagram-preview.png" alt="时序图"></p>
+<p><img src="http://httl.github.com/images/httl-sequence-diagram.png" alt="时序图"></p>
 
 <p><a href="http://httl.github.com/images/httl-sequence-diagram.png">查看大图</a></p>
 
@@ -684,7 +709,7 @@ $!{body}
 <span class="c1">// 传入的parameters在渲染过程中总是不会被修改，确保渲染过程无副作用，以及多次渲染的幂等性。</span>
 <span class="n">template</span><span class="o">.</span><span class="na">render</span><span class="o">(</span><span class="n">parameters</span><span class="o">,</span> <span class="n">writer</span><span class="o">);</span>
 
-<span class="c1">// 注意：这里获取到的并不是上面render参入的parameters，而是parameters的包装类。</span>
+<span class="c1">// 注意：这里获取到的并不是上面render传入的parameters，而是parameters的包装类。</span>
 <span class="c1">// 此包装类是可写的，并且写入不会影响原生传入的parameters，当模板中set回写变量时，写入该Map中。</span>
 <span class="c1">// 在查询变量时，先在包装类中查找，找不到，再到原生传入的parameters中查找。</span>
 <span class="n">Context</span><span class="o">.</span><span class="na">getContext</span><span class="o">().</span><span class="na">getParameters</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="s">"price"</span><span class="o">);</span>
@@ -790,6 +815,7 @@ $!{body}
     ...
 <span class="c">&lt;!--#end--&gt;</span>
 $!{xxx(books)}
+<span class="c">&lt;!--#set(xxx := xxx(books))--&gt;</span>
 </pre></div>
 
 <h2>5.6 字面指令</h2>
@@ -1000,29 +1026,29 @@ ${colors.next}
 
 <h3>6.2.6 国际化函数</h3>
 
-<div class="highlight"><pre><span class="n">$</span><span class="o">{</span><span class="s">"key"</span><span class="o">.</span><span class="na">i18n</span><span class="o">}</span> <span class="err">或</span> <span class="n">$</span><span class="o">{</span><span class="n">i18n</span><span class="o">(</span><span class="s">"key"</span><span class="o">)}</span>
-<span class="err">依次查找下面文件中的</span><span class="n">key</span><span class="err">配置：</span>
-<span class="n">basename_zh_CN</span><span class="o">.</span><span class="na">properties</span>
-<span class="n">basename_zh</span><span class="o">.</span><span class="na">properties</span>
-<span class="n">basename</span><span class="o">.</span><span class="na">properties</span>
+<pre><code>${"key".i18n} 或 ${i18n("key")}
+依次查找下面文件中的key配置：
+basename_zh_CN.properties
+basename_zh.properties
+basename.properties
 
-<span class="n">$</span><span class="o">!{</span><span class="n">include</span><span class="o">(</span><span class="s">"template.httl"</span><span class="o">.</span><span class="na">locale</span><span class="o">)}</span> <span class="err">或</span> <span class="n">$</span><span class="o">!{</span><span class="n">include</span><span class="o">(</span><span class="n">locale</span><span class="o">(</span><span class="s">"template.httl"</span><span class="o">))}</span>
-<span class="err">依次查找以下文件是否存在：</span>
-<span class="n">template_zh_CN</span><span class="o">.</span><span class="na">httl</span>
-<span class="n">template_zh</span><span class="o">.</span><span class="na">httl</span>
-<span class="n">template</span><span class="o">.</span><span class="na">httl</span>
-</pre></div>
+$!{include("template.httl".locale)} 或 $!{include(locale("template.httl"))}
+依次查找以下文件是否存在：
+template_zh_CN.httl
+template_zh.httl
+template.httl
+</code></pre>
 
 <p>httl.properties相关配置：</p>
 
-<pre><code># 国际化信息配置文件前缀，将在ClassPath下查找messages_zh_CN.properties
+<pre><code># 国际化信息配置文件前缀，将从Loader中查找messages_zh_CN.properties
 i18n.basename=messages
 
 # 国际化信息格式，支持message和string，分别对应MessagFormat.format()和String.format()
 i18n.format=message
 
-# 优先从Web请求中获取locale信息，其次再从引擎配置中获取缺省locale信息
-resolvers=httl.web.WebResolver,httl.spi.resolvers.EngineResolver
+# 用户可以直接用UTF-8文件保存国际化信息，而不需要ascii2native
+i18n.encoding=UTF-8
 
 # 缺省区域信息
 locale=zh_CN
@@ -1048,6 +1074,24 @@ locale=zh_CN
 
 <p>其中，engine负责组装，parser负责解析语法，translator负责将模板表达式翻译成java表达式。
 除非你想改变语法，或优化解析性能，否则此三项不需要配置。</p>
+
+<p>缺省使用HTML注释语法，如：</p>
+
+<div class="highlight"><pre><span class="c">&lt;!--#var(User user, Book[] books)--&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+  <span class="nt">&lt;body&gt;</span>
+    <span class="c">&lt;!--#if(user.role == "admin")--&gt;</span>
+    <span class="nt">&lt;table&gt;</span>
+      <span class="c">&lt;!--#foreach(book in books)--&gt;</span>
+      <span class="nt">&lt;tr&gt;</span>
+        <span class="nt">&lt;td&gt;</span>${book.title}<span class="nt">&lt;/td&gt;</span>
+      <span class="nt">&lt;/tr&gt;</span>
+      <span class="c">&lt;!--#end--&gt;</span>
+    <span class="nt">&lt;/table&gt;</span>
+    <span class="c">&lt;!--#end--&gt;</span>
+  <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
 
 <p>如果你喜欢HTML标签属性语法，可以配置：</p>
 
@@ -1097,26 +1141,28 @@ locale=zh_CN
 
 <p>缺省为强缓存，即所有模板和表达式加载后全部缓存：(缺省值不用配)</p>
 
-<div class="highlight"><pre><span class="na">cache</span><span class="o">=</span><span class="s">httl.spi.caches.AdaptiveCache</span>
-<span class="na">cache.capacity</span><span class="o">=</span><span class="s">0</span>
+<div class="highlight"><pre><span class="na">template.cache</span><span class="o">=</span><span class="s">httl.spi.caches.TemplateAdaptiveCache</span>
+<span class="na">expression.cache</span><span class="o">=</span><span class="s">httl.spi.caches.ExpressionAdaptiveCache</span>
+<span class="na">template.cache.capacity</span><span class="o">=</span>
+<span class="na">expression.cache.capacity</span><span class="o">=</span>
 </pre></div>
 
 <p>当配置的capacity大于0，AdaptiveCache将适配到LRU(最近最少使用)实现，否则将适配到全缓存实现。</p>
 
-<p>如果你的模板非常之多，内存不足以缓存所有模板，可以配置为缓存容量：（将自动启用LRU丢弃策略）</p>
+<p>如果你的模板非常之多，内存不足以缓存所有模板，可以配置缓存容量：（将自动启用LRU丢弃策略）</p>
+
+<div class="highlight"><pre><span class="na">template.cache.capacity</span><span class="o">=</span><span class="s">10000</span>
+<span class="na">expression.cache.capacity</span><span class="o">=</span><span class="s">10000</span>
+</pre></div>
+
+<p>你也可以用cache.capacity同时设置模板和表达式两者的缓存：(和上面的配置等价)</p>
 
 <div class="highlight"><pre><span class="na">cache.capacity</span><span class="o">=</span><span class="s">10000</span>
 </pre></div>
 
-<p>如果不需要缓存，请设为：</p>
+<p>开发阶段，可以开启热加载：</p>
 
-<div class="highlight"><pre><span class="na">cache</span><span class="o">=</span><span class="s">null</span>
-</pre></div>
-
-<p>你也可以分开设置模板和表达式两者的缓存：</p>
-
-<div class="highlight"><pre><span class="na">template.cache</span><span class="o">=</span><span class="s">httl.spi.caches.LruCache</span>
-<span class="na">expression.cache</span><span class="o">=</span><span class="s">httl.spi.caches.LruCache</span>
+<div class="highlight"><pre><span class="na">reloadable</span><span class="o">=</span><span class="s">true</span>
 </pre></div>
 
 <h2>7.4 模板加载配置</h2>
@@ -1362,6 +1408,11 @@ locale=zh_CN
 <span class="na">text.filters+</span><span class="o">=</span><span class="s">httl.spi.filters.CompressBlankFilter</span>
 </pre></div>
 
+<p>HTTL缺省会移除指令所在行空白，如果需要保留，请配置：</p>
+
+<pre><code>remove.directive.blank=false
+</code></pre>
+
 <h2>7.8 类型导入</h2>
 
 <h3>7.8.1 导入包名</h3>
@@ -1514,25 +1565,7 @@ ${weekday}
 
 <p><img src="http://httl.github.com/images/httl-mvc.png" alt="MVC"></p>
 
-<h3>1. Web应用需要配置ServletLoader加载Web目录下的模板：</h3>
-
-<p>(注：如果你将模板放在ClassPath下，则不需要此配置)</p>
-
-<p>web.xml:</p>
-
-<div class="highlight"><pre><span class="nt">&lt;listener&gt;</span>
-    <span class="nt">&lt;listener-class&gt;</span>httl.spi.loaders.ServletLoader<span class="nt">&lt;/listener-class&gt;</span>
-<span class="nt">&lt;/listener&gt;</span>
-</pre></div>
-
-<p>httl.properties：</p>
-
-<div class="highlight"><pre><span class="na">loaders</span><span class="o">=</span><span class="s">httl.spi.loaders.ServletLoader</span>
-</pre></div>
-
-<h3>2. Web应用查找httl.properties配置的顺序：</h3>
-
-<p>(注：以下第1,2步只有配了ServletLoader才有效，否则直接在ClassPath查找配置)</p>
+<p>Web应用查找httl.properties配置的顺序：</p>
 
 <p>(1) 首先查找/WEB-INF/web.xml中的context-param指定的配置：</p>
 
@@ -1559,10 +1592,6 @@ ${weekday}
         <span class="na">xmlns=</span><span class="s">"http://java.sun.com/xml/ns/javaee"</span> <span class="na">xmlns:web=</span><span class="s">"http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"</span>
         <span class="na">xsi:schemaLocation=</span><span class="s">"http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"</span>
         <span class="na">version=</span><span class="s">"2.5"</span><span class="nt">&gt;</span>
-
-    <span class="nt">&lt;listener&gt;</span>
-        <span class="nt">&lt;listener-class&gt;</span>httl.spi.loaders.ServletLoader<span class="nt">&lt;/listener-class&gt;</span>
-    <span class="nt">&lt;/listener&gt;</span>
 
     <span class="nt">&lt;listener&gt;</span>
         <span class="nt">&lt;listener-class&gt;</span>org.springframework.web.context.ContextLoaderListener<span class="nt">&lt;/listener-class&gt;</span>
@@ -1597,8 +1626,7 @@ ${weekday}
 
 <p>配置/WEB-INF/httl.properties：</p>
 
-<div class="highlight"><pre><span class="na">loaders</span><span class="o">=</span><span class="s">httl.spi.loaders.ServletLoader</span>
-<span class="na">template.directory</span><span class="o">=</span><span class="s">/WEB-INF/templates</span>
+<div class="highlight"><pre><span class="na">template.directory</span><span class="o">=</span><span class="s">/WEB-INF/templates</span>
 <span class="na">input.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
 <span class="na">output.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
 </pre></div>
@@ -1612,10 +1640,6 @@ ${weekday}
         <span class="na">xmlns=</span><span class="s">"http://java.sun.com/xml/ns/javaee"</span> <span class="na">xmlns:web=</span><span class="s">"http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"</span>
         <span class="na">xsi:schemaLocation=</span><span class="s">"http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"</span>
         <span class="na">version=</span><span class="s">"2.5"</span><span class="nt">&gt;</span>
-
-    <span class="nt">&lt;listener&gt;</span>
-        <span class="nt">&lt;listener-class&gt;</span>httl.spi.loaders.ServletLoader<span class="nt">&lt;/listener-class&gt;</span>
-    <span class="nt">&lt;/listener&gt;</span>
 
     <span class="nt">&lt;filter&gt;</span>
         <span class="nt">&lt;filter-name&gt;</span>struts<span class="nt">&lt;/filter-name&gt;</span>
@@ -2073,6 +2097,41 @@ HttlServlet会模板目录下读取forward过来的path同名的模板，然后�
 13. 增加"foo".i18n()方法查找ResourceBunlde国际化信息，如：message_zh_CN.properties。
 14. 增加"foo.httl".locale()方法查找国际化文件名，如：foo_zh_CN.httl。
 </code></pre>
+
+<h2>11.7 HTTL 1.0.4 (2012-11-25)</h2>
+
+<pre><code>1. 修复生成模板类源码数组类型名称问题。
+2. 单引号为字符串，反单引号为char。
+3. 生成的模板类代码只打印在日志，不放到异常信息中。
+4. 国际化信息找不到时，显示Key。
+5. 多Resolver和多Loader反序查找，便于+=配置，用户配置优先。
+6. set支持用分号分隔多个赋值。
+7. foreach状态的stcak集合改成parent链。
+8. 清理所有Array.get()反射。
+9. ClassUtils增加属性反射缓存。
+10. 允许分开设置template.cache.capacity和expression.cache.capacity。
+11. 修复生成Java代码时，部分方法调用没有生成null判断。
+12. read,include应根据output类型自适应返回byte[]或String。
+13. 增加byte[]和char[]的toString处理。
+14. 增加string.split(char)方法。
+15. 增加Object弱类型参数运行时byte[]判断，以免被format()成String，再转回byte[]输出。
+16. 打印配置和模板加载目录INFO日志，方便排错。
+17. 解决Engine的properties后于init()方法赋值问题。
+18. 修复set重复定义变量类型，导致JdkCompiler编译失败的问题。
+19. 自动删除指令行空白，并可通过remove.directive.blank配置。
+20. 改为从模板相同的Loader加载国际化信息。
+21. 改为使用EncodingProperties加载国际化信息，用户可以直接用UTF-8文件保存国际化信息，而不需要ascii2native。
+</code></pre>
+
+<h1>12. 支持</h1>
+
+<p>如果使用过程中遇到问题，请在下面地址提交问题：</p>
+
+<p>[<a href="https://github.com/httl/httl/issues">https://github.com/httl/httl/issues</a>]</p>
+
+<p>或发邮件到：</p>
+
+<p>liangfei0201 (At) gmail (Dot) com</p>
         </section>
 
         <footer>
@@ -2080,49 +2139,6 @@ HttlServlet会模板目录下读取forward过来的path同名的模板，然后�
           This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
         </footer>
 
-<div style="position: absolute; right: 160px; top: 0px;">中文 | <a href="../en">English</a></div>
-<div id="outlineIndex" style="position: absolute; left: 100px; top: 280px; display: none; width: 100px; padding: 10px; border: 1px dashed black; background-color: white;"></div>
-<div id="outlineClose" style="position: absolute; left: 200px; top: 280px; display: none; color: #FF3333; cursor: pointer;" onclick="document.getElementById('outlineIndex').style.display = 'none';document.getElementById('outlineClose').style.display = 'none'">[X]</div>
-<script type="text/javascript">
-<!--
-var outlineIndex = document.getElementById("outlineIndex");
-var outlineClose = document.getElementById("outlineClose");
-
-var index = "";
-var outlines = document.getElementsByTagName("h1");
-for (var i = 0; i < outlines.length; i ++) {
-	var outline = outlines[i];
-	var name = outline.innerHTML;
-    outline.outerHTML = "<a name=\"" + name + "\"></a>" + outline.outerHTML;
-    index += "<a href=\"#" + name + "\">" + name + "</a><br/>"
-}
-
-outlineIndex.innerHTML = index;
-outlineIndex.style.display = '';
-outlineClose.style.display = '';
-
-var left = ((window.screen.width - 600) / 2) - 200;
-if (left < 0) {
-	left = 0;
-}
-
-outlineIndex.style.left = left + "px";
-outlineClose.style.left = (left + 100) + "px";
-
-window.addEventListener("scroll", function(e) {
-	var orignTop = 280;
-	var scrollTop = document.body.scrollTop;
-	if (scrollTop > orignTop) {
-		document.getElementById("outlineIndex").style.top = scrollTop + "px";
-		document.getElementById("outlineClose").style.top = scrollTop + "px";
-	} else {
-		document.getElementById("outlineIndex").style.top = orignTop + "px";
-		document.getElementById("outlineClose").style.top = orignTop + "px";
-	}
-
-}, false);
--->
-</script>
         
       </div>
     </div>
