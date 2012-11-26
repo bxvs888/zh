@@ -2127,6 +2127,7 @@ HttlServlet会模板目录下读取forward过来的path同名的模板，然后�
 20. 改为从模板相同的Loader加载国际化信息。
 21. 改为使用EncodingProperties加载国际化信息，用户可以直接用UTF-8文件保存国际化信息，而不需要ascii2native。
 22. 所有Web集成不再需要在web.xml和httl.properties中配置ServletLoader，缺省自动配置。
+23. 修复Compiler类元重复编译导至类元信息泄漏的问题。
 </code></pre>
 
 <h1>13.支持</h1>
