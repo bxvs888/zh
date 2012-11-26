@@ -23,9 +23,9 @@
         </header>
 
         <section id="downloads" class="clearfix">
-          <a href="https://github.com/downloads/httl/httl/httl-1.0.4.jar" id="download-zip" class="button"><span>下载 1.0.4.jar</span></a>
-          <a href="https://github.com/downloads/httl/httl/httl-1.0.4-sources.jar" id="download-tar-gz" class="button"><span>下载 1.0.4-src.jar</span></a>
-          <a href="https://github.com/httl/httl" id="view-on-github" class="button"><span>查看源码仓库</span></a>
+          <a href="https://github.com/httl/zh/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/httl/zh/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/httl/zh" id="view-on-github" class="button"><span>View on GitHub</span></a>
         </section>
 
         <hr>
@@ -116,7 +116,7 @@
 
 <p>其中，+=表示追加配置，而不覆盖缺省配置。
 注意，所有配置项都有缺省值，如果使用缺省值，可以不配，
-更多配置参见文档第7章。</p>
+更多配置参见文档第8章。</p>
 
 <h1>3.性能</h1>
 
@@ -496,15 +496,31 @@ ${price}
 
 <p>2.4 然后输出过滤后的内容。</p>
 
-<h1>5.指令</h1>
+<h1>5.语法</h1>
+
+<h2>5.1 注释语法</h2>
 
 <p>基于Velocity指令和Html注释:</p>
 
-<h2>5.0 与Velocity对比</h2>
+<div class="highlight"><pre><span class="c">&lt;!--#var(User user, Book[] books)--&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+  <span class="nt">&lt;body&gt;</span>
+    <span class="c">&lt;!--#if(user.role == "admin")--&gt;</span>
+    <span class="nt">&lt;table&gt;</span>
+      <span class="c">&lt;!--#foreach(book in books)--&gt;</span>
+      <span class="nt">&lt;tr&gt;</span>
+        <span class="nt">&lt;td&gt;</span>${book.title}<span class="nt">&lt;/td&gt;</span>
+      <span class="nt">&lt;/tr&gt;</span>
+      <span class="c">&lt;!--#end--&gt;</span>
+    <span class="nt">&lt;/table&gt;</span>
+    <span class="c">&lt;!--#end--&gt;</span>
+  <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
 
 <p>如果你用过Velocity模板，可以查看以下对比，加深了解：</p>
 
-<h3>5.0.1 语法对比</h3>
+<h3>5.1.1 语法对比</h3>
 
 <ol>
 <li><p>HTTL指令必需加注释外壳，只支持&lt;!--#if(x)--&gt;，不支持#if(x)，确保不干扰HTML本身的有效源码。 </p></li>
@@ -514,7 +530,7 @@ ${price}
 在HTTL中，$!{aaa}表示不对内容进行过滤，用于原样输出HTML片段。</p></li>
 <li><p>HTTL支持在所有使用变量的地方，进行表达式计算，也就是你不需要像Velocity那样，先#set($j = $i + 1)，再${j}，可以直接${i + 1}，其它指令也一样，比如：&lt;!--#if(i + 1 == n)--&gt;。</p></li>
 <li><p>HTTL采用扩展Class原生方法的方式，如：${"a".toChar}，而不像Velocity的Tool工具方法那样：$(StringTool.toChar("a"))，这样的调用方式更直观，更符合代码书写习惯。</p></li>
-</ol><h3>5.0.2 指令对比</h3>
+</ol><h3>5.1.2 指令对比</h3>
 
 <table>
 <tr>
@@ -637,9 +653,70 @@ ${price}
 <td>不同</td>
 <td>停止模板解析</td>
 </tr>
-</table><h2>5.1 输出指令</h2>
+</table><p>缺省使用HTML注释语法，如：</p>
 
-<h3>5.1.1 过滤输出</h3>
+<div class="highlight"><pre><span class="c">&lt;!--#var(User user, Book[] books)--&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+  <span class="nt">&lt;body&gt;</span>
+    <span class="c">&lt;!--#if(user.role == "admin")--&gt;</span>
+    <span class="nt">&lt;table&gt;</span>
+      <span class="c">&lt;!--#foreach(book in books)--&gt;</span>
+      <span class="nt">&lt;tr&gt;</span>
+        <span class="nt">&lt;td&gt;</span>${book.title}<span class="nt">&lt;/td&gt;</span>
+      <span class="nt">&lt;/tr&gt;</span>
+      <span class="c">&lt;!--#end--&gt;</span>
+    <span class="nt">&lt;/table&gt;</span>
+    <span class="c">&lt;!--#end--&gt;</span>
+  <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+
+<h2>5.2 属性语法</h2>
+
+<p>基于Html标签属性: (指令和表达式与注释语法相同)</p>
+
+<div class="highlight"><pre><span class="nt">&lt;html</span> <span class="na">var=</span><span class="s">"User user, Book[] books"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;table</span> <span class="na">if=</span><span class="s">"user.role == 'admin'"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;tr</span> <span class="na">foreach=</span><span class="s">"book in books"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;td&gt;</span>${book.title}<span class="nt">&lt;/td&gt;</span>
+      <span class="nt">&lt;/tr&gt;</span>
+    <span class="nt">&lt;/table&gt;</span>
+  <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+
+<p>需要配置：</p>
+
+<div class="highlight"><pre><span class="na">parser</span><span class="o">=</span><span class="s">httl.spi.parsers.AttributeParser</span>
+</pre></div>
+
+<p>属性语法需要用到jericho包解析HTML标签：</p>
+
+<p><a href="http://central.maven.org/maven2/net/htmlparser/jericho/jericho-html/3.1/jericho-html-3.1.jar">jericho-html-3.1.jar</a></p>
+
+<div class="highlight"><pre><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>net.htmlparser.jericho<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>jericho-html<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>3.1<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</pre></div>
+
+<p>如果属性和其它框架冲突，可以添加名字空间：</p>
+
+<div class="highlight"><pre><span class="na">attribute.namespace</span><span class="o">=</span><span class="s">httl</span>
+</pre></div>
+
+<p>名称空间写法如：</p>
+
+<div class="highlight"><pre><span class="nt">&lt;tr</span> <span class="na">httl:foreach=</span><span class="s">"book in books"</span> <span class="nt">/&gt;</span>
+</pre></div>
+
+<h1>6.指令</h1>
+
+<h2>6.1 输出指令</h2>
+
+<h3>6.1.1 过滤输出</h3>
 
 <p>输出表达式的计算结果，并进行过滤，比如：过滤变量中的HTML标签。</p>
 
@@ -652,7 +729,7 @@ ${user.name}
 
 <p>注：HTTL缺省开启了EscapeXmlFilter，以防止HTML注入XSS攻击。如果你需要更强的过滤，请自行实现Filter，并配置到value.filters。此处为运行时热点，请注意性能。</p>
 
-<h3>5.1.2 不过滤输出</h3>
+<h3>6.1.2 不过滤输出</h3>
 
 <p>原样输出表达式的计算结果，不进行任何过滤，通常用于输出HTML片段。</p>
 
@@ -663,9 +740,9 @@ $!{expression}
 $!{body}
 </pre></div>
 
-<h3>5.2 变量定义指令</h3>
+<h3>6.2 变量定义指令</h3>
 
-<h3>5.2.1 类型声明</h3>
+<h3>6.2.1 类型声明</h3>
 
 <p>声明输入变量的类型，模板内部其它变量类型基于此类型推导。</p>
 
@@ -676,7 +753,7 @@ $!{body}
 <span class="c">&lt;!--#var(User user, Book[] books)--&gt;</span>
 </pre></div>
 
-<h3>5.2.2 变量赋值</h3>
+<h3>6.2.2 变量赋值</h3>
 
 <p>将表达式的计算结果存入变量中。</p>
 
@@ -724,9 +801,9 @@ $!{body}
 <span class="n">Context</span><span class="o">.</span><span class="na">getContext</span><span class="o">().</span><span class="na">getParameters</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="s">"price"</span><span class="o">);</span>
 </pre></div>
 
-<h2>5.3 条件指令</h2>
+<h2>6.3 条件指令</h2>
 
-<h3>5.3.1 IF条件</h3>
+<h3>6.3.1 IF条件</h3>
 
 <p>如果条件表达式计算结果为真或非空，则输出指令所包含的块。</p>
 
@@ -739,7 +816,7 @@ $!{body}
 <span class="c">&lt;!--#end--&gt;</span>
 </pre></div>
 
-<h3>5.3.2 ELSEIF条件</h3>
+<h3>6.3.2 ELSEIF条件</h3>
 
 <p>如果前面的IF条件不为真，并且当前条件表达式计算结果为真或非空，则输出指令所包含的块。</p>
 
@@ -754,7 +831,7 @@ $!{body}
 <span class="c">&lt;!--#end--&gt;</span>
 </pre></div>
 
-<h3>5.3.3 ELSE条件</h3>
+<h3>6.3.3 ELSE条件</h3>
 
 <p>如果前面的IF条件不为真，则输出指令所包含的块。</p>
 
@@ -769,9 +846,9 @@ $!{body}
 <span class="c">&lt;!--#end--&gt;</span>
 </pre></div>
 
-<h2>5.4 迭代指令</h2>
+<h2>6.4 迭代指令</h2>
 
-<h3>5.4.1 集合迭代</h3>
+<h3>6.4.1 集合迭代</h3>
 
 <p>迭代表达式产生的集合，以集合中的每项值，重复输出指令所包含的块。</p>
 
@@ -797,7 +874,7 @@ $!{body}
 
 <p>如果booklist的泛型丢失，上面的写法可以恢复book的类型。</p>
 
-<h3>5.4.3 中断迭代</h3>
+<h3>6.4.3 中断迭代</h3>
 
 <p>当条件表达式为真或非空时，中断当前迭代过程。</p>
 
@@ -812,7 +889,7 @@ $!{body}
 <span class="c">&lt;!--#end--&gt;</span>
 </pre></div>
 
-<h2>5.5 宏指令</h2>
+<h2>6.5 宏指令</h2>
 
 <p>将指令块封装成可复用的模板片断，在声明处不执行，在调用时再执行。</p>
 
@@ -827,9 +904,9 @@ $!{xxx(books)}
 <span class="c">&lt;!--#set(xxx := xxx(books))--&gt;</span>
 </pre></div>
 
-<h2>5.6 字面指令</h2>
+<h2>6.6 字面指令</h2>
 
-<h3>5.6.1 注释块</h3>
+<h3>6.6.1 注释块</h3>
 
 <p>隐藏注释的内容，用于注解过程，或屏蔽指令内容。</p>
 
@@ -840,7 +917,7 @@ $!{xxx(books)}
 <span class="c">&lt;!--## This is menu --&gt;</span>
 </pre></div>
 
-<h3>5.6.2 不解析块</h3>
+<h3>6.6.2 不解析块</h3>
 
 <p>原样输出模板内容，用于输出纯文本内容。</p>
 
@@ -851,7 +928,7 @@ $!{xxx(books)}
 <span class="cp">&lt;![CDATA[## This is menu ]]&gt;</span>
 </pre></div>
 
-<h3>5.6.3 特殊符转义</h3>
+<h3>6.6.3 特殊符转义</h3>
 
 <p>原样输出指令特殊符，用于输出纯文本内容。</p>
 
@@ -864,7 +941,7 @@ $!{xxx(books)}
 \\${xxx}
 </pre></div>
 
-<h1>6.表达式</h1>
+<h1>7.表达式</h1>
 
 <p>基于Java表达式和扩展方法。</p>
 
@@ -886,9 +963,9 @@ $!{xxx(books)}
 <li>再查找obj.isFoo()函数</li>
 <li>再查找obj.foo()函数</li>
 <li>再查找obj.foo属性</li>
-</ul><h2>6.1 操作符表达式</h2>
+</ul><h2>7.1 操作符表达式</h2>
 
-<h3>6.1.1 集合操作符</h3>
+<h3>7.1.1 集合操作符</h3>
 
 <div class="highlight"><pre>${list[0]} 等价于：${list.get(0)}
 
@@ -921,7 +998,7 @@ ${item}
 <span class="c">&lt;!--#end--&gt;</span>
 </pre></div>
 
-<h3>6.1.2 逻辑操作符</h3>
+<h3>7.1.2 逻辑操作符</h3>
 
 <div class="highlight"><pre><span class="c">&lt;!--#if(object)--&gt;</span>
 等价于：
@@ -940,7 +1017,7 @@ ${item}
 <span class="c">&lt;!--#foreach(item in list1 != null &amp;&amp; list1.size() &gt; 0 ? list1 : list2)--&gt;</span>
 </pre></div>
 
-<h3>6.1.3 日期操作符</h3>
+<h3>7.1.3 日期操作符</h3>
 
 <div class="highlight"><pre><span class="n">date1</span> <span class="o">&gt;</span> <span class="n">date2</span>
 <span class="n">date1</span> <span class="o">&gt;=</span> <span class="n">date2</span>
@@ -948,9 +1025,9 @@ ${item}
 <span class="n">date1</span> <span class="o">&lt;=</span> <span class="n">date2</span>
 </pre></div>
 
-<h2>6.2 函数表达式</h2>
+<h2>7.2 函数表达式</h2>
 
-<h3>6.2.1 转型函数</h3>
+<h3>7.2.1 转型函数</h3>
 
 <div class="highlight"><pre><span class="n">obj</span><span class="o">.</span><span class="na">to</span><span class="o">(</span><span class="s">"com.foo.Bar"</span><span class="o">)</span>
 <span class="n">num</span><span class="o">.</span><span class="na">toDate</span>
@@ -966,14 +1043,14 @@ ${item}
 <span class="n">str</span><span class="o">.</span><span class="na">toClass</span>
 </pre></div>
 
-<h3>6.2.2 转义函数</h3>
+<h3>7.2.2 转义函数</h3>
 
 <div class="highlight"><pre><span class="n">str</span><span class="o">.</span><span class="na">escapeXml</span>
 <span class="n">str</span><span class="o">.</span><span class="na">escapeUrl</span>
 <span class="n">str</span><span class="o">.</span><span class="na">escapeString</span>
 </pre></div>
 
-<h3>6.2.3 格式化函数</h3>
+<h3>7.2.3 格式化函数</h3>
 
 <div class="highlight"><pre><span class="n">num</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="s">"###,##0"</span><span class="o">)</span>
 <span class="n">num</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="s">"###,##0.##"</span><span class="o">)</span>
@@ -981,7 +1058,7 @@ ${item}
 <span class="n">date</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="s">"yyyy-MM-dd HH:mm:ss"</span><span class="o">)</span>
 </pre></div>
 
-<h3>6.2.4 集合函数</h3>
+<h3>7.2.4 集合函数</h3>
 
 <div class="highlight"><pre># 数组和List一样可以用size方法获取大小
 array.size
@@ -1022,7 +1099,7 @@ ${colors.next}
 <span class="c">&lt;!--#end--&gt;</span>
 </pre></div>
 
-<h3>6.2.5 文件函数</h3>
+<h3>7.2.5 文件函数</h3>
 
 <div class="highlight"><pre><span class="n">include</span><span class="o">(</span><span class="s">"template.httl"</span><span class="o">)}</span>
 <span class="n">include</span><span class="o">(</span><span class="s">"template.httl"</span><span class="o">,</span> <span class="s">"UTF-8"</span><span class="o">)</span>
@@ -1033,7 +1110,7 @@ ${colors.next}
 <span class="n">read</span><span class="o">(</span><span class="n">locale</span><span class="o">(</span><span class="s">"i18n-text.txt"</span><span class="o">))</span>
 </pre></div>
 
-<h3>6.2.6 国际化函数</h3>
+<h3>7.2.6 国际化函数</h3>
 
 <pre><code>${"key".i18n} 或 ${i18n("key")}
 依次查找下面文件中的key配置：
@@ -1063,18 +1140,18 @@ i18n.encoding=UTF-8
 locale=zh_CN
 </code></pre>
 
-<h3>6.2.7 系统函数</h3>
+<h3>7.2.7 系统函数</h3>
 
 <div class="highlight"><pre><span class="n">now</span><span class="o">()</span>
 <span class="n">random</span><span class="o">()</span>
 <span class="n">uuid</span><span class="o">()</span>
 </pre></div>
 
-<h1>7.配置</h1>
+<h1>8.配置</h1>
 
 <p>配置中，+=表示在缺省配置上追加配置，=表示覆盖缺省配置，多个值用逗号分隔。</p>
 
-<h2>7.1 模板引擎配置</h2>
+<h2>8.1 模板引擎配置</h2>
 
 <div class="highlight"><pre><span class="na">engine</span><span class="o">=</span><span class="s">httl.spi.engines.DefaultEngine</span>
 <span class="na">parser</span><span class="o">=</span><span class="s">httl.spi.parsers.CommentParser</span>
@@ -1084,69 +1161,12 @@ locale=zh_CN
 <p>其中，engine负责组装，parser负责解析语法，translator负责将模板表达式翻译成java表达式。
 除非你想改变语法，或优化解析性能，否则此三项不需要配置。</p>
 
-<p>缺省使用HTML注释语法，如：</p>
-
-<div class="highlight"><pre><span class="c">&lt;!--#var(User user, Book[] books)--&gt;</span>
-<span class="nt">&lt;html&gt;</span>
-  <span class="nt">&lt;body&gt;</span>
-    <span class="c">&lt;!--#if(user.role == "admin")--&gt;</span>
-    <span class="nt">&lt;table&gt;</span>
-      <span class="c">&lt;!--#foreach(book in books)--&gt;</span>
-      <span class="nt">&lt;tr&gt;</span>
-        <span class="nt">&lt;td&gt;</span>${book.title}<span class="nt">&lt;/td&gt;</span>
-      <span class="nt">&lt;/tr&gt;</span>
-      <span class="c">&lt;!--#end--&gt;</span>
-    <span class="nt">&lt;/table&gt;</span>
-    <span class="c">&lt;!--#end--&gt;</span>
-  <span class="nt">&lt;/body&gt;</span>
-<span class="nt">&lt;/html&gt;</span>
-</pre></div>
-
-<p>如果你喜欢HTML标签属性语法，可以配置：</p>
-
-<div class="highlight"><pre><span class="na">parser</span><span class="o">=</span><span class="s">httl.spi.parsers.AttributeParser</span>
-</pre></div>
-
-<p>语法如：</p>
-
-<div class="highlight"><pre><span class="nt">&lt;html</span> <span class="na">var=</span><span class="s">"User user, Book[] books"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;body&gt;</span>
-    <span class="nt">&lt;table</span> <span class="na">if=</span><span class="s">"user.role == 'admin'"</span><span class="nt">&gt;</span>
-      <span class="nt">&lt;tr</span> <span class="na">foreach=</span><span class="s">"book in books"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;td&gt;</span>${book.title}<span class="nt">&lt;/td&gt;</span>
-      <span class="nt">&lt;/tr&gt;</span>
-    <span class="nt">&lt;/table&gt;</span>
-  <span class="nt">&lt;/body&gt;</span>
-<span class="nt">&lt;/html&gt;</span>
-</pre></div>
-
-<p>属性语法需要用到jericho包解析HTML标签：</p>
-
-<p><a href="http://central.maven.org/maven2/net/htmlparser/jericho/jericho-html/3.1/jericho-html-3.1.jar">jericho-html-3.1.jar</a></p>
-
-<div class="highlight"><pre><span class="nt">&lt;dependency&gt;</span>
-    <span class="nt">&lt;groupId&gt;</span>net.htmlparser.jericho<span class="nt">&lt;/groupId&gt;</span>
-    <span class="nt">&lt;artifactId&gt;</span>jericho-html<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>3.1<span class="nt">&lt;/version&gt;</span>
-<span class="nt">&lt;/dependency&gt;</span>
-</pre></div>
-
-<p>如果属性和其它框架冲突，可以添加名字空间：</p>
-
-<div class="highlight"><pre><span class="na">attribute.namespace</span><span class="o">=</span><span class="s">httl</span>
-</pre></div>
-
-<p>名称空间写法如：</p>
-
-<div class="highlight"><pre><span class="nt">&lt;tr</span> <span class="na">httl:foreach=</span><span class="s">"book in books"</span> <span class="nt">/&gt;</span>
-</pre></div>
-
 <p>你可以设置foreach状态的变量名，缺省为foreach：(缺省值不用配)</p>
 
 <div class="highlight"><pre><span class="na">foreach.status</span><span class="o">=</span><span class="s">foreach</span>
 </pre></div>
 
-<h2>7.2 模板缓存配置</h2>
+<h2>8.2 模板缓存配置</h2>
 
 <p>缺省为强缓存，即所有模板和表达式加载后全部缓存：(缺省值不用配)</p>
 
@@ -1174,7 +1194,7 @@ locale=zh_CN
 <div class="highlight"><pre><span class="na">reloadable</span><span class="o">=</span><span class="s">true</span>
 </pre></div>
 
-<h2>7.4 模板加载配置</h2>
+<h2>8.4 模板加载配置</h2>
 
 <p>(1) 可以配置启动时预编译所有模板，会调用loader.list()扫描模板文件。</p>
 
@@ -1200,7 +1220,7 @@ locale=zh_CN
 <div class="highlight"><pre><span class="na">input.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
 </pre></div>
 
-<h3>7.4.1 从Classpath下加载</h3>
+<h3>8.4.1 从Classpath下加载</h3>
 
 <p>缺省从Classpath下加载，即模板放在任意jar包中：(缺省值不用配)</p>
 
@@ -1208,31 +1228,31 @@ locale=zh_CN
 <span class="na">template.directory</span><span class="o">=</span>
 </pre></div>
 
-<h3>7.4.2 从文件加载：</h3>
+<h3>8.4.2 从文件加载：</h3>
 
 <div class="highlight"><pre><span class="na">loaders</span><span class="o">=</span><span class="s">httl.spi.loaders.FileLoader</span>
 <span class="na">template.directory</span><span class="o">=</span><span class="s">/home/admin/templates</span>
 </pre></div>
 
-<h3>7.4.3 从jar包中加载：</h3>
+<h3>8.4.3 从jar包中加载：</h3>
 
 <div class="highlight"><pre><span class="na">loaders</span><span class="o">=</span><span class="s">httl.spi.loaders.JarLoader</span>
 <span class="na">template.directory</span><span class="o">=</span><span class="s">/home/admin/tempaltes.jar</span>
 </pre></div>
 
-<h3>7.4.4 从zip包中加载：</h3>
+<h3>8.4.4 从zip包中加载：</h3>
 
 <div class="highlight"><pre><span class="na">loaders</span><span class="o">=</span><span class="s">httl.spi.loaders.ZipLoader</span>
 <span class="na">template.directory</span><span class="o">=</span><span class="s">/home/admin/tempaltes.zip</span>
 </pre></div>
 
-<h3>7.4.5 从指定url加载：</h3>
+<h3>8.4.5 从指定url加载：</h3>
 
 <div class="highlight"><pre><span class="na">loaders</span><span class="o">=</span><span class="s">httl.spi.loaders.UrlLoader</span>
 <span class="na">template.directory</span><span class="o">=</span><span class="s">http://myhost/tempaltes</span>
 </pre></div>
 
-<h3>7.4.6 从war包加载：</h3>
+<h3>8.4.6 从war包加载：</h3>
 
 <div class="highlight"><pre><span class="na">loaders</span><span class="o">=</span><span class="s">httl.spi.loaders.ServletLoader</span>
 <span class="na">template.directory</span><span class="o">=</span><span class="s">/WEB-INF/templates</span>
@@ -1245,7 +1265,7 @@ locale=zh_CN
 <span class="nt">&lt;/listener&gt;</span>
 </pre></div>
 
-<h3>7.4.7 从内存字符串加载：</h3>
+<h3>8.4.7 从内存字符串加载：</h3>
 
 <div class="highlight"><pre><span class="na">loaders</span><span class="o">=</span><span class="s">httl.spi.loaders.StringLoader</span>
 </pre></div>
@@ -1255,7 +1275,7 @@ locale=zh_CN
 <div class="highlight"><pre><span class="n">StringLoader</span><span class="o">.</span><span class="na">addResource</span><span class="o">(</span><span class="s">"foo.httl"</span><span class="o">,</span> <span class="s">"&lt;!--#var(User user)--&gt;${user.name}"</span><span class="o">);</span>
 </pre></div>
 
-<h3>7.4.8 从多个源加载：</h3>
+<h3>8.4.8 从多个源加载：</h3>
 
 <div class="highlight"><pre><span class="na">loaders</span><span class="o">=</span><span class="s">httl.spi.loaders.ClasspathLoader,httl.spi.loaders.FileLoader</span>
 </pre></div>
@@ -1265,7 +1285,7 @@ locale=zh_CN
 <div class="highlight"><pre><span class="na">loaders+</span><span class="o">=</span><span class="s">httl.spi.loaders.FileLoader</span>
 </pre></div>
 
-<h2>7.5 模板编译器</h2>
+<h2>8.5 模板编译器</h2>
 
 <p>用于将模板类编译成字节码，缺省使用根据JDK版本自适应编译器：(缺省值不用配)</p>
 
@@ -1346,7 +1366,7 @@ locale=zh_CN
 <div class="highlight"><pre><span class="na">compile.directory</span><span class="o">=</span>
 </pre></div>
 
-<h2>7.6 输出格式化器</h2>
+<h2>8.6 输出格式化器</h2>
 
 <p>缺省加载了日期格式化器：(缺省值不用配)</p>
 
@@ -1382,7 +1402,7 @@ locale=zh_CN
 <span class="na">false.value</span><span class="o">=</span><span class="s">no</span>
 </pre></div>
 
-<h2>7.7 输出过滤器</h2>
+<h2>8.7 输出过滤器</h2>
 
 <p>过滤器分为两类，一类是针对模板文本的，一类是针对动态插值的。</p>
 
@@ -1422,9 +1442,9 @@ locale=zh_CN
 <pre><code>remove.directive.blank=false
 </code></pre>
 
-<h2>7.8 类型导入</h2>
+<h2>8.8 类型导入</h2>
 
-<h3>7.8.1 导入包名</h3>
+<h3>8.8.1 导入包名</h3>
 
 <p>缺省导入了java.util包：(缺省值不用配)</p>
 
@@ -1438,7 +1458,7 @@ locale=zh_CN
 <div class="highlight"><pre><span class="na">import.packages+</span><span class="o">=</span><span class="s">com.foo</span>
 </pre></div>
 
-<h3>7.8.2 导入方法</h3>
+<h3>8.8.2 导入方法</h3>
 
 <p>缺省导入DefaultMethod类中的方法：(缺省值不用配)</p>
 
@@ -1499,14 +1519,14 @@ ${now()}
 <div class="highlight"><pre>${include("foo.httl")}
 </pre></div>
 
-<h3>7.8.3 导入宏</h3>
+<h3>8.8.3 导入宏</h3>
 
 <p>导指定模板中的所有宏，多个模板用逗号分隔，这些宏可在其它任意模板中使用，如：</p>
 
 <div class="highlight"><pre><span class="na">import.macros</span><span class="o">=</span><span class="s">common_macros.httl</span>
 </pre></div>
 
-<h3>7.8.4 导入序列</h3>
+<h3>8.8.4 导入序列</h3>
 
 <p>用法如：</p>
 
@@ -1528,7 +1548,7 @@ ${weekday}
 <div class="highlight"><pre><span class="na">sequences+</span><span class="o">=</span><span class="s">金 木 水 火 土 金</span>
 </pre></div>
 
-<h2>7.9 日志输出配置</h2>
+<h2>8.9 日志输出配置</h2>
 
 <p>缺省使用log4j输出日志：(缺省值不用配)</p>
 
@@ -1554,7 +1574,7 @@ ${weekday}
 
 <p>注：当日志级别为DEBUG时，HTTL将向日志中输出编译的模板源码，方便排错。</p>
 
-<h2>7.10 运行时属性</h2>
+<h2>8.10 运行时属性</h2>
 
 <p>缺省只从引擎配置中获取属性：(缺省值不用配)</p>
 
@@ -1568,7 +1588,7 @@ ${weekday}
 
 <p>比如：用户的locale区域国际化信息，换上面的配置先从请求中获取，这样就可以根据用户区域设置显示不同语言。</p>
 
-<h1>8.集成</h1>
+<h1>9.集成</h1>
 
 <p>HTTL在MVC中的定位：</p>
 
@@ -1592,7 +1612,7 @@ ${weekday}
 
 <p>(4) 如果ClassPath根目录也没有，则使用标准配置。</p>
 
-<h2>8.1 Spring MVC 集成</h2>
+<h2>9.1 Spring MVC 集成</h2>
 
 <p>配置/WEB-INF/web.xml:</p>
 
@@ -1635,12 +1655,14 @@ ${weekday}
 
 <p>配置/WEB-INF/httl.properties：</p>
 
-<div class="highlight"><pre><span class="na">template.directory</span><span class="o">=</span><span class="s">/WEB-INF/templates</span>
+<div class="highlight"><pre><span class="na">import.packages+</span><span class="o">=</span><span class="s">com.your.domain</span>
+<span class="na">template.directory</span><span class="o">=</span><span class="s">/WEB-INF/templates</span>
+<span class="na">i18n.basename</span><span class="o">=</span><span class="s">/WEB-INF/messages</span>
 <span class="na">input.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
 <span class="na">output.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
 </pre></div>
 
-<h2>8.2 Struts 集成</h2>
+<h2>9.2 Struts 集成</h2>
 
 <p>配置/WEB-INF/web.xml:</p>
 
@@ -1680,12 +1702,14 @@ ${weekday}
 
 <p>配置/WEB-INF/httl.properties：</p>
 
-<div class="highlight"><pre><span class="na">template.directory</span><span class="o">=</span><span class="s">/WEB-INF/templates</span>
+<div class="highlight"><pre><span class="na">import.packages+</span><span class="o">=</span><span class="s">com.your.domain</span>
+<span class="na">template.directory</span><span class="o">=</span><span class="s">/WEB-INF/templates</span>
+<span class="na">i18n.basename</span><span class="o">=</span><span class="s">/WEB-INF/messages</span>
 <span class="na">input.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
 <span class="na">output.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
 </pre></div>
 
-<h2>8.3 Webx 集成</h2>
+<h2>9.3 Webx 集成</h2>
 
 <p>配置/WEB-INF/web.xml:</p>
 
@@ -1734,12 +1758,14 @@ ${weekday}
 
 <p>配置/WEB-INF/httl.properties：</p>
 
-<div class="highlight"><pre><span class="na">template.directory</span><span class="o">=</span><span class="s">/WEB-INF/templates</span>
+<div class="highlight"><pre><span class="na">import.packages+</span><span class="o">=</span><span class="s">com.your.domain</span>
+<span class="na">template.directory</span><span class="o">=</span><span class="s">/WEB-INF/templates</span>
+<span class="na">i18n.basename</span><span class="o">=</span><span class="s">/WEB-INF/messages</span>
 <span class="na">input.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
 <span class="na">output.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
 </pre></div>
 
-<h2>8.4 Filter 集成</h2>
+<h2>9.4 Filter 集成</h2>
 
 <p>你需要在你的业务Servlet中，处理完业务后，将业务参数都写到request.setAttribute()中。
 HttlFilter会模板目录下读取请求path加.httl后缀的模板，然后以request中的变量进行渲染。</p>
@@ -1778,12 +1804,14 @@ HttlFilter会模板目录下读取请求path加.httl后缀的模板，然后以r
 
 <p>配置/WEB-INF/httl.properties：</p>
 
-<div class="highlight"><pre><span class="na">template.directory</span><span class="o">=</span><span class="s">/WEB-INF/templates</span>
+<div class="highlight"><pre><span class="na">import.packages+</span><span class="o">=</span><span class="s">com.your.domain</span>
+<span class="na">template.directory</span><span class="o">=</span><span class="s">/WEB-INF/templates</span>
+<span class="na">i18n.basename</span><span class="o">=</span><span class="s">/WEB-INF/messages</span>
 <span class="na">input.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
 <span class="na">output.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
 </pre></div>
 
-<h2>8.5 Servlet 集成</h2>
+<h2>9.5 Servlet 集成</h2>
 
 <p>你需要在你的业务Servlet中，处理完业务后，将业务参数都写到request.setAttribute()中，
 并将请求forward到指定模板，比如：request.getRequestDispatcher("foo.httl").forward(request, response);
@@ -1824,14 +1852,16 @@ HttlServlet会模板目录下读取forward过来的path同名的模板，然后�
 
 <p>配置/WEB-INF/httl.properties：</p>
 
-<div class="highlight"><pre><span class="na">template.directory</span><span class="o">=</span><span class="s">/WEB-INF/templates</span>
+<div class="highlight"><pre><span class="na">import.packages+</span><span class="o">=</span><span class="s">com.your.domain</span>
+<span class="na">template.directory</span><span class="o">=</span><span class="s">/WEB-INF/templates</span>
+<span class="na">i18n.basename</span><span class="o">=</span><span class="s">/WEB-INF/messages</span>
 <span class="na">input.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
 <span class="na">output.encoding</span><span class="o">=</span><span class="s">UTF-8</span>
 </pre></div>
 
-<h1>9.扩展</h1>
+<h1>10.扩展</h1>
 
-<h2>9.1 配置注入：</h2>
+<h2>10.1 配置注入：</h2>
 
 <div class="highlight"><pre><span class="kd">public</span> <span class="n">MyFilter</span> <span class="kd">implements</span> <span class="n">Filter</span> <span class="o">{</span>
 
@@ -1868,7 +1898,7 @@ HttlServlet会模板目录下读取forward过来的path同名的模板，然后�
 <span class="o">}</span>
 </pre></div>
 
-<h2>9.2 支持的扩展点</h2>
+<h2>10.2 支持的扩展点</h2>
 
 <div class="highlight"><pre><span class="c"># 日志输出</span>
 <span class="na">loggers</span><span class="o">=</span><span class="s">httl.spi.Logger</span>
@@ -1907,13 +1937,13 @@ HttlServlet会模板目录下读取forward过来的path同名的模板，然后�
 <span class="na">import.methods</span><span class="o">=</span><span class="s">StaticMethodClass</span>
 </pre></div>
 
-<h1>10.下载</h1>
+<h1>11.下载</h1>
 
-<h2>10.1 发布包:</h2>
+<h2>11.1 发布包:</h2>
 
 <p><a href="https://github.com/httl/httl/downloads">https://github.com/httl/httl/downloads</a></p>
 
-<h2>10.2 源代码:</h2>
+<h2>11.2 源代码:</h2>
 
 <p><a href="https://github.com/httl/httl">https://github.com/httl/httl</a></p>
 
@@ -1940,7 +1970,7 @@ HttlServlet会模板目录下读取forward过来的path同名的模板，然后�
 
 <p>Eclipse -&gt; Window -&gt; Preferences -&gt; General -&gt; Content Types -&gt; Text -&gt; HTML -&gt; Add -&gt; .httl</p>
 
-<h2>10.3 Maven依赖:</h2>
+<h2>11.3 Maven依赖:</h2>
 
 <div class="highlight"><pre><span class="nt">&lt;project&gt;</span>
     <span class="nt">&lt;dependencies&gt;</span>
@@ -1960,13 +1990,13 @@ HttlServlet会模板目录下读取forward过来的path同名的模板，然后�
 <span class="nt">&lt;project&gt;</span>
 </pre></div>
 
-<h2>10.4 运行环境</h2>
+<h2>11.4 运行环境</h2>
 
 <p><a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">JDK1.5+</a></p>
 
 <p>缺省配置下，HTTL不需要依赖任何三方类库即可运行。</p>
 
-<h2>10.5 开源许可</h2>
+<h2>11.5 开源许可</h2>
 
 <p><a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License 2.0</a></p>
 
@@ -1984,14 +2014,14 @@ HttlServlet会模板目录下读取forward过来的path同名的模板，然后�
 详见根据本许可证许可下特定语言的管辖权限和限制。
 </code></pre>
 
-<h1>11.变更</h1>
+<h1>12.变更</h1>
 
-<h2>11.1 HTTL 0.1.0 (2011-09-13)</h2>
+<h2>12.1 HTTL 0.1.0 (2011-09-13)</h2>
 
 <pre><code>第一个版本，基本功能实现，HTML属性语法解析。
 </code></pre>
 
-<h2>11.2 HTTL 0.2.0 (2011-09-22)</h2>
+<h2>12.2 HTTL 0.2.0 (2011-09-22)</h2>
 
 <pre><code>1. 增加注释语法并设为缺省，如：&lt;!--#if(...)--&gt; 
 2. 支持热加载，当文件变更时，自动重新加载，配置：reloadable=true 
@@ -2014,7 +2044,7 @@ HttlServlet会模板目录下读取forward过来的path同名的模板，然后�
 19. 兼容JDK1.5，需配置：compiler=com.googlecode.httl.support.compilers.JavassistCompiler 
 </code></pre>
 
-<h2>11.3 HTTL 1.0.0 (2012-10-30)</h2>
+<h2>12.3 HTTL 1.0.0 (2012-10-30)</h2>
 
 <pre><code>修复问题：
 1. 解决foreach和if/else联合使用时状态错乱问题。
@@ -2045,7 +2075,7 @@ HttlServlet会模板目录下读取forward过来的path同名的模板，然后�
 20. 加号数字优先，即只要有一方为数字即换数字计算，如："2" + 3，输出：5，而不是：23，如果要字符相拼双方都要为字符："2" + 3.toString
 </code></pre>
 
-<h2>11.4 HTTL 1.0.1 (2012-11-02)</h2>
+<h2>12.4 HTTL 1.0.1 (2012-11-02)</h2>
 
 <pre><code>1. 增加springmvc的ViewResolver集成。
 2. 增加struts的Result和TemplateEngine集成。
@@ -2057,7 +2087,7 @@ HttlServlet会模板目录下读取forward过来的path同名的模板，然后�
 8. 优化unescapeString和unescapeHtml的性能。
 </code></pre>
 
-<h2>11.5 HTTL 1.0.2 (2012-11-04)</h2>
+<h2>12.5 HTTL 1.0.2 (2012-11-04)</h2>
 
 <pre><code>1. 修复压测下${evaluate("1 + 2")}动态编译出现大量编译问题，以及perm区增长问题，增加类及实例缓存。
 2. 修复压测下WrappedMap过多实例化问题，延迟到Context.getParameters()被调用时再创建。
@@ -2073,7 +2103,7 @@ HttlServlet会模板目录下读取forward过来的path同名的模板，然后�
 12. 修复Loader加载时目录拼接错误。
 </code></pre>
 
-<h2>11.6 HTTL 1.0.3 (2012-11-13)</h2>
+<h2>12.6 HTTL 1.0.3 (2012-11-13)</h2>
 
 <pre><code>1. java.version配置项缺省改为自动获取当前JDK的版本。
 2. 修复precompiled注入顺序问题。
@@ -2091,7 +2121,7 @@ HttlServlet会模板目录下读取forward过来的path同名的模板，然后�
 14. 增加"foo.httl".locale()方法查找国际化文件名，如：foo_zh_CN.httl。
 </code></pre>
 
-<h2>11.7 HTTL 1.0.4 (2012-11-25)</h2>
+<h2>12.7 HTTL 1.0.4 (2012-11-25)</h2>
 
 <pre><code>1. 修复生成模板类源码数组类型名称问题。
 2. 单引号为字符串，反单引号为char。
@@ -2117,7 +2147,7 @@ HttlServlet会模板目录下读取forward过来的path同名的模板，然后�
 22. 所有Web集成不再需要在web.xml和httl.properties中配置ServletLoader，缺省自动配置。
 </code></pre>
 
-<h1>12.支持</h1>
+<h1>13.支持</h1>
 
 <p>如果使用过程中遇到问题，请在下面地址提交问题：</p>
 
@@ -2128,7 +2158,6 @@ HttlServlet会模板目录下读取forward过来的path同名的模板，然后�
 <p>博客：<a href="http://javatar.iteye.com">http://javatar.iteye.com</a></p>
 
 <p>微博：<a href="http://weibo.com/liangfei0201">http://weibo.com/liangfei0201</a></p>
-
         </section>
 
         <footer>
@@ -2136,49 +2165,6 @@ HttlServlet会模板目录下读取forward过来的path同名的模板，然后�
           This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
         </footer>
 
-<div style="position: absolute; right: 160px; top: 0px;">中文 | <a href="../en">English</a></div>
-<div id="outlineIndex" style="position: absolute; left: 100px; top: 280px; display: none; width: 100px; padding: 10px; border: 1px dashed black; background-color: white;"></div>
-<div id="outlineClose" style="position: absolute; left: 200px; top: 280px; display: none; color: #FF3333; cursor: pointer;" onclick="document.getElementById('outlineIndex').style.display = 'none';document.getElementById('outlineClose').style.display = 'none'">[X]</div>
-<script type="text/javascript">
-<!--
-var outlineIndex = document.getElementById("outlineIndex");
-var outlineClose = document.getElementById("outlineClose");
-
-var index = "";
-var outlines = document.getElementsByTagName("h1");
-for (var i = 0; i < outlines.length; i ++) {
-	var outline = outlines[i];
-	var name = outline.innerHTML;
-    outline.outerHTML = "<a name=\"" + name + "\"></a>" + outline.outerHTML;
-    index += "<a href=\"#" + name + "\">" + name + "</a><br/>"
-}
-
-outlineIndex.innerHTML = index;
-outlineIndex.style.display = '';
-outlineClose.style.display = '';
-
-var left = ((window.screen.width - 600) / 2) - 200;
-if (left < 0) {
-	left = 0;
-}
-
-outlineIndex.style.left = left + "px";
-outlineClose.style.left = (left + 100) + "px";
-
-window.addEventListener("scroll", function(e) {
-	var orignTop = 280;
-	var scrollTop = document.body.scrollTop;
-	if (scrollTop > orignTop) {
-		document.getElementById("outlineIndex").style.top = scrollTop + "px";
-		document.getElementById("outlineClose").style.top = scrollTop + "px";
-	} else {
-		document.getElementById("outlineIndex").style.top = orignTop + "px";
-		document.getElementById("outlineClose").style.top = orignTop + "px";
-	}
-
-}, false);
--->
-</script>
         
       </div>
     </div>
