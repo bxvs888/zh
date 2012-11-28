@@ -1138,6 +1138,8 @@ locale=zh_CN
 
 <h2>8.1 模板引擎配置</h2>
 
+<p>缺省使用注释语法：(缺省值不用配)</p>
+
 <div class="highlight"><pre><span class="na">engine</span><span class="o">=</span><span class="s">httl.spi.engines.DefaultEngine</span>
 <span class="na">parser</span><span class="o">=</span><span class="s">httl.spi.parsers.CommentParser</span>
 <span class="na">translator</span><span class="o">=</span><span class="s">httl.spi.translators.DfaTranslator</span>
@@ -1174,7 +1176,7 @@ locale=zh_CN
 <div class="highlight"><pre><span class="na">cache.capacity</span><span class="o">=</span><span class="s">10000</span>
 </pre></div>
 
-<p>开发阶段，可以开启热加载：</p>
+<p>开发阶段，可以开启热加载：(将根据文件的最后修改时间自动清理缓存)</p>
 
 <div class="highlight"><pre><span class="na">reloadable</span><span class="o">=</span><span class="s">true</span>
 </pre></div>
